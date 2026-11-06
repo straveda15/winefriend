@@ -10,6 +10,7 @@
     "shared"
   ],
   "scripts": {
+    "dev": "npm run dev:website",
     "dev:backend": "npm run dev --workspace @winefriend/backend",
     "dev:website": "npm run dev --workspace @winefriend/website",
     "dev:dashboard": "npm run dev --workspace @winefriend/dashboard",

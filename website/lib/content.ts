@@ -9,11 +9,25 @@ import type { JournalArticle, Product } from "@winefriend/shared/types";
  */
 const CONTENT_LIFE = { stale: 60, revalidate: 300, expire: 86400 };
 
+
 async function getProductsCached(): Promise<Product[]> {
+
+async function getContent<T>(path: string): Promise<T[]> {
+  try {
+    return await backendGet<T[]>(path);
+  } catch (error) {
+    if (process.env.NODE_ENV !== "development") throw error;
+    console.warn(`[website] Could not load ${path}; rendering without backend content in development.`);
+    return [];
+  }
+}
+
+export async function getProducts(): Promise<Product[]> {
+>>>>>>> 12049ec9fcceedb5dba026c7dd934f2117dfbaf2
   "use cache";
   cacheTag("products");
   cacheLife(CONTENT_LIFE);
-  return backendGet<Product[]>("/api/products");
+  return getContent<Product>("/api/products");
 }
 
 export async function getProducts(): Promise<Product[]> {
@@ -41,7 +55,7 @@ async function getPostsCached(): Promise<JournalArticle[]> {
   "use cache";
   cacheTag("posts");
   cacheLife(CONTENT_LIFE);
-  return backendGet<JournalArticle[]>("/api/posts");
+  return getContent<JournalArticle>("/api/posts");
 }
 
 export async function getPosts(): Promise<JournalArticle[]> {
