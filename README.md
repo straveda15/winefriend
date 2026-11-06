@@ -96,6 +96,20 @@ Hosting each app on a different server works as long as the website and dashboar
 Serverless hosts (e.g. Vercel) are fine for the website and dashboard; the backend needs a long-running host with a persistent disk, or its
 storage in `backend/src/store.ts` swapped for a database.
 
+## Deploying the website and dashboard on Vercel
+
+Create **two** Vercel projects from the same Git repository (each has its own `vercel.json`):
+
+| | Root Directory | Environment variables |
+|---|---|---|
+| Website | `website` | `BACKEND_URL`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_TOUR_SITE_URL` (optional) |
+| Dashboard | `dashboard` | `BACKEND_URL`, `WEBSITE_URL`, `NEXT_PUBLIC_WEBSITE_URL` |
+
+Leave "Include source files outside of the Root Directory" switched on (the default) so `shared/` is available.
+The backend must already be online and reachable at `BACKEND_URL` before the website is built. Vercel's disk is temporary,
+so the backend cannot keep its data files there: host it on a server with a persistent disk (Render, Railway, Fly.io, a VPS),
+set its `WEBSITE_URL` to the website's Vercel domain, and use the same `REVALIDATE_SECRET` there and in the website project.
+
 ## Good to know
 
 - The login throttle (5 failed attempts per 15 minutes) and enquiry rate limit (5 per 10 minutes) are in memory and reset when the backend restarts.
