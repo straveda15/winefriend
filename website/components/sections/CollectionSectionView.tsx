@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/animations";
+import { Wine } from "lucide-react";
 
 import { Container } from "@/components/layout/Container";
 import { ProductCard } from "@/components/ui/ProductCard";
@@ -123,7 +124,22 @@ export function CollectionSectionView({ products, preview = false }: { products:
           ))}
         </div>
         {visibleProducts.length === 0 && (
-          <p className="mt-10 text-center text-charcoal-light">Products will appear here soon.</p>
+          preview ? (
+            <p className="mt-10 text-center text-charcoal-light">Products will appear here soon.</p>
+          ) : (
+            <div
+              role="status"
+              aria-live="polite"
+              className="mt-6 flex min-h-40 items-center justify-center px-6 py-6 text-center"
+            >
+              <div className="flex max-w-3xl flex-col items-center gap-4 sm:flex-row">
+                <Wine aria-hidden="true" className="h-14 w-14 flex-none text-gold sm:h-16 sm:w-16" strokeWidth={1.4} />
+                <p className="font-sans text-base font-normal leading-relaxed text-charcoal-light sm:text-lg">
+                  Products will appear here soon.
+                </p>
+              </div>
+            </div>
+          )
         )}
         {active && <ProductDialog product={active} onClose={() => setActive(null)} />}
         {preview && (
