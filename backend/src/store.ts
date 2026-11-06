@@ -1,18 +1,15 @@
 import { randomBytes } from "node:crypto";
-import { promises as fs } from "node:fs";
-import path from "node:path";
-import { config } from "./config";
+import type { AnyBulkWriteOperation, Document } from "mongodb";
+import { getDb } from "./db";
 import { seedPosts, seedProducts } from "./seed";
 import type { Enquiry, JournalArticle, Product } from "@winefriend/shared/types";
 
 /**
- * Small JSON-file store: <DATA_DIR>/products.json, posts.json, enquiries.json and <DATA_DIR>/uploads/.
- * DATA_DIR must be on persistent storage (it must survive deploys).
- * Writes are serialised per collection and atomic (temp file + rename).
+ * MongoDB store. Each collection (products, posts, enquiries) keeps one document per item, with the
+ * item's own `id` used as the document `_id`. The starter products and posts are inserted once, the
+ * first time a collection is read (a marker in the `meta` collection stops them coming back after
+ * you delete everything). Writes are serialised per collection.
  */
-
-export const DATA_DIR = config.dataDir;
-export const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 
 type Collections = {
   products: Product;
@@ -29,28 +26,27 @@ const seeds: { [K in CollectionName]: () => Collections[K][] } = {
 
 const queues = new Map<string, Promise<unknown>>();
 
-function filePath(name: CollectionName) {
-  return path.join(DATA_DIR, `${name}.json`);
+type Item = { id: string };
+const toDoc = (item: Item): Document => ({ _id: item.id as unknown, ...item });
+function fromDoc<T>(doc: Document): T {
+  const { _id, ...rest } = doc;
+  void _id;
+  return rest as T;
 }
 
 async function readRaw<K extends CollectionName>(name: K): Promise<Collections[K][]> {
-  try {
-    const text = await fs.readFile(filePath(name), "utf8");
-    return JSON.parse(text) as Collections[K][];
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
-    const initial = seeds[name]();
-    await writeRaw(name, initial);
-    return initial;
-  }
-}
+  const db = await getDb();
+  const collection = db.collection(name);
+  const meta = db.collection<{ _id: string }>("meta");
 
-async function writeRaw<K extends CollectionName>(name: K, items: Collections[K][]) {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  const target = filePath(name);
-  const temp = `${target}.${randomBytes(4).toString("hex")}.tmp`;
-  await fs.writeFile(temp, JSON.stringify(items, null, 2), "utf8");
-  await fs.rename(temp, target);
+  if (!(await meta.findOne({ _id: name }))) {
+    const claim = await meta.updateOne({ _id: name }, { $setOnInsert: { seededAt: new Date() } }, { upsert: true });
+    const initial = seeds[name]();
+    if (claim.upsertedCount && initial.length) await collection.insertMany(initial.map(toDoc));
+  }
+
+  const docs = await collection.find().toArray();
+  return docs.map((doc) => fromDoc<Collections[K]>(doc));
 }
 
 export async function readCollection<K extends CollectionName>(name: K): Promise<Collections[K][]> {
@@ -59,7 +55,7 @@ export async function readCollection<K extends CollectionName>(name: K): Promise
   return readRaw(name);
 }
 
-/** Read-modify-write under a per-collection lock. */
+/** Read, change, then save only what changed (added / edited / removed items). */
 export async function mutateCollection<K extends CollectionName, R>(
   name: K,
   update: (items: Collections[K][]) => { items: Collections[K][]; result: R },
@@ -69,8 +65,21 @@ export async function mutateCollection<K extends CollectionName, R>(
     .catch(() => undefined)
     .then(async () => {
       const current = await readRaw(name);
+      const before = new Map(current.map((item) => [item.id, JSON.stringify(item)]));
       const { items, result } = update(current);
-      await writeRaw(name, items);
+
+      const operations: AnyBulkWriteOperation<Document>[] = [];
+      const keep = new Set<string>();
+      for (const item of items) {
+        keep.add(item.id);
+        if (before.get(item.id) !== JSON.stringify(item)) {
+          operations.push({ replaceOne: { filter: { _id: item.id as never }, replacement: toDoc(item), upsert: true } });
+        }
+      }
+      for (const id of before.keys()) {
+        if (!keep.has(id)) operations.push({ deleteOne: { filter: { _id: id as never } } });
+      }
+      if (operations.length) await (await getDb()).collection(name).bulkWrite(operations, { ordered: true });
       return result;
     });
   queues.set(name, run);

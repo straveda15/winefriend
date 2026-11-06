@@ -1,6 +1,6 @@
 import { BACKEND_URL, sessionToken } from "@/lib/api";
 
-const MAX_BYTES = 6 * 1024 * 1024;
+const MAX_BYTES = 4 * 1024 * 1024;
 
 /** Receives an image from the browser and hands it to the backend, which validates and stores it. */
 export async function POST(request: Request) {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "No image received." }, { status: 400 });
   }
   if (file.size > MAX_BYTES) {
-    return Response.json({ error: "Image is larger than 6 MB." }, { status: 413 });
+    return Response.json({ error: "Image is larger than 4 MB." }, { status: 413 });
   }
 
   try {

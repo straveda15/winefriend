@@ -25,8 +25,8 @@ winefriend/
 | | backend | website | dashboard |
 |---|---|---|---|
 | Env file | `backend/.env.local` | `website/.env.local` | `dashboard/.env.local` |
-| Holds | `ADMIN_*`, `SESSION_SECRET`, `DATA_DIR`, `WEBSITE_URL`, `REVALIDATE_SECRET` | `BACKEND_URL`, `REVALIDATE_SECRET` | `BACKEND_URL`, `WEBSITE_URL` |
-| Needs a disk | yes (persistent) | no | no |
+| Holds | `MONGODB_URI`, `ADMIN_*`, `SESSION_SECRET`, `WEBSITE_URL`, `REVALIDATE_SECRET` | `BACKEND_URL`, `REVALIDATE_SECRET` | `BACKEND_URL`, `WEBSITE_URL` |
+| Needs a disk | no (data is in MongoDB) | no | no |
 
 ## Run it locally
 
@@ -63,9 +63,10 @@ After editing an `.env.local`, restart that app. Other scripts: `npm run build`,
 
 ## Data and images
 
-The backend stores everything in `DATA_DIR` (default `backend/.data`): `products.json`, `posts.json`, `enquiries.json` and `uploads/`.
-Put it on persistent storage and back it up. Images are served by the backend at `/uploads/<file>`; the website and dashboard pass them
-through, so image URLs stay on their own domains.
+The backend stores everything in MongoDB (`MONGODB_URI`, database `MONGODB_DB`, default `winefriend`): the `products`, `posts`
+and `enquiries` collections, plus `uploads` for images. The starter products and articles from `backend/src/seed.ts` are inserted
+once, the first time the database is used. Images are served by the backend at `/uploads/<file>`; the website and dashboard pass them
+through, so image URLs stay on their own domains. In MongoDB Atlas, allow your host's IP under Network Access (use 0.0.0.0/0 for Vercel).
 
 ## API (backend)
 
@@ -85,30 +86,29 @@ npm run start:website      # port 3000
 npm run start:dashboard    # port 3001
 ```
 
-Production values: `backend` → `WEBSITE_URL=https://winefriend.in`, a strong `ADMIN_PASSWORD`, a random `SESSION_SECRET` (32+ characters),
-`DATA_DIR`; `website` / `dashboard` → `BACKEND_URL` pointing at the backend; `dashboard` → `WEBSITE_URL` and `NEXT_PUBLIC_WEBSITE_URL` set
+Production values: `backend` → `WEBSITE_URL=https://winefriend.in`, `MONGODB_URI`, a strong `ADMIN_PASSWORD`, a random `SESSION_SECRET` (32+ characters); `website` / `dashboard` → `BACKEND_URL` pointing at the backend; `dashboard` → `WEBSITE_URL` and `NEXT_PUBLIC_WEBSITE_URL` set
 to the public site (set `NEXT_PUBLIC_*` before `npm run build`).
 
 Keep the backend off the public internet if you can (firewall it to the website and dashboard servers). Its admin routes need a login token,
 but the public routes are open and the enquiry rate limit trusts the `x-forwarded-for` header the website sends.
 
-Hosting each app on a different server works as long as the website and dashboard can reach `BACKEND_URL`. Only the backend needs the disk.
-Serverless hosts (e.g. Vercel) are fine for the website and dashboard; the backend needs a long-running host with a persistent disk, or its
-storage in `backend/src/store.ts` swapped for a database.
+Hosting each app on a different server works as long as the website and dashboard can reach `BACKEND_URL`. Nothing needs a local disk,
+so all three can run on serverless hosts.
 
-## Deploying the website and dashboard on Vercel
+## Deploying on Vercel
 
-Create **two** Vercel projects from the same Git repository (each has its own `vercel.json`):
+Create **three** Vercel projects from the same Git repository (each folder has its own `vercel.json`). Deploy the backend first.
 
 | | Root Directory | Environment variables |
 |---|---|---|
+| Backend | `backend` | `MONGODB_URI`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, `WEBSITE_URL`, `REVALIDATE_SECRET` |
 | Website | `website` | `BACKEND_URL`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_TOUR_SITE_URL` (optional) |
 | Dashboard | `dashboard` | `BACKEND_URL`, `WEBSITE_URL`, `NEXT_PUBLIC_WEBSITE_URL` |
 
-Leave "Include source files outside of the Root Directory" switched on (the default) so `shared/` is available.
-The backend must already be online and reachable at `BACKEND_URL` before the website is built. Vercel's disk is temporary,
-so the backend cannot keep its data files there: host it on a server with a persistent disk (Render, Railway, Fly.io, a VPS),
-set its `WEBSITE_URL` to the website's Vercel domain, and use the same `REVALIDATE_SECRET` there and in the website project.
+Leave "Include source files outside of the Root Directory" switched on (the default) so `shared/` is available. The backend must be
+online at `BACKEND_URL` before the website is built. Image uploads are limited to 4 MB (Vercel's request limit); the dashboard
+shrinks photos before uploading. The login throttle and enquiry rate limit are in memory, so on serverless hosts they only slow
+down attacks per instance.
 
 ## Good to know
 

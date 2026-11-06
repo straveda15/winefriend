@@ -1,13 +1,11 @@
 import { Router } from "express";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { ENQUIRY_TOPICS } from "@winefriend/shared/constants";
 import type { Enquiry } from "@winefriend/shared/types";
 import { isValidEmail } from "@winefriend/shared/validation";
 import { clientKey } from "../auth";
 import { asBody, str } from "../input";
-import { mutateCollection, newId, readCollection, UPLOAD_DIR } from "../store";
-import { MIME_BY_EXT, UPLOAD_NAME } from "../uploads";
+import { mutateCollection, newId, readCollection } from "../store";
+import { UPLOAD_NAME, readUpload } from "../uploads";
 
 /** Read-only content for the website, the contact form, and uploaded images. */
 export const publicRouter = Router();
@@ -99,15 +97,18 @@ publicRouter.get("/uploads/:name", async (request, response) => {
     return;
   }
   try {
-    const data = await fs.readFile(path.join(UPLOAD_DIR, name));
-    const ext = name.split(".").pop() ?? "";
+    const file = await readUpload(name);
+    if (!file) {
+      response.status(404).send("Not found");
+      return;
+    }
     response
       .set({
-        "Content-Type": MIME_BY_EXT[ext] ?? "application/octet-stream",
+        "Content-Type": file.contentType,
         "Cache-Control": "public, max-age=31536000, immutable",
         "X-Content-Type-Options": "nosniff",
       })
-      .send(data);
+      .send(file.data);
   } catch {
     response.status(404).send("Not found");
   }

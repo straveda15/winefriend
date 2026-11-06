@@ -1,7 +1,5 @@
 import express, { Router } from "express";
 import { randomBytes } from "node:crypto";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { BLOG_CATEGORIES, MAX_PRODUCT_IMAGES, PRODUCT_CATEGORIES, UPLOAD_PREFIX } from "@winefriend/shared/constants";
 import type { JournalArticle, Product } from "@winefriend/shared/types";
 import { isAllowedImagePath, lines } from "@winefriend/shared/validation";
@@ -17,8 +15,8 @@ import {
 import { asBody, bool, str } from "../input";
 import { notifyWebsite } from "../notify";
 import { SESSION_MAX_AGE_SECONDS, createSessionToken } from "../session";
-import { UPLOAD_DIR, mutateCollection, newId, readCollection, slugify, uniqueSlug } from "../store";
-import { deleteUnreferencedUploads, detectImageExt } from "../uploads";
+import { mutateCollection, newId, readCollection, slugify, uniqueSlug } from "../store";
+import { MIME_BY_EXT, deleteUnreferencedUploads, detectImageExt, saveUpload } from "../uploads";
 
 /** Everything the dashboard needs. All routes except login/status require an admin session token. */
 export const adminRouter = Router();
@@ -312,7 +310,8 @@ adminRouter.delete("/api/admin/enquiries/:id", async (request, response) => {
 
 /* -------------------------------------------------------------- uploads */
 
-const MAX_BYTES = 6 * 1024 * 1024;
+// Kept under 4.5 MB so it also fits Vercel's request size limit (the dashboard resizes images before upload).
+const MAX_BYTES = 4 * 1024 * 1024;
 
 // The dashboard forwards the image bytes as-is (application/octet-stream).
 adminRouter.post("/api/admin/uploads", express.raw({ type: "*/*", limit: MAX_BYTES }), async (request, response) => {
@@ -329,7 +328,6 @@ adminRouter.post("/api/admin/uploads", express.raw({ type: "*/*", limit: MAX_BYT
   }
 
   const name = `${Date.now().toString(36)}-${randomBytes(6).toString("hex")}.${ext}`;
-  await fs.mkdir(UPLOAD_DIR, { recursive: true });
-  await fs.writeFile(path.join(UPLOAD_DIR, name), bytes);
+  await saveUpload(name, bytes, MIME_BY_EXT[ext] ?? "application/octet-stream");
   response.json({ url: `${UPLOAD_PREFIX}${name}` });
 });

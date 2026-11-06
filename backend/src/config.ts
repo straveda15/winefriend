@@ -9,7 +9,8 @@ export const isProduction = process.env.NODE_ENV === "production" || process.arg
 
 export const config = {
   port: Number(process.env.PORT ?? 4000),
-  dataDir: process.env.DATA_DIR ?? path.resolve(process.cwd(), ".data"),
+  mongodbUri: process.env.MONGODB_URI ?? "",
+  mongodbDb: process.env.MONGODB_DB ?? "winefriend",
   adminEmail: process.env.ADMIN_EMAIL ?? "",
   adminPassword: process.env.ADMIN_PASSWORD ?? "",
   sessionSecret: process.env.SESSION_SECRET ?? "",

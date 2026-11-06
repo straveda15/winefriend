@@ -114,7 +114,7 @@ export function ImageUploader({ value, onChange, max, firstLabel = "Cover" }: Im
         <label htmlFor="image-upload" className={`${buttonGhost} cursor-pointer ${value.length >= max ? "pointer-events-none opacity-50" : ""}`}>
           <ImagePlus /> {value.length ? "Add more images" : "Upload images"}
         </label>
-        <span className="text-xs text-slate">{value.length} / {max} · JPG, PNG, WebP or GIF, up to 6 MB each</span>
+        <span className="text-xs text-slate">{value.length} / {max} · JPG, PNG, WebP or GIF, up to 4 MB each</span>
       </div>
       {error && <p role="alert" className="mt-2 text-sm text-[#8c2f25]">{error}</p>}
     </div>

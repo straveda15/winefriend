@@ -1,7 +1,7 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { Binary } from "mongodb";
 import { UPLOAD_PREFIX } from "@winefriend/shared/constants";
-import { UPLOAD_DIR, readCollection } from "./store";
+import { getDb } from "./db";
+import { readCollection } from "./store";
 
 export const UPLOAD_NAME = /^[a-z0-9][a-z0-9-]{3,80}\.(jpg|png|webp|gif)$/;
 
@@ -24,6 +24,22 @@ export function detectImageExt(bytes: Uint8Array): "jpg" | "png" | "webp" | "gif
   return null;
 }
 
+type UploadDoc = { _id: string; contentType: string; data: Binary; createdAt: Date };
+
+async function uploadsCollection() {
+  return (await getDb()).collection<UploadDoc>("uploads");
+}
+
+/** Store an image in MongoDB (the file name is the document id). */
+export async function saveUpload(name: string, bytes: Uint8Array, contentType: string) {
+  await (await uploadsCollection()).insertOne({ _id: name, contentType, data: new Binary(bytes), createdAt: new Date() });
+}
+
+export async function readUpload(name: string): Promise<{ contentType: string; data: Buffer } | null> {
+  const doc = await (await uploadsCollection()).findOne({ _id: name });
+  return doc ? { contentType: doc.contentType, data: Buffer.from(doc.data.buffer) } : null;
+}
+
 /** Delete uploaded files that no product or post references any more. */
 export async function deleteUnreferencedUploads(candidates: string[]) {
   const uploads = [...new Set(candidates)].filter((src) => src.startsWith(UPLOAD_PREFIX));
@@ -32,13 +48,9 @@ export async function deleteUnreferencedUploads(candidates: string[]) {
   const [products, posts] = await Promise.all([readCollection("products"), readCollection("posts")]);
   const inUse = new Set<string>([...products.flatMap((item) => item.images), ...posts.map((item) => item.image)]);
 
-  await Promise.all(
-    uploads
-      .filter((src) => !inUse.has(src))
-      .map(async (src) => {
-        const name = src.slice(UPLOAD_PREFIX.length);
-        if (!UPLOAD_NAME.test(name)) return;
-        await fs.rm(path.join(UPLOAD_DIR, name), { force: true });
-      }),
-  );
+  const names = uploads
+    .filter((src) => !inUse.has(src))
+    .map((src) => src.slice(UPLOAD_PREFIX.length))
+    .filter((name) => UPLOAD_NAME.test(name));
+  if (names.length) await (await uploadsCollection()).deleteMany({ _id: { $in: names } });
 }
