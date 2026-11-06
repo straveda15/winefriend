@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/Button";
 import { tourWebsiteUrl } from "@/data/site";
-import { whatsappLink } from "@/lib/contact";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { ImageReveal } from "@/components/animations/ImageReveal";
 import { TextReveal } from "@/components/animations/TextReveal";
@@ -65,14 +65,12 @@ export function ToursSection({ preview = false }: { preview?: boolean }) {
                       Visit the Nashik Wine Tours website ↗
                     </a>
                   )}
-                  <a
+                  <WhatsAppLink
                     className={tourWebsiteUrl ? "wf-action" : "wf-action wf-action-primary"}
-                    href={whatsappLink("Hello Wine Friend, I would like to plan a Nashik wine tour.")}
-                    target="_blank"
-                    rel="noreferrer"
+                    message="Hello Wine Friend, I would like to plan a Nashik wine tour."
                   >
                     Plan a tour on WhatsApp
-                  </a>
+                  </WhatsAppLink>
                   <Button href="/contact" variant="ghost">Send an enquiry</Button>
                 </div>
               )}

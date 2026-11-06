@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { MessageCircle, Phone, Send } from "lucide-react";
 import { categoryLabel, formatPrice } from "@winefriend/shared/constants";
-import { productEnquiryMessage, telHref, whatsappLink } from "@/lib/contact";
+import { productEnquiryMessage, telHref } from "@/lib/contact";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import type { Product } from "@winefriend/shared/types";
 
 interface ProductDetailsProps {
@@ -40,9 +41,9 @@ export function ProductDetails({ product, as: Heading = "h2", headingId, onNavig
       )}
 
       <div className="wf-product-actions">
-        <a className="wf-action wf-action-primary" href={whatsappLink(productEnquiryMessage(product.name))} target="_blank" rel="noreferrer">
+        <WhatsAppLink className="wf-action wf-action-primary" message={productEnquiryMessage(product.name)}>
           <MessageCircle aria-hidden="true" /> Enquire on WhatsApp
-        </a>
+        </WhatsAppLink>
         <Link className="wf-action" href={`/contact?product=${encodeURIComponent(product.name)}`} onClick={onNavigate}>
           <Send aria-hidden="true" /> Send an enquiry
         </Link>

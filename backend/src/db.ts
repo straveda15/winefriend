@@ -1,5 +1,10 @@
+import dns from "node:dns";
 import { MongoClient, type Db } from "mongodb";
-import { config } from "./config";
+import { config, isProduction } from "./config";
+
+// Some home/office routers and ISPs refuse the SRV lookup that mongodb+srv:// URIs need
+// (error "querySrv ECONNREFUSED"). For local development only, resolve through public DNS.
+if (!isProduction && !process.env.VERCEL) dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 /**
  * One shared MongoDB connection. It is kept on globalThis so that serverless hosts (Vercel) reuse it

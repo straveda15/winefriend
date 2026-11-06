@@ -8,7 +8,8 @@ import { ContactForm } from "@/components/sections/ContactForm";
 import { ContactPageMotion } from "@/components/sections/ContactPageMotion";
 import { contactInfo } from "@/data/footer";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
-import { telHref, whatsappLink } from "@/lib/contact";
+import { telHref } from "@/lib/contact";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export const metadata: Metadata = {
   title: "Contact | Kamaltara Enterprises — Always in All Ways for Wine Lovers",
@@ -43,10 +44,10 @@ export default function ContactPage() {
                 <span className="wf-contact-detail-icon"><Phone aria-hidden="true" /></span>
                 <span><small>Call</small>{contactInfo.phone.map((number) => <span key={number}>{number}</span>)}</span>
               </a>
-              <a className="wf-contact-detail" href={whatsappLink()} target="_blank" rel="noreferrer">
+              <WhatsAppLink className="wf-contact-detail">
                 <span className="wf-contact-detail-icon"><MessageCircle aria-hidden="true" /></span>
                 <span><small>WhatsApp</small>Chat with us directly<em>Open WhatsApp ↗</em></span>
-              </a>
+              </WhatsAppLink>
               <a className="wf-contact-detail" href={`mailto:${contactInfo.email}`} aria-label={`Email ${contactInfo.email}`}>
                 <span className="wf-contact-detail-icon"><Mail aria-hidden="true" /></span>
                 <span><small>Email</small><span className="wf-contact-email-address">{contactInfo.email}</span></span>

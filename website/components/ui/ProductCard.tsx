@@ -3,7 +3,8 @@
 import { ArrowRight, Images, MessageCircle } from "lucide-react";
 import { Img } from "@/components/ui/Img";
 import { formatPrice } from "@winefriend/shared/constants";
-import { productEnquiryMessage, whatsappLink } from "@/lib/contact";
+import { productEnquiryMessage } from "@/lib/contact";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import type { Product } from "@winefriend/shared/types";
 
 interface ProductCardProps {
@@ -47,16 +48,14 @@ export function ProductCard({ product, index, onOpen }: ProductCardProps) {
           </span>
         </div>
       </button>
-      <a
+      <WhatsAppLink
         className="wf-product-cart-button"
-        href={whatsappLink(productEnquiryMessage(product.name))}
-        target="_blank"
-        rel="noreferrer"
+        message={productEnquiryMessage(product.name)}
         aria-label={`Enquire about ${product.name} on WhatsApp`}
       >
         <MessageCircle aria-hidden="true" />
         Enquire on WhatsApp
-      </a>
+      </WhatsAppLink>
     </article>
   );
 }

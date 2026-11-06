@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { FadeUp } from "@/components/animations/FadeUp";
-import { JournalCard } from "@/components/ui/JournalCard";
+import { JournalListingCard } from "@/components/ui/JournalListingCard";
 import { BLOG_CATEGORIES } from "@winefriend/shared/constants";
 import type { JournalArticle } from "@winefriend/shared/types";
 
@@ -12,7 +12,10 @@ const ALL = "All stories";
 export function JournalListingView({ articles }: { articles: JournalArticle[] }) {
   const [activeCategory, setActiveCategory] = useState<string>(ALL);
   const categories = [ALL, ...BLOG_CATEGORIES.filter((category) => articles.some((article) => article.category === category))];
-  const filteredArticles = activeCategory === ALL ? articles : articles.filter((article) => article.category === activeCategory);
+  const filteredArticles =
+    activeCategory === ALL
+      ? [...articles.filter((article) => article.featured), ...articles.filter((article) => !article.featured)]
+      : articles.filter((article) => article.category === activeCategory);
 
   return (
     <section className="wf-section wf-journal py-14 lg:py-20 bg-cream">
@@ -25,13 +28,15 @@ export function JournalListingView({ articles }: { articles: JournalArticle[] })
             </button>
           ))}
         </nav>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
-          {filteredArticles.map((article, index) => (
-            <FadeUp key={article.id} delay={Math.min(index * .06, .24)}>
-              <JournalCard article={article} featured={article.featured && activeCategory === ALL} />
-            </FadeUp>
-          ))}
-        </div>
+        {filteredArticles.length > 0 && (
+          <div className="wf-jgrid">
+            {filteredArticles.map((article, index) => (
+              <FadeUp key={article.id} delay={Math.min(index * .06, .24)} className={article.featured && activeCategory === ALL ? "wf-jgrid-featured" : undefined}>
+                <JournalListingCard article={article} featured={article.featured && activeCategory === ALL} />
+              </FadeUp>
+            ))}
+          </div>
+        )}
       </Container>
     </section>
   );

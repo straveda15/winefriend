@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 import { submitEnquiryAction } from "@/app/actions/enquiry";
 import { ENQUIRY_TOPICS } from "@winefriend/shared/constants";
-import { whatsappLink } from "@/lib/contact";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { useHydrated } from "@winefriend/shared/use-hydrated";
 
 export function ContactForm() {
@@ -93,9 +93,9 @@ export function ContactForm() {
       <button className="wf-contact-submit" type="submit" disabled={pending || !ready}>
         {pending ? "Sending…" : "Submit"}
       </button>
-      <a className="wf-contact-whatsapp" href={whatsappLink(product ? `Hello Wine Friend, I would like to enquire about "${product}".` : undefined)} target="_blank" rel="noreferrer">
+      <WhatsAppLink className="wf-contact-whatsapp" message={product ? `Hello Wine Friend, I would like to enquire about "${product}".` : undefined}>
         <MessageCircle aria-hidden="true" /> Prefer WhatsApp? Chat with us directly
-      </a>
+      </WhatsAppLink>
     </form>
   );
 }

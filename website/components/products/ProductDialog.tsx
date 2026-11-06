@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
-import { ExternalLink, X } from "lucide-react";
+import { X } from "lucide-react";
 import { ProductDetails } from "@/components/products/ProductDetails";
 import { ProductGallery } from "@/components/products/ProductGallery";
 import type { Product } from "@winefriend/shared/types";
@@ -14,11 +13,22 @@ export function ProductDialog({ product, onClose }: { product: Product; onClose:
     const dialog = ref.current;
     if (!dialog) return;
     if (!dialog.open) dialog.showModal();
-    const previousOverflow = document.body.style.overflow;
+    // Lock the page behind the dialog. Both <html> and <body> are locked because the smooth-scroll
+    // library scrolls <html>.
+    const html = document.documentElement;
+    const previous = { html: html.style.overflow, body: document.body.style.overflow };
+    html.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+    // Wheel / touch movement on the dimmed backdrop (which targets the <dialog> itself) must not reach the page.
+    const blockBackdropScroll = (event: Event) => {
+      if (event.target === dialog) event.preventDefault();
+    };
+    dialog.addEventListener("wheel", blockBackdropScroll, { passive: false });
+    dialog.addEventListener("touchmove", blockBackdropScroll, { passive: false });
     return () => {
       // The element is removed on unmount, which also takes it out of the top layer.
-      document.body.style.overflow = previousOverflow;
+      html.style.overflow = previous.html;
+      document.body.style.overflow = previous.body;
     };
   }, []);
 
@@ -46,9 +56,6 @@ export function ProductDialog({ product, onClose }: { product: Product; onClose:
         <ProductGallery images={product.images} name={product.name} priority sizes="(max-width: 767px) 100vw, 560px" />
         <div className="wf-dialog-copy">
           <ProductDetails product={product} headingId={headingId} onNavigate={onClose} />
-          <Link href={`/products/${product.slug}`} className="wf-dialog-fullpage">
-            Open full page <ExternalLink aria-hidden="true" />
-          </Link>
         </div>
       </div>
     </dialog>

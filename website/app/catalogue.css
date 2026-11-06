@@ -127,6 +127,7 @@
   display: grid;
   max-height: calc(100dvh - 1.5rem);
   grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  align-items: start;
   gap: clamp(1.25rem, 3vw, 2.25rem);
   padding: clamp(1rem, 2.5vw, 1.75rem);
   overflow-y: auto;
@@ -150,20 +151,7 @@
 .wf-dialog-close:hover { background: var(--gold); }
 .wf-dialog-close:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .wf-dialog-close svg { width: 1.1rem; height: 1.1rem; }
-.wf-dialog-copy { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding-top: 1.75rem; }
-.wf-dialog-fullpage {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  width: fit-content;
-  margin-top: 1.25rem;
-  color: #805f23;
-  font-size: .68rem;
-  font-weight: 600;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.wf-dialog-fullpage svg { width: .85rem; height: .85rem; }
+.wf-dialog-copy { display: flex; min-width: 0; flex-direction: column; justify-content: flex-start; padding-top: 0; }
 
 /* Product details (dialog and full page) */
 .wf-product-details-title {
@@ -220,9 +208,11 @@
 .wf-action-primary { border-color: var(--gold); background: var(--gold); }
 .wf-action-primary:hover { background: #d4aa4d; }
 
-@media (max-width: 767px) {
+@media (max-width: 899px) {
+  .wf-dialog { width: min(40rem, calc(100vw - 1.5rem)); }
   .wf-dialog-body { grid-template-columns: minmax(0, 1fr); }
-  .wf-dialog-copy { padding-top: 0; }
+}
+@media (max-width: 767px) {
   .wf-action { flex: 1 1 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -236,25 +226,19 @@
   right: 1.1rem;
   bottom: 1.1rem;
   z-index: 60;
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  padding: .75rem 1.05rem;
-  border-radius: 999px;
-  background: #1f8f4e;
-  color: #fff;
-  font: 600 .72rem/1 var(--font-sans), sans-serif;
-  letter-spacing: .06em;
-  text-decoration: none;
-  box-shadow: 0 10px 28px rgb(0 0 0 / 28%);
-  transition: transform 250ms ease, background-color 250ms ease;
+  display: block;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 50%;
+  line-height: 0;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 30%);
+  transition: transform 250ms ease;
 }
-.wf-whatsapp-float:hover { background: #187a42; transform: translateY(-2px); }
+.wf-whatsapp-float:hover { transform: translateY(-2px) scale(1.05); }
 .wf-whatsapp-float:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-.wf-whatsapp-float svg { width: 1.25rem; height: 1.25rem; }
+.wf-whatsapp-float svg { width: 100%; height: 100%; }
 @media (max-width: 639px) {
-  .wf-whatsapp-float { right: .8rem; bottom: .8rem; padding: .85rem; }
-  .wf-whatsapp-float span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .wf-whatsapp-float { right: .8rem; bottom: .8rem; width: 2.6rem; height: 2.6rem; }
 }
 html:has(dialog[open]) .wf-whatsapp-float { display: none; }
 
