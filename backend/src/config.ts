@@ -1,8 +1,9 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
-// Load backend/.env.local when present (real environment variables always win).
-const envFile = path.resolve(process.cwd(), ".env.local");
+// Prefer .env.local, and support .env for a conventional local setup.
+const localEnvFile = path.resolve(process.cwd(), ".env.local");
+const envFile = existsSync(localEnvFile) ? localEnvFile : path.resolve(process.cwd(), ".env");
 if (existsSync(envFile)) process.loadEnvFile(envFile);
 
 export const isProduction = process.env.NODE_ENV === "production" || process.argv.includes("--production");

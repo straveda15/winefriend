@@ -1,4 +1,4 @@
-import { BACKEND_URL, sessionToken } from "@/lib/api";
+import { BACKEND_URL, backendFetchErrorMessage, sessionToken } from "@/lib/api";
 
 const MAX_BYTES = 4 * 1024 * 1024;
 
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     });
     const data = await upstream.json().catch(() => ({ error: "Upload failed." }));
     return Response.json(data, { status: upstream.status });
-  } catch {
-    return Response.json({ error: "Cannot reach the backend. Make sure it is running." }, { status: 503 });
+  } catch (error) {
+    return Response.json({ error: backendFetchErrorMessage("/api/admin/uploads", error) }, { status: 503 });
   }
 }

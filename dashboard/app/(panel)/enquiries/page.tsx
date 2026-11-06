@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { CheckCircle2, Mail, MessageCircle, Phone, RotateCcw, Trash2 } from "lucide-react";
 import { deleteEnquiryAction, toggleEnquiryHandledAction } from "@/app/actions";
 import { ConfirmForm } from "@/components/ConfirmForm";
@@ -7,14 +8,21 @@ import { adminEnquiries } from "@/lib/admin-data";
 
 const dateTime = new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" });
 
-export default async function AdminEnquiriesPage() {
-  const enquiries = await adminEnquiries();
-
+export default function AdminEnquiriesPage() {
   return (
     <>
       <PageHeader title="Enquiries" description="Messages sent through the website enquiry form. Reply by email, phone or WhatsApp, then mark them as handled." />
+      <Suspense fallback={<div className="py-10 text-center text-sm text-slate" aria-busy="true">Loading enquiries…</div>}>
+        <EnquiriesList />
+      </Suspense>
+    </>
+  );
+}
 
-      {enquiries.length === 0 ? (
+async function EnquiriesList() {
+  const enquiries = await adminEnquiries();
+  return (
+    <>{enquiries.length === 0 ? (
         <div className={`${card} p-10 text-center`}>
           <p className="font-serif text-xl">No enquiries yet</p>
           <p className="mt-2 text-sm text-slate">Messages from the contact form will appear here.</p>
@@ -29,7 +37,7 @@ export default async function AdminEnquiriesPage() {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="font-serif text-lg">{item.name}</p>
-                    <p className="text-xs text-slate">{dateTime.format(new Date(item.createdAt))} · {item.topic}</p>
+                    <p className="text-xs text-slate">{dateTime.format(new Date(item.createdAt))} Â· {item.topic}</p>
                   </div>
                   <span className={item.status === "new" ? badgeAmber : badgeGrey}>{item.status === "new" ? "New" : "Handled"}</span>
                 </div>

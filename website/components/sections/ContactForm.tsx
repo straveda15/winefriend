@@ -55,7 +55,14 @@ export function ContactForm() {
         </label>
         <label>
           Phone number (optional)
-          <input autoComplete="tel" name="phone" type="tel" maxLength={30} />
+          <input
+            autoComplete="tel"
+            name="phone"
+            type="tel"
+            maxLength={30}
+            pattern={"(?=(?:\\D*\\d){7,15}\\D*$)\\+?(?:[0-9]|\\s|\\(|\\)|\\.|-)+"}
+            title="Use 7–15 digits; spaces, parentheses, +, dots, and hyphens are allowed."
+          />
         </label>
       </div>
       <label>

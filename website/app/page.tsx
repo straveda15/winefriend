@@ -13,19 +13,28 @@ import { HomeIntro } from "@/components/sections/HomeIntro";
 export default function Home() {
   return (
     <>
-      <HomeIntro />
-      <Header />
+      <Suspense fallback={null}>
+        <HomeIntro />
+      </Suspense>
+      <Suspense fallback={<Header />}>
+        <Header />
+      </Suspense>
       <main>
         <HeroSection />
         <DiscoverSection />
-        <CollectionSection preview />
+        <Suspense fallback={null}>
+          <CollectionSection preview />
+        </Suspense>
         <BusinessSection preview />
         <ToursSection preview />
         <AboutSection preview />
-        <JournalSection preview />
+        <Suspense fallback={null}>
+          <JournalSection preview />
+        </Suspense>
         <CtaSection />
       </main>
       <Footer />
     </>
   );
 }
+import { Suspense } from "react";

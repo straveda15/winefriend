@@ -15,6 +15,26 @@ export class ApiError extends Error {
   }
 }
 
+function describeFetchError(error: unknown): string {
+  if (!(error instanceof Error)) return String(error);
+  const cause = error.cause;
+  if (cause instanceof Error && cause.message !== error.message) return `${error.message}: ${cause.message}`;
+  if (cause && typeof cause === "object" && "code" in cause && typeof cause.code === "string") {
+    return `${error.message} (${cause.code})`;
+  }
+  return error.message;
+}
+
+export function backendFetchErrorMessage(path: string, error: unknown): string {
+  let backendHost = BACKEND_URL;
+  try {
+    backendHost = new URL(BACKEND_URL).host;
+  } catch {
+    // Keep the original value in the message so a malformed URL is easy to fix.
+  }
+  return `Could not reach the backend at ${backendHost}${path}: ${describeFetchError(error)}. Check BACKEND_URL and make sure the backend is running.`;
+}
+
 export async function sessionToken(): Promise<string | undefined> {
   return (await cookies()).get(SESSION_COOKIE)?.value;
 }
@@ -55,8 +75,8 @@ export async function api<T = unknown>(path: string, options: Options = {}): Pro
       body: options.raw ?? (options.body !== undefined ? JSON.stringify(options.body) : undefined),
       cache: "no-store",
     });
-  } catch {
-    throw new ApiError(503, "Cannot reach the backend. Make sure it is running (npm run dev:backend).");
+  } catch (error) {
+    throw new ApiError(503, backendFetchErrorMessage(path, error));
   }
 
   if (response.status === 401 && options.auth !== false) redirect("/login");

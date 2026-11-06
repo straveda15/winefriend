@@ -9,11 +9,20 @@ import type { JournalArticle, Product } from "@winefriend/shared/types";
  */
 const CONTENT_LIFE = { stale: 60, revalidate: 300, expire: 86400 };
 
-export async function getProducts(): Promise<Product[]> {
+async function getProductsCached(): Promise<Product[]> {
   "use cache";
   cacheTag("products");
   cacheLife(CONTENT_LIFE);
   return backendGet<Product[]>("/api/products");
+}
+
+export async function getProducts(): Promise<Product[]> {
+  try {
+    return await getProductsCached();
+  } catch (error) {
+    console.error("[website] Could not load /api/products; rendering without backend content.", error);
+    return [];
+  }
 }
 
 export async function getProductsForHome(limit = 3): Promise<Product[]> {
@@ -28,11 +37,20 @@ export async function getProduct(slug: string): Promise<Product | undefined> {
   return items.find((item) => item.slug === slug);
 }
 
-export async function getPosts(): Promise<JournalArticle[]> {
+async function getPostsCached(): Promise<JournalArticle[]> {
   "use cache";
   cacheTag("posts");
   cacheLife(CONTENT_LIFE);
   return backendGet<JournalArticle[]>("/api/posts");
+}
+
+export async function getPosts(): Promise<JournalArticle[]> {
+  try {
+    return await getPostsCached();
+  } catch (error) {
+    console.error("[website] Could not load /api/posts; rendering without backend content.", error);
+    return [];
+  }
 }
 
 export async function getPost(slug: string): Promise<JournalArticle | undefined> {

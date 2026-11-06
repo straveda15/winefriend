@@ -67,6 +67,11 @@ publicRouter.post("/api/enquiries", async (request, response) => {
     response.status(400).json({ error: "That phone number looks too long." });
     return;
   }
+  const phoneDigits = phone.replace(/\D/g, "").length;
+  if (phone && (!/^\+?[0-9\s().-]+$/.test(phone) || phoneDigits < 7 || phoneDigits > 15)) {
+    response.status(400).json({ error: "Enter a valid phone number using 7 to 15 digits." });
+    return;
+  }
   if (!message || message.length > 3000) {
     response.status(400).json({ error: "Please write a message (up to 3,000 characters)." });
     return;
@@ -84,8 +89,30 @@ publicRouter.post("/api/enquiries", async (request, response) => {
     createdAt: new Date().toISOString(),
   };
 
-  await mutateCollection("enquiries", (items) => ({ items: [enquiry, ...items].slice(0, 2000), result: null }));
-  response.json({ ok: true, message: "Thank you - your enquiry has been received. We will get back to you shortly." });
+  const duplicate = await mutateCollection("enquiries", (items) => {
+    const duplicateWindow = 60 * 1000;
+    const isDuplicate = items.some((item) => {
+      const age = Date.now() - Date.parse(item.createdAt);
+      return (
+        age >= 0 &&
+        age <= duplicateWindow &&
+        item.name.toLowerCase() === enquiry.name.toLowerCase() &&
+        item.email.toLowerCase() === enquiry.email.toLowerCase() &&
+        item.phone === enquiry.phone &&
+        item.topic === enquiry.topic &&
+        item.message === enquiry.message &&
+        (item.product ?? "") === (enquiry.product ?? "")
+      );
+    });
+    return isDuplicate
+      ? { items, result: true }
+      : { items: [enquiry, ...items].slice(0, 2000), result: false };
+  });
+  response.json({
+    ok: true,
+    message: "Thank you - your enquiry has been received. We will get back to you shortly.",
+    duplicate,
+  });
 });
 
 /* -------------------------------------------------------------- uploads */

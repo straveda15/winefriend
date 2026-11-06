@@ -28,7 +28,8 @@ export async function submitEnquiryAction(_prev: FormState, formData: FormData):
     const data = (await response.json().catch(() => ({}))) as { ok?: boolean; message?: string; error?: string };
     if (response.ok) return { ok: true, message: data.message ?? "Thank you - your enquiry has been received." };
     return { error: data.error ?? "We could not send your enquiry. Please try again or use WhatsApp." };
-  } catch {
+  } catch (error) {
+    console.error("[website] Contact enquiry request failed:", error);
     return { error: "We could not send your enquiry right now. Please try again in a moment or use WhatsApp." };
   }
 }
