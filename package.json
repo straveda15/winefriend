@@ -1,0 +1,25 @@
+{
+  "name": "winefriend",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Wine Friend (Kamaltara Enterprises): backend API, public website and admin dashboard.",
+  "workspaces": [
+    "backend",
+    "website",
+    "dashboard",
+    "shared"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace @winefriend/backend",
+    "dev:website": "npm run dev --workspace @winefriend/website",
+    "dev:dashboard": "npm run dev --workspace @winefriend/dashboard",
+    "build": "npm run build:website && npm run build:dashboard",
+    "build:website": "npm run build --workspace @winefriend/website",
+    "build:dashboard": "npm run build --workspace @winefriend/dashboard",
+    "start:backend": "npm run start --workspace @winefriend/backend",
+    "start:website": "npm run start --workspace @winefriend/website",
+    "start:dashboard": "npm run start --workspace @winefriend/dashboard",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}

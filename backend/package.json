@@ -1,0 +1,21 @@
+{
+  "name": "@winefriend/backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Wine Friend API: owns the data (products, posts, enquiries), uploads and admin login.",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts --production",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@winefriend/shared": "*",
+    "express": "^5.1.0",
+    "tsx": "^4.20.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^20",
+    "typescript": "^5"
+  }
+}

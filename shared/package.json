@@ -1,0 +1,16 @@
+{
+  "name": "@winefriend/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Code shared by the backend, website and dashboard: data types, constants, form helpers.",
+  "exports": {
+    "./types": "./src/types.ts",
+    "./constants": "./src/constants.ts",
+    "./validation": "./src/validation.ts",
+    "./form-state": "./src/form-state.ts",
+    "./use-hydrated": "./src/use-hydrated.ts"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
