@@ -56,7 +56,7 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
               stagger={0.15}
             >
               {(preview ? aboutPillars.slice(0, 2) : aboutPillars).map((pillar) => (
-                <FeatureIcon key={pillar.title} pillar={pillar} />
+                <FeatureIcon key={pillar.title} pillar={pillar} horizontalMobile={!preview} />
               ))}
             </StaggerChildren>
           </div>
