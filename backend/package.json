@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts --production",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "bundle": "esbuild src/vercel.ts --bundle --platform=node --target=node22 --format=cjs --outfile=api/index.js --footer:js=\"module.exports = module.exports.default;\" --external:kerberos --external:@mongodb-js/zstd --external:@aws-sdk/credential-providers --external:gcp-metadata --external:snappy --external:socks --external:mongodb-client-encryption --external:aws4 --log-level=warning",
+    "vercel-build": "npm run bundle"
   },
   "dependencies": {
     "@winefriend/shared": "*",
@@ -17,6 +19,7 @@
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^20",
+    "esbuild": "^0.28.2",
     "typescript": "^5"
   }
 }
