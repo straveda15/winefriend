@@ -29,5 +29,23 @@ export function isAllowedImagePath(src: unknown): src is string {
 }
 
 export function isValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) && value.length <= 254;
+  if (value.length > 254) return false;
+  const [local, domain, ...extra] = value.split("@");
+  if (extra.length > 0 || !local || local.length > 64 || !domain || local.startsWith(".") || local.endsWith(".") || local.includes("..")) return false;
+  if (!/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+$/i.test(local)) return false;
+  return /^(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,63}$/i.test(domain);
+}
+
+export function isValidContactName(value: string): boolean {
+  const name = value.trim();
+  return name.length >= 2 && name.length <= 100 && /^[\p{L} ]+$/u.test(name);
+}
+
+export function isValidIndianMobile(value: string): boolean {
+  return /^[6-9]\d{9}$/.test(value.trim());
+}
+
+export function isValidEnquiryMessage(value: string): boolean {
+  const message = value.trim();
+  return message.length > 0 && message.length <= 3000;
 }

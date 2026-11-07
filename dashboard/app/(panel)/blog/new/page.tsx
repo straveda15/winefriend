@@ -8,7 +8,7 @@ export default async function NewPostPage() {
 
   return (
     <>
-      <PageHeader title="New article" description="Write the article, add a featured image and choose when it is published." />
+      <PageHeader title="New article" description="Write the article and choose when it is published. Adding photos is optional." />
       <PostForm today={today} />
     </>
   );

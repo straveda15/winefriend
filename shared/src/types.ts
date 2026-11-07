@@ -40,7 +40,10 @@ export interface JournalArticle {
   excerpt: string;
   /** Plain text with light formatting: blank line = paragraph, "## " = heading, "- " = list item. */
   content: string;
-  image: string;
+  /** Optional primary/cover image retained for older article records. */
+  image?: string;
+  /** Additional article images; images[0] is the cover when present. */
+  images?: string[];
   category: string;
   /** ISO date (yyyy-mm-dd) shown as the publication date. */
   date: string;

@@ -53,8 +53,8 @@ export function ProductDialog({ product, onClose }: { product: Product; onClose:
         <X aria-hidden="true" />
       </button>
       <div className="wf-dialog-body" data-lenis-prevent>
-        <ProductGallery images={product.images} name={product.name} priority sizes="(max-width: 767px) 100vw, 560px" />
-        <div className="wf-dialog-copy">
+        <ProductGallery images={product.images} name={product.name} imageFit="contain" priority sizes="(max-width: 767px) 100vw, 560px" />
+        <div className="wf-dialog-copy" tabIndex={0} aria-label="Product details">
           <ProductDetails product={product} headingId={headingId} onNavigate={onClose} />
         </div>
       </div>

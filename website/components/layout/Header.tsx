@@ -94,6 +94,7 @@ export function Header() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  scroll={item.href !== "/contact"}
                   onClick={() => handleNavigationClick(item.href)}
                   aria-current={activeHref === item.href ? "page" : undefined}
                   className={`wf-nav-link font-serif text-[13px] 2xl:text-sm tracking-[0.015em] transition-colors relative after:absolute after:bottom-[-7px] after:left-0 after:w-0 after:h-px after:transition-all after:duration-300 hover:after:w-full whitespace-nowrap ${

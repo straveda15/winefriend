@@ -1,19 +1,19 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Img } from "@/components/ui/Img";
+import { JournalImage } from "@/components/ui/JournalImage";
 import { formatDate } from "@winefriend/shared/constants";
 import type { JournalArticle } from "@winefriend/shared/types";
 
 /** Card used on the Wine Journal page: a wide "featured" layout or a standard grid card. */
 export function JournalListingCard({ article, featured = false }: { article: JournalArticle; featured?: boolean }) {
   return (
-    <Link href={`/journal/${article.slug}`} className={`wf-jcard group${featured ? " wf-jcard--featured" : ""}`}>
-      <div className="wf-jcard-media img-fallback-wine">
-        <Img
-          src={article.image}
+    <Link href={`/journal/${article.slug}`} className={`wf-jcard wf-journal-card group${featured ? " wf-jcard--featured" : ""}`}>
+      <div className="wf-jcard-media bg-white">
+        <JournalImage
+          src={article.image ?? article.images?.[0]}
+          fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined}
           alt={article.title}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           sizes={featured ? "(max-width: 1023px) 100vw, 60vw" : "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"}
         />
       </div>

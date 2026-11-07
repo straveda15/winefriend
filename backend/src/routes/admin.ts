@@ -217,7 +217,9 @@ async function savePost(id: string | undefined, body: ReturnType<typeof asBody>)
   const title = str(body, "title");
   const excerpt = str(body, "excerpt");
   const content = (typeof body.content === "string" ? body.content : "").replace(/\r\n/g, "\n").trim();
-  const image = str(body, "image");
+  const legacyImage = str(body, "image");
+  const images = Array.isArray(body.images) ? body.images : legacyImage ? [legacyImage] : [];
+  const image = typeof images[0] === "string" ? images[0] : undefined;
   const category = str(body, "category");
   const date = str(body, "date");
   const customSlug = str(body, "slug");
@@ -230,7 +232,8 @@ async function savePost(id: string | undefined, body: ReturnType<typeof asBody>)
   if (excerpt.length > 300) return { error: "Summary must be 300 characters or fewer." };
   if (!content) return { error: "Write the article content." };
   if (content.length > 30000) return { error: "Article is too long (30,000 character limit)." };
-  if (!isAllowedImagePath(image)) return { error: "Add a featured image." };
+  if (body.images !== undefined && !Array.isArray(body.images)) return { error: "Article images must be a list." };
+  if (!images.every(isAllowedImagePath)) return { error: "One of the article images is invalid. Please re-upload it." };
   if (!(BLOG_CATEGORIES as readonly string[]).includes(category)) return { error: "Choose a category." };
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Choose a publication date." };
 
@@ -245,14 +248,15 @@ async function savePost(id: string | undefined, body: ReturnType<typeof asBody>)
     if (id) {
       const previous = items.find((item) => item.id === id);
       if (!previous) return { items, result: { error: "That post no longer exists." } };
-      const updated: JournalArticle = { ...previous, title, slug, excerpt, content, image, category, date, featured, published, updatedAt: now };
+      const updated: JournalArticle = { ...previous, title, slug, excerpt, content, image, images, category, date, featured, published, updatedAt: now };
+      const previousImages = previous.images?.length ? previous.images : previous.image ? [previous.image] : [];
       return {
         items: items.map((item) => (item.id === id ? updated : (cleared.find((other) => other.id === item.id) ?? item))),
-        result: { saved: updated, removed: previous.image !== image ? [previous.image] : [] },
+        result: { saved: updated, removed: previousImages.filter((previousImage) => !images.includes(previousImage)) },
       };
     }
 
-    const created: JournalArticle = { id: newId(), title, slug, excerpt, content, image, category, date, featured, published, updatedAt: now };
+    const created: JournalArticle = { id: newId(), title, slug, excerpt, content, image, images, category, date, featured, published, updatedAt: now };
     return { items: [created, ...cleared], result: { saved: created, removed: [] } };
   });
 }
@@ -269,7 +273,7 @@ adminRouter.delete("/api/admin/posts/:id", async (request, response) => {
   const id = String(request.params.id);
   const removed = await mutateCollection("posts", (items) => {
     const target = items.find((item) => item.id === id);
-    return { items: items.filter((item) => item.id !== id), result: target ? [target.image] : [] };
+    return { items: items.filter((item) => item.id !== id), result: target ? (target.images?.length ? target.images : target.image ? [target.image] : []) : [] };
   });
   await deleteUnreferencedUploads(removed);
   await notifyWebsite(["posts"]);

@@ -12,7 +12,7 @@ import type { JournalArticle } from "@winefriend/shared/types";
 
 export function PostForm({ post, today }: { post?: JournalArticle; today: string }) {
   const [state, action, pending] = useActionState(savePostAction, {});
-  const [image, setImage] = useState<string[]>(post?.image ? [post.image] : []);
+  const [images, setImages] = useState<string[]>(post?.images?.length ? post.images : post?.image ? [post.image] : []);
   const ready = useHydrated();
 
   return (
@@ -25,7 +25,7 @@ export function PostForm({ post, today }: { post?: JournalArticle; today: string
       }}
     >
       {post && <input type="hidden" name="id" value={post.id} />}
-      <input type="hidden" name="image" value={image[0] ?? ""} />
+      <input type="hidden" name="images" value={JSON.stringify(images)} />
 
       <div className="grid gap-6">
         <section className={`${card} grid gap-5 p-5 sm:p-6`}>
@@ -50,9 +50,9 @@ export function PostForm({ post, today }: { post?: JournalArticle; today: string
         </section>
 
         <section className={`${card} p-5 sm:p-6`}>
-          <h2 className="font-serif text-xl">Featured image</h2>
-          <p className={`${hint} mb-4`}>Shown on the blog listing and at the top of the article.</p>
-          <ImageUploader value={image} onChange={(next) => setImage(next.slice(-1))} max={1} firstLabel="Featured" />
+          <h2 className="font-serif text-xl">Article images <span className="text-sm font-normal text-slate">(optional)</span></h2>
+          <p className={`${hint} mb-4`}>Upload photos if you want. The first image is used as the cover; portrait and landscape images are fitted without cropping.</p>
+          <ImageUploader value={images} onChange={setImages} firstLabel="Cover" />
         </section>
       </div>
 

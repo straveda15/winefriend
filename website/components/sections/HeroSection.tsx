@@ -286,7 +286,7 @@ export function HeroSection() {
                   alt={slide.alt}
                   ref={(element) => { photoRefs.current[index] = element; }}
                   fill
-                  preload={index === 0}
+                  loading={index < 2 ? "eager" : "lazy"}
                   sizes="(max-width: 767px) 100vw, 34vw"
                   className="wf-hero-photo"
                   draggable={false}

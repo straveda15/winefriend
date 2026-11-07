@@ -21,8 +21,16 @@ export default function AdminEnquiriesPage() {
 
 async function EnquiriesList() {
   const enquiries = await adminEnquiries();
+  const newCount = enquiries.filter((item) => item.status === "new").length;
+  const handledCount = enquiries.length - newCount;
   return (
-    <>{enquiries.length === 0 ? (
+    <>
+      <div className="mb-6 grid gap-3 sm:grid-cols-3">
+        <SummaryCard label="Total enquiries" value={enquiries.length} />
+        <SummaryCard label="New enquiries" value={newCount} />
+        <SummaryCard label="Handled enquiries" value={handledCount} />
+      </div>
+      {enquiries.length === 0 ? (
         <div className={`${card} p-10 text-center`}>
           <p className="font-serif text-xl">No enquiries yet</p>
           <p className="mt-2 text-sm text-slate">Messages from the contact form will appear here.</p>
@@ -42,7 +50,20 @@ async function EnquiriesList() {
                   <span className={item.status === "new" ? badgeAmber : badgeGrey}>{item.status === "new" ? "New" : "Handled"}</span>
                 </div>
                 {item.product && <p className="mt-3 text-sm"><span className="font-semibold">Product:</span> {item.product}</p>}
-                <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed text-charcoal-light">{item.message}</p>
+                <p className="mt-3 line-clamp-2 whitespace-pre-wrap break-words text-sm leading-relaxed text-charcoal-light">{item.message}</p>
+                <details className="mt-3 rounded-lg border border-gold/20 bg-cream/40 px-3 py-2">
+                  <summary className="cursor-pointer text-sm font-semibold text-[#805f23]">View details</summary>
+                  <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+                    <div><dt className="font-semibold">Customer name</dt><dd>{item.name}</dd></div>
+                    <div><dt className="font-semibold">Email</dt><dd className="break-all">{item.email}</dd></div>
+                    <div><dt className="font-semibold">Phone</dt><dd>{item.phone || "Not provided"}</dd></div>
+                    <div><dt className="font-semibold">Enquiry type</dt><dd>{item.topic}</dd></div>
+                    {item.product && <div><dt className="font-semibold">Product</dt><dd>{item.product}</dd></div>}
+                    <div><dt className="font-semibold">Submitted</dt><dd>{dateTime.format(new Date(item.createdAt))}</dd></div>
+                    <div><dt className="font-semibold">Status</dt><dd>{item.status === "new" ? "New" : "Handled"}</dd></div>
+                    <div className="sm:col-span-2"><dt className="font-semibold">Complete message</dt><dd className="mt-1 whitespace-pre-wrap break-words text-charcoal-light">{item.message}</dd></div>
+                  </dl>
+                </details>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   <a className={buttonGhost} href={`mailto:${item.email}`}><Mail /> {item.email}</a>
                   {item.phone && <a className={buttonGhost} href={`tel:${item.phone.replace(/[^\d+]/g, "")}`}><Phone /> {item.phone}</a>}
@@ -65,5 +86,14 @@ async function EnquiriesList() {
         </ul>
       )}
     </>
+  );
+}
+
+function SummaryCard({ label, value }: { label: string; value: number }) {
+  return (
+    <div className={`${card} p-4 sm:p-5`}>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-charcoal-light">{label}</p>
+      <p className="mt-2 font-serif text-3xl font-medium">{value}</p>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 export function BrandLogo({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link href="/" aria-label="Wine Friend dashboard" className="flex items-center gap-3">
-      <Image src="/logo.png" alt="" width={421} height={293} priority unoptimized className="h-12 w-auto" />
+      <Image src="/new_logo.png" alt="" width={1033} height={665} priority unoptimized className="h-12 w-auto" />
       <span className={`flex flex-col leading-tight font-serif ${inverse ? "text-[#f5efe3]" : "text-charcoal"}`}>
         <span className="text-[0.8rem] font-semibold tracking-[0.12em]">KAMALTARA</span>
         <span className="text-[0.8rem] font-semibold tracking-[0.12em]">ENTERPRISES</span>

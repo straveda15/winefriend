@@ -44,7 +44,7 @@ export function ProductDetails({ product, as: Heading = "h2", headingId, onNavig
         <WhatsAppLink className="wf-action wf-action-primary" message={productEnquiryMessage(product.name)}>
           <MessageCircle aria-hidden="true" /> Enquire on WhatsApp
         </WhatsAppLink>
-        <Link className="wf-action" href={`/contact?product=${encodeURIComponent(product.name)}`} onClick={onNavigate}>
+        <Link className="wf-action" href={`/contact?product=${encodeURIComponent(product.name)}`} scroll={false} onClick={onNavigate}>
           <Send aria-hidden="true" /> Send an enquiry
         </Link>
         <a className="wf-action" href={telHref}>
