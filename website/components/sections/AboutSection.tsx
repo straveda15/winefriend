@@ -55,7 +55,7 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
               className="wf-about-pillars grid grid-cols-1 sm:grid-cols-2 gap-4"
               stagger={0.15}
             >
-              {(preview ? aboutPillars.slice(0, 2) : aboutPillars).map((pillar) => (
+              {aboutPillars.map((pillar) => (
                 <FeatureIcon key={pillar.title} pillar={pillar} horizontalMobile={!preview} />
               ))}
             </StaggerChildren>
