@@ -14,15 +14,19 @@ async function getContent<T>(path: string): Promise<T[]> {
   return backendGet<T[]>(path);
 }
 
-async function getProductsCached(): Promise<Product[]> {
+async function getProductsCached(): Promise<Product[] | null> {
   "use cache";
   cacheTag("products");
   cacheLife(CONTENT_LIFE);
-  return getContent<Product>("/api/products");
+  const products = await getContent<Product>("/api/products");
+  // Never keep an empty catalogue cached: a temporary backend/database mismatch
+  // should not hide products after the source is corrected.
+  return products.length > 0 ? products : null;
 }
 
 export async function getProductsOrThrow(): Promise<Product[]> {
-  return getProductsCached();
+  const cached = await getProductsCached();
+  return cached ?? getContent<Product>("/api/products");
 }
 
 export async function getProducts(): Promise<Product[]> {
@@ -35,10 +39,8 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function getProductsForHome(limit = 3): Promise<Product[]> {
-  const items = await getProducts();
-  const featured = items.filter((item) => item.featured);
-  const rest = items.filter((item) => !item.featured);
-  return [...featured, ...rest].slice(0, limit);
+  const items = await getProductsOrThrow();
+  return items.filter((item) => item.featured).slice(0, limit);
 }
 
 export async function getProduct(slug: string): Promise<Product | undefined> {

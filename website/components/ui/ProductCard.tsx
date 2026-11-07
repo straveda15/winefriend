@@ -22,7 +22,7 @@ export function ProductCard({ product, index, onOpen }: ProductCardProps) {
             src={product.images[0]}
             alt={product.name}
             fill
-            className="wf-product-image object-contain"
+            className="wf-product-image object-cover"
             sizes="(max-width: 479px) 100vw, (max-width: 1023px) 50vw, 33vw"
           />
           <div className="wf-product-image-wash absolute inset-0" />

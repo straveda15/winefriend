@@ -21,9 +21,6 @@ export default function ProductsPage() {
       <Suspense fallback={<CollectionSectionView products={[]} loadState="loading" />}>
         <CollectionSection />
       </Suspense>
-      <section className="wf-section bg-ivory py-14 lg:py-20">
-
-      <CollectionSection />
       <section className="wf-section bg-ivory py-12 lg:py-18">
 
         <Container>

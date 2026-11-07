@@ -5,24 +5,15 @@ import Link from "next/link";
 export function BrandLogo({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link href="/" aria-label="Wine Friend dashboard" className="flex items-center gap-3">
- 
-      <Image src="/new_logo.png" alt="" width={1033} height={665} priority unoptimized className="h-12 w-auto" />
-
-      <span className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-black">
-        <Image
-          src="/kamaltara-logo.png"
-          alt=""
-          width={800}
-          height={600}
-          priority
-          unoptimized
-          className="h-full w-full scale-[1.08] rounded-full object-contain"
-        />
-        <span className="absolute right-[14%] top-[14%] z-10 text-base font-semibold leading-none text-[#c69a3a]" aria-hidden="true">
-          {"\u2122"}
+      <span className="relative block size-12 shrink-0">
+        <Image src="/winelogo-circle.png" alt="" width={512} height={512} priority unoptimized className="h-full w-full object-contain" />
+        <span
+          aria-hidden="true"
+          className="absolute left-[64%] top-[18%] font-[Arial,sans-serif] text-xs leading-none font-medium text-[#D9A321]"
+        >
+          TM
         </span>
       </span>
-
       <span className={`flex flex-col leading-tight font-serif ${inverse ? "text-[#f5efe3]" : "text-charcoal"}`}>
         <span className="text-[0.8rem] font-semibold tracking-[0.12em]">KAMALTARA</span>
         <span className="text-[0.8rem] font-semibold tracking-[0.12em]">ENTERPRISES</span>

@@ -51,7 +51,7 @@ export function BusinessSection({ preview = false }: { preview?: boolean }) {
               src="/images/business/wine-service-business.webp"
               alt="Wine being poured into a decanter during professional service"
               fill
-              className="object-contain"
+              className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-3 border border-gold/20 rounded-xl pointer-events-none" />

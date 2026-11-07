@@ -574,6 +574,10 @@ h1, h2, h3, h4, h5, h6 {
   background: #f4efe5;
 }
 
+.wf-product-image {
+  object-position: center 42%;
+}
+
 .wf-product-image-wash {
   pointer-events: none;
   background: linear-gradient(180deg, rgb(45 20 20 / 5%), transparent 24%, transparent 78%, rgb(45 20 20 / 8%));
@@ -1873,7 +1877,7 @@ a.wf-contact-detail[href^="mailto:"]:focus-visible,
   max-height: none;
   margin: 0;
   padding: 0;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   transform: none;
 }

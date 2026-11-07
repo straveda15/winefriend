@@ -84,7 +84,7 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
                 alt="A warmly lit wine cellar lined with wooden racks and bottles"
                 fill
                 sizes="(max-width: 1023px) 100vw, 50vw"
-                className="wf-about-editorial-photo object-contain"
+                className="wf-about-editorial-photo object-cover"
               />
               <figcaption>A World Built Around Wine</figcaption>
             </figure>
