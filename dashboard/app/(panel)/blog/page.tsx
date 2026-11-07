@@ -30,7 +30,7 @@ export default async function AdminBlogPage({ searchParams }: { searchParams: Pr
           {posts.map((post) => (
             <li key={post.id} className={`${card} flex flex-wrap items-center gap-4 p-3 sm:p-4`}>
               <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-cream sm:h-24 sm:w-36">
-                <Img src={post.image} alt="" className="object-cover" />
+                <Img src={post.image ?? post.images?.[0] ?? "/images/journal/indian-wine-experience.webp"} alt="" className="object-contain bg-white" />
               </div>
               <div className="min-w-0 flex-1 basis-56">
                 <div className="flex flex-wrap items-center gap-2">

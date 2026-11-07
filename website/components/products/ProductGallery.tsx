@@ -7,11 +7,12 @@ import { Img } from "@/components/ui/Img";
 interface ProductGalleryProps {
   images: string[];
   name: string;
+  imageFit?: "contain" | "cover";
   priority?: boolean;
   sizes?: string;
 }
 
-export function ProductGallery({ images, name, priority = false, sizes = "(max-width: 1023px) 100vw, 50vw" }: ProductGalleryProps) {
+export function ProductGallery({ images, name, imageFit = "cover", priority = false, sizes = "(max-width: 1023px) 100vw, 50vw" }: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
   const count = images.length;
   const current = Math.min(index, count - 1);
@@ -28,7 +29,11 @@ export function ProductGallery({ images, name, priority = false, sizes = "(max-w
             fill
             priority={priority && i === 0}
             sizes={sizes}
+
+            className={`object-${imageFit} wf-gallery-slide ${i === current ? "is-active" : ""}`}
+
             className={`object-contain wf-gallery-slide ${i === current ? "is-active" : ""}`}
+
             aria-hidden={i === current ? undefined : true}
           />
         ))}

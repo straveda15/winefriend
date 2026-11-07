@@ -56563,7 +56563,22 @@ function isAllowedImagePath(src) {
   return BUNDLED_PATH.test(src) && !src.includes("..");
 }
 function isValidEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) && value.length <= 254;
+  if (value.length > 254) return false;
+  const [local, domain, ...extra] = value.split("@");
+  if (extra.length > 0 || !local || local.length > 64 || !domain || local.startsWith(".") || local.endsWith(".") || local.includes("..")) return false;
+  if (!/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+$/i.test(local)) return false;
+  return /^(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,63}$/i.test(domain);
+}
+function isValidContactName(value) {
+  const name = value.trim();
+  return name.length >= 2 && name.length <= 100 && /^[\p{L} ]+$/u.test(name);
+}
+function isValidIndianMobile(value) {
+  return /^[6-9]\d{9}$/.test(value.trim());
+}
+function isValidEnquiryMessage(value) {
+  const message = value.trim();
+  return message.length > 0 && message.length <= 3e3;
 }
 
 // src/auth.ts
@@ -56572,7 +56587,8 @@ var import_node_crypto2 = require("node:crypto");
 // src/config.ts
 var import_node_fs = require("node:fs");
 var import_node_path = __toESM(require("node:path"));
-var envFile = import_node_path.default.resolve(process.cwd(), ".env.local");
+var localEnvFile = import_node_path.default.resolve(process.cwd(), ".env.local");
+var envFile = (0, import_node_fs.existsSync)(localEnvFile) ? localEnvFile : import_node_path.default.resolve(process.cwd(), ".env");
 if ((0, import_node_fs.existsSync)(envFile)) process.loadEnvFile(envFile);
 var isProduction = process.env.NODE_ENV === "production" || process.argv.includes("--production");
 var config = {
@@ -56997,7 +57013,7 @@ async function deleteUnreferencedUploads(candidates) {
   const uploads = [...new Set(candidates)].filter((src) => src.startsWith(UPLOAD_PREFIX));
   if (!uploads.length) return;
   const [products, posts] = await Promise.all([readCollection("products"), readCollection("posts")]);
-  const inUse = /* @__PURE__ */ new Set([...products.flatMap((item) => item.images), ...posts.map((item) => item.image)]);
+  const inUse = /* @__PURE__ */ new Set([...products.flatMap((item) => item.images), ...posts.flatMap((item) => item.images?.length ? item.images : item.image ? [item.image] : [])]);
   const names = uploads.filter((src) => !inUse.has(src)).map((src) => src.slice(UPLOAD_PREFIX.length)).filter((name) => UPLOAD_NAME.test(name));
   if (names.length) await (await uploadsCollection()).deleteMany({ _id: { $in: names } });
 }
@@ -57162,7 +57178,9 @@ async function savePost(id, body) {
   const title = str(body, "title");
   const excerpt = str(body, "excerpt");
   const content = (typeof body.content === "string" ? body.content : "").replace(/\r\n/g, "\n").trim();
-  const image = str(body, "image");
+  const legacyImage = str(body, "image");
+  const images = Array.isArray(body.images) ? body.images : legacyImage ? [legacyImage] : [];
+  const image = typeof images[0] === "string" ? images[0] : void 0;
   const category = str(body, "category");
   const date = str(body, "date");
   const customSlug = str(body, "slug");
@@ -57174,7 +57192,8 @@ async function savePost(id, body) {
   if (excerpt.length > 300) return { error: "Summary must be 300 characters or fewer." };
   if (!content) return { error: "Write the article content." };
   if (content.length > 3e4) return { error: "Article is too long (30,000 character limit)." };
-  if (!isAllowedImagePath(image)) return { error: "Add a featured image." };
+  if (body.images !== void 0 && !Array.isArray(body.images)) return { error: "Article images must be a list." };
+  if (!images.every(isAllowedImagePath)) return { error: "One of the article images is invalid. Please re-upload it." };
   if (!BLOG_CATEGORIES.includes(category)) return { error: "Choose a category." };
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Choose a publication date." };
   const now = (/* @__PURE__ */ new Date()).toISOString();
@@ -57185,13 +57204,14 @@ async function savePost(id, body) {
     if (id) {
       const previous = items.find((item) => item.id === id);
       if (!previous) return { items, result: { error: "That post no longer exists." } };
-      const updated = { ...previous, title, slug, excerpt, content, image, category, date, featured, published, updatedAt: now };
+      const updated = { ...previous, title, slug, excerpt, content, image, images, category, date, featured, published, updatedAt: now };
+      const previousImages = previous.images?.length ? previous.images : previous.image ? [previous.image] : [];
       return {
         items: items.map((item) => item.id === id ? updated : cleared.find((other) => other.id === item.id) ?? item),
-        result: { saved: updated, removed: previous.image !== image ? [previous.image] : [] }
+        result: { saved: updated, removed: previousImages.filter((previousImage) => !images.includes(previousImage)) }
       };
     }
-    const created = { id: newId(), title, slug, excerpt, content, image, category, date, featured, published, updatedAt: now };
+    const created = { id: newId(), title, slug, excerpt, content, image, images, category, date, featured, published, updatedAt: now };
     return { items: [created, ...cleared], result: { saved: created, removed: [] } };
   });
 }
@@ -57205,7 +57225,7 @@ adminRouter.delete("/api/admin/posts/:id", async (request, response) => {
   const id = String(request.params.id);
   const removed = await mutateCollection("posts", (items) => {
     const target = items.find((item) => item.id === id);
-    return { items: items.filter((item) => item.id !== id), result: target ? [target.image] : [] };
+    return { items: items.filter((item) => item.id !== id), result: target ? target.images?.length ? target.images : target.image ? [target.image] : [] : [] };
   });
   await deleteUnreferencedUploads(removed);
   await notifyWebsite(["posts"]);
@@ -57277,8 +57297,8 @@ function rateLimited(key) {
 }
 publicRouter.post("/api/enquiries", async (request, response) => {
   const body = asBody(request.body);
-  if (str(body, "website")) {
-    response.json({ ok: true, message: "Thank you - we will be in touch shortly." });
+  if (str(body, "company_website") || str(body, "website")) {
+    response.json({ ok: true, saved: false, message: "We could not verify this enquiry." });
     return;
   }
   if (rateLimited(clientKey(request))) {
@@ -57291,19 +57311,19 @@ publicRouter.post("/api/enquiries", async (request, response) => {
   const topic = str(body, "topic");
   const message = str(body, "message");
   const product = str(body, "product");
-  if (!name || name.length > 100) {
-    response.status(400).json({ error: "Please enter your name." });
+  if (!isValidContactName(name)) {
+    response.status(400).json({ error: "Enter at least 2 letters for your name. Use alphabets and spaces only." });
     return;
   }
   if (!isValidEmail(email)) {
     response.status(400).json({ error: "Please enter a valid email address." });
     return;
   }
-  if (phone.length > 30) {
-    response.status(400).json({ error: "That phone number looks too long." });
+  if (!isValidIndianMobile(phone)) {
+    response.status(400).json({ error: "Enter a valid 10-digit Indian mobile number." });
     return;
   }
-  if (!message || message.length > 3e3) {
+  if (!isValidEnquiryMessage(message)) {
     response.status(400).json({ error: "Please write a message (up to 3,000 characters)." });
     return;
   }
@@ -57318,8 +57338,15 @@ publicRouter.post("/api/enquiries", async (request, response) => {
     status: "new",
     createdAt: (/* @__PURE__ */ new Date()).toISOString()
   };
-  await mutateCollection("enquiries", (items) => ({ items: [enquiry, ...items].slice(0, 2e3), result: null }));
-  response.json({ ok: true, message: "Thank you - your enquiry has been received. We will get back to you shortly." });
+  const duplicate = await mutateCollection("enquiries", (items) => {
+    const duplicateWindow = 60 * 1000;
+    const isDuplicate = items.some((item) => {
+      const age = Date.now() - Date.parse(item.createdAt);
+      return age >= 0 && age <= duplicateWindow && item.name.toLowerCase() === enquiry.name.toLowerCase() && item.email.toLowerCase() === enquiry.email.toLowerCase() && item.phone === enquiry.phone && item.topic === enquiry.topic && item.message === enquiry.message && (item.product ?? "") === (enquiry.product ?? "");
+    });
+    return isDuplicate ? { items, result: true } : { items: [enquiry, ...items].slice(0, 2e3), result: false };
+  });
+  response.json({ ok: true, saved: !duplicate, message: "Thank you - your enquiry has been received. We will get back to you shortly.", duplicate });
 });
 publicRouter.get("/uploads/:name", async (request, response) => {
   const name = String(request.params.name);

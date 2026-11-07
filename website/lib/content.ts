@@ -21,9 +21,13 @@ async function getProductsCached(): Promise<Product[]> {
   return getContent<Product>("/api/products");
 }
 
+export async function getProductsOrThrow(): Promise<Product[]> {
+  return getProductsCached();
+}
+
 export async function getProducts(): Promise<Product[]> {
   try {
-    return await getProductsCached();
+    return await getProductsOrThrow();
   } catch (error) {
     console.error("[website] Could not load /api/products; rendering without backend content.", error);
     return [];

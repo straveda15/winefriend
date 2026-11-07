@@ -3,6 +3,7 @@ import { ExternalLink, LogOut } from "lucide-react";
 import { logoutAction } from "@/app/actions";
 import { AdminNav } from "@/components/AdminNav";
 import { BrandLogo } from "@/components/BrandLogo";
+import { EnquiriesCountWatcher } from "@/components/EnquiriesCountWatcher";
 import { adminEnquiries } from "@/lib/admin-data";
 import { requireAdmin } from "@/lib/auth";
 
@@ -19,9 +20,11 @@ async function AdminShell({ children }: { children: ReactNode }) {
   const session = await requireAdmin();
   const enquiries = await adminEnquiries();
   const newEnquiries = enquiries.filter((item) => item.status === "new").length;
+  const enquiryCounts = { total: enquiries.length, new: newEnquiries, handled: enquiries.length - newEnquiries };
 
   return (
     <div className="lg:grid lg:min-h-screen lg:grid-cols-[16rem_minmax(0,1fr)]">
+      <EnquiriesCountWatcher counts={enquiryCounts} />
       <aside className="bg-[#24211d] p-4 text-[#f5efe3] lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:p-5">
         <div className="mb-4 flex items-center justify-between gap-3 lg:mb-8 lg:block">
           <BrandLogo inverse />

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ENQUIRY_TOPICS } from "@winefriend/shared/constants";
 import type { Enquiry } from "@winefriend/shared/types";
-import { isValidEmail } from "@winefriend/shared/validation";
+import { isValidContactName, isValidEmail, isValidEnquiryMessage, isValidIndianMobile } from "@winefriend/shared/validation";
 import { clientKey } from "../auth";
 import { asBody, str } from "../input";
 import { mutateCollection, newId, readCollection } from "../store";
@@ -38,8 +38,8 @@ publicRouter.post("/api/enquiries", async (request, response) => {
   const body = asBody(request.body);
 
   // Honeypot: real visitors never see or fill this field.
-  if (str(body, "website")) {
-    response.json({ ok: true, message: "Thank you - we will be in touch shortly." });
+  if (str(body, "company_website") || str(body, "website")) {
+    response.json({ ok: true, saved: false, message: "We could not verify this enquiry." });
     return;
   }
 
@@ -55,24 +55,19 @@ publicRouter.post("/api/enquiries", async (request, response) => {
   const message = str(body, "message");
   const product = str(body, "product");
 
-  if (!name || name.length > 100) {
-    response.status(400).json({ error: "Please enter your name." });
+  if (!isValidContactName(name)) {
+    response.status(400).json({ error: "Enter at least 2 letters for your name. Use alphabets and spaces only." });
     return;
   }
   if (!isValidEmail(email)) {
     response.status(400).json({ error: "Please enter a valid email address." });
     return;
   }
-  if (phone.length > 30) {
-    response.status(400).json({ error: "That phone number looks too long." });
+  if (!isValidIndianMobile(phone)) {
+    response.status(400).json({ error: "Enter a valid 10-digit Indian mobile number." });
     return;
   }
-  const phoneDigits = phone.replace(/\D/g, "").length;
-  if (phone && (!/^\+?[0-9\s().-]+$/.test(phone) || phoneDigits < 7 || phoneDigits > 15)) {
-    response.status(400).json({ error: "Enter a valid phone number using 7 to 15 digits." });
-    return;
-  }
-  if (!message || message.length > 3000) {
+  if (!isValidEnquiryMessage(message)) {
     response.status(400).json({ error: "Please write a message (up to 3,000 characters)." });
     return;
   }
@@ -110,6 +105,7 @@ publicRouter.post("/api/enquiries", async (request, response) => {
   });
   response.json({
     ok: true,
+    saved: !duplicate,
     message: "Thank you - your enquiry has been received. We will get back to you shortly.",
     duplicate,
   });

@@ -6,6 +6,7 @@ import { ApiError, api } from "@/lib/api";
 import { endSession, startSession } from "@/lib/auth";
 import type { FormState } from "@winefriend/shared/form-state";
 import { checked, text } from "@winefriend/shared/validation";
+import { adminEnquiries } from "@/lib/admin-data";
 
 /**
  * Thin layer between the dashboard forms and the backend API. All validation, storage and
@@ -98,11 +99,18 @@ export async function toggleProductPublishedAction(formData: FormData) {
 export async function savePostAction(_prev: FormState, formData: FormData): Promise<FormState> {
   const id = text(formData, "id");
 
+  let images: unknown;
+  try {
+    images = JSON.parse(text(formData, "images") || "[]");
+  } catch {
+    images = [];
+  }
+
   const body = {
     title: text(formData, "title"),
     excerpt: text(formData, "excerpt"),
     content: String(formData.get("content") ?? ""),
-    image: text(formData, "image"),
+    images,
     category: text(formData, "category"),
     date: text(formData, "date"),
     slug: text(formData, "slug"),
@@ -128,6 +136,12 @@ export async function togglePostPublishedAction(formData: FormData) {
 }
 
 /* ------------------------------------------------------------- enquiries */
+
+export async function getEnquiryCountsAction() {
+  const enquiries = await adminEnquiries();
+  const newCount = enquiries.filter((item) => item.status === "new").length;
+  return { total: enquiries.length, new: newCount, handled: enquiries.length - newCount };
+}
 
 export async function toggleEnquiryHandledAction(formData: FormData) {
   await api(`/api/admin/enquiries/${encodeURIComponent(text(formData, "id"))}/toggle-handled`, { method: "POST" });

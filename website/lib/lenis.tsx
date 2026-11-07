@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect, useLayoutEffect, useRef, type RefObject } from "react";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -9,6 +10,8 @@ if (typeof window !== "undefined") {
 }
 
 export function LenisProvider({ children }: { children: React.ReactNode }) {
+  const lenisRef = useRef<import("lenis").default | null>(null);
+
   useEffect(() => {
     if (typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -25,6 +28,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
         orientation: "vertical",
         smoothWheel: true,
       });
+      lenisRef.current = lenis;
 
       lenis.on("scroll", ScrollTrigger.update);
       rafCallback = (time: number) => lenis?.raf(time * 1000);
@@ -36,8 +40,36 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
       disposed = true;
       if (rafCallback) gsap.ticker.remove(rafCallback);
       lenis?.destroy();
+      lenisRef.current = null;
     };
   }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <Suspense fallback={null}>
+        <ContactScrollReset lenisRef={lenisRef} />
+      </Suspense>
+    </>
+  );
+}
+
+function ContactScrollReset({
+  lenisRef,
+}: {
+  lenisRef: RefObject<import("lenis").default | null>;
+}) {
+  const pathname = usePathname();
+
+  useLayoutEffect(() => {
+    if (pathname !== "/contact") return;
+
+    lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+
+    const frame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => window.cancelAnimationFrame(frame);
+  }, [pathname, lenisRef]);
+
+  return null;
 }

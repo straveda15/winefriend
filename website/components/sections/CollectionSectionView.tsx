@@ -16,7 +16,17 @@ import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 
-export function CollectionSectionView({ products, preview = false }: { products: Product[]; preview?: boolean }) {
+type LoadState = "loading" | "error";
+
+export function CollectionSectionView({
+  products,
+  preview = false,
+  loadState,
+}: {
+  products: Product[];
+  preview?: boolean;
+  loadState?: LoadState;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const [category, setCategory] = useState<string>("all");
@@ -128,14 +138,18 @@ export function CollectionSectionView({ products, preview = false }: { products:
             <p className="mt-10 text-center text-charcoal-light">Products will appear here soon.</p>
           ) : (
             <div
-              role="status"
-              aria-live="polite"
+              role={loadState === "error" ? "alert" : "status"}
+              aria-live={loadState === "error" ? "assertive" : "polite"}
               className="mt-6 flex min-h-40 items-center justify-center px-6 py-6 text-center"
             >
               <div className="flex max-w-3xl flex-col items-center gap-4 sm:flex-row">
                 <Wine aria-hidden="true" className="h-14 w-14 flex-none text-gold sm:h-16 sm:w-16" strokeWidth={1.4} />
                 <p className="font-sans text-base font-normal leading-relaxed text-charcoal-light sm:text-lg">
-                  Products will appear here soon.
+                  {loadState === "loading"
+                    ? "Loading products…"
+                    : loadState === "error"
+                      ? "We couldn’t load the product catalogue. Please try again shortly."
+                      : "No products are currently available. Please check back soon."}
                 </p>
               </div>
             </div>

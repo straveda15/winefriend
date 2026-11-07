@@ -46,7 +46,10 @@ export async function deleteUnreferencedUploads(candidates: string[]) {
   if (!uploads.length) return;
 
   const [products, posts] = await Promise.all([readCollection("products"), readCollection("posts")]);
-  const inUse = new Set<string>([...products.flatMap((item) => item.images), ...posts.map((item) => item.image)]);
+  const inUse = new Set<string>([
+    ...products.flatMap((item) => item.images),
+    ...posts.flatMap((item) => item.images?.length ? item.images : item.image ? [item.image] : []),
+  ]);
 
   const names = uploads
     .filter((src) => !inUse.has(src))

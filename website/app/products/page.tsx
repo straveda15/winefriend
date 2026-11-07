@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PageFrame } from "@/components/layout/PageFrame";
 import { EditorialPageHero } from "@/components/layout/EditorialPageHero";
 import { CollectionSection } from "@/components/sections/CollectionSection";
+import { CollectionSectionView } from "@/components/sections/CollectionSectionView";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { Container } from "@/components/layout/Container";
 import { BusinessServicesGrid } from "@/components/products/BusinessServicesGrid";
@@ -15,8 +17,15 @@ export default function ProductsPage() {
   return (
     <PageFrame>
       <EditorialPageHero kicker="The art of serving well" title="Objects for the Wine Ritual" description="Explore wine openers, wine and champagne corks, glasses, preservation systems, decanters, wooden, acrylic and stainless-steel racks, barrel furniture, and promotional materials." image="/images/categories/wine-accessories-display.webp" imageAlt="Wine accessories arranged for service" />
+
+      <Suspense fallback={<CollectionSectionView products={[]} loadState="loading" />}>
+        <CollectionSection />
+      </Suspense>
+      <section className="wf-section bg-ivory py-14 lg:py-20">
+
       <CollectionSection />
       <section className="wf-section bg-ivory py-12 lg:py-18">
+
         <Container>
           <div className="mb-8">
             <TextReveal>

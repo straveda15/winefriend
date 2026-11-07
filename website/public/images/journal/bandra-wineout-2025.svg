@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" role="img" aria-labelledby="title desc">
+  <title id="title">The Bandra WINEOUT 2025</title>
+  <desc id="desc">Taste. Explore. Celebrate.</desc>
+  <rect width="1000" height="700" fill="#fff"/>
+  <g font-family="Comic Sans MS, Arial Rounded MT Bold, Trebuchet MS, Arial, sans-serif" font-weight="900" text-anchor="middle">
+    <text x="500" y="174" fill="#72519a" font-size="190" letter-spacing="-12">The</text>
+    <text x="500" y="350" fill="#d92787" font-size="190" letter-spacing="-11" textLength="730" lengthAdjust="spacingAndGlyphs">Bandra</text>
+  </g>
+  <g font-family="Comic Sans MS, Arial Rounded MT Bold, Trebuchet MS, Arial, sans-serif" font-weight="900" font-size="151" text-anchor="middle" letter-spacing="-11">
+    <text x="220" y="520" fill="#72519a" transform="rotate(-4 220 520)">W</text>
+    <path fill="#d92787" d="M334 389h22v35c0 12 6 21 15 31l13 14v58c0 11-9 19-20 19h-37c-11 0-20-8-20-19v-58l13-14c9-10 14-19 14-31z"/>
+    <text x="475" y="520" fill="#72519a" transform="rotate(2 475 520)">N</text>
+    <text x="590" y="520" fill="#72519a" transform="rotate(-2 590 520)">E</text>
+    <text x="710" y="520" fill="#72519a" transform="rotate(2 710 520)">O</text>
+    <text x="825" y="520" fill="#72519a" transform="rotate(-2 825 520)">U</text>
+    <text x="935" y="520" fill="#72519a" transform="rotate(2 935 520)">T</text>
+  </g>
+  <text x="850" y="586" text-anchor="middle" fill="#d92787" font-family="Comic Sans MS, Arial Rounded MT Bold, Trebuchet MS, Arial, sans-serif" font-size="64" font-weight="900" letter-spacing="-2">2025</text>
+  <rect x="165" y="612" width="670" height="68" rx="2" fill="#9ed45b"/>
+  <text x="500" y="664" text-anchor="middle" fill="#15220e" font-family="Georgia, serif" font-size="43" font-weight="700" letter-spacing="-1">Taste . Explore . Celebrate</text>
+</svg>

@@ -9,7 +9,7 @@ import { FadeUp } from "@/components/animations/FadeUp";
 import { ImageReveal } from "@/components/animations/ImageReveal";
 import { PostContent } from "@/components/blog/PostContent";
 import { Button } from "@/components/ui/Button";
-import { Img } from "@/components/ui/Img";
+import { JournalImage } from "@/components/ui/JournalImage";
 import { formatDate } from "@winefriend/shared/constants";
 import { getPost, getPosts } from "@/lib/content";
 
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   return {
     title: `${article.title} | WineFriend Journal`,
     description: article.excerpt,
-    openGraph: { images: [{ url: article.image }] },
+    openGraph: { images: [{ url: article.image ?? article.images?.[0] ?? "/images/journal/indian-wine-experience.webp" }] },
   };
 }
 
@@ -47,6 +47,7 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
   const { slug } = await params;
   const article = await getPost(slug);
   if (!article) notFound();
+  const coverImage = article.image ?? article.images?.[0];
 
   return (
     <main className="wf-section wf-detail-page bg-ivory py-14 lg:py-22">
@@ -55,10 +56,23 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
         <FadeUp>
           <p className="wf-collection-kicker mt-8">{article.category} · {formatDate(article.date)}</p>
           <h1 className="wf-page-title max-w-4xl">{article.title}</h1>
-        </FadeUp>
+       
+        <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden bg-white">
+          <JournalImage src={coverImage} fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined} alt={article.title} fill priority sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
+
         <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden bg-cream">
           <Img src={article.image} alt={article.title} fill priority sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
+
         </ImageReveal>
+        {article.images && article.images.length > 1 && (
+          <div className="mb-10 grid gap-4 sm:grid-cols-2">
+            {article.images.slice(1).map((image, index) => (
+              <div key={`${image}-${index}`} className="relative aspect-[4/3] overflow-hidden rounded-xl bg-white">
+                <JournalImage src={image} alt={`${article.title} photo ${index + 2}`} fill sizes="(max-width: 639px) 100vw, 50vw" className="object-contain" />
+              </div>
+            ))}
+          </div>
+        )}
         <FadeUp>
           <p className="wf-page-lede max-w-3xl font-medium">{article.excerpt}</p>
           {article.content.trim() !== article.excerpt.trim() && <PostContent content={article.content} />}

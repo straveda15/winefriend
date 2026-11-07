@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { BACKEND_URL } from "@/lib/backend";
 import type { FormState } from "@winefriend/shared/form-state";
 
-const FIELDS = ["name", "email", "phone", "topic", "message", "product", "website"] as const;
+const FIELDS = ["name", "email", "phone", "topic", "message", "product", "company_website", "website"] as const;
 
 /** Forwards the contact form to the backend, which validates, rate-limits and stores it. */
 export async function submitEnquiryAction(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -25,9 +25,19 @@ export async function submitEnquiryAction(_prev: FormState, formData: FormData):
       cache: "no-store",
       signal: AbortSignal.timeout(8000),
     });
-    const data = (await response.json().catch(() => ({}))) as { ok?: boolean; message?: string; error?: string };
-    if (response.ok) return { ok: true, message: data.message ?? "Thank you - your enquiry has been received." };
-    return { error: data.error ?? "We could not send your enquiry. Please try again or use WhatsApp." };
+    const data = (await response.json().catch(() => ({}))) as {
+      ok?: boolean;
+      saved?: boolean;
+      duplicate?: boolean;
+      message?: string;
+      error?: string;
+    };
+    if (!response.ok || data.ok !== true) {
+      return { error: data.error ?? "We could not send your enquiry. Please try again or use WhatsApp." };
+    }
+    if (data.saved === true) return { ok: true, message: data.message ?? "Thank you - your enquiry has been received." };
+    if (data.duplicate === true) return { ok: true, message: "We have already received this enquiry and will be in touch." };
+    return { error: "We could not verify that your enquiry was saved. Please try again or use WhatsApp." };
   } catch (error) {
     console.error("[website] Contact enquiry request failed:", error);
     return { error: "We could not send your enquiry right now. Please try again in a moment or use WhatsApp." };

@@ -29,8 +29,8 @@ export function AdminNav({ newEnquiries }: { newEnquiries: number }) {
           >
             <Icon className="size-[1.1rem]" aria-hidden="true" />
             {label}
-            {label === "Enquiries" && newEnquiries > 0 && (
-              <span className="ml-auto rounded-full bg-[#a33a2e] px-2 py-0.5 text-[11px] font-semibold text-white">{newEnquiries}</span>
+            {label === "Enquiries" && (
+              <span aria-label={`${newEnquiries} new enquiries`} className="ml-auto rounded-full bg-[#a33a2e] px-2 py-0.5 text-[11px] font-semibold text-white">{newEnquiries}</span>
             )}
           </Link>
         );

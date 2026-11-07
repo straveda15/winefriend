@@ -55,7 +55,7 @@ export function Button({
 
   if (href) {
     return (
-      <Link href={href} className={baseStyles}>
+      <Link href={href} scroll={!href.startsWith("/contact")} className={baseStyles}>
         {content}
       </Link>
     );
