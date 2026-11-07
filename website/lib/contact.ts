@@ -5,6 +5,9 @@ export const whatsappNumber = contactInfo.phone[0].replace(/\D/g, "");
 
 export const telHref = `tel:+${whatsappNumber}`;
 
+/** Shared address search used by both the contact page and footer. */
+export const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.location.replace(/\s+/g, " "))}`;
+
 function query(message?: string): string {
   const params = new URLSearchParams({ phone: whatsappNumber });
   if (message) params.set("text", message);

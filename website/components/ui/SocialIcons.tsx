@@ -1,4 +1,5 @@
 import type { SocialLink } from "@winefriend/shared/types";
+import { Mail } from "lucide-react";
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -41,10 +42,11 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 interface SocialIconsProps {
   links: SocialLink[];
+  email?: string;
   className?: string;
 }
 
-export function SocialIcons({ links, className = "" }: SocialIconsProps) {
+export function SocialIcons({ links, email, className = "" }: SocialIconsProps) {
   return (
     <div className={`flex items-center gap-4 ${className}`}>
       {links.map((link) => {
@@ -62,6 +64,17 @@ export function SocialIcons({ links, className = "" }: SocialIconsProps) {
           </a>
         );
       })}
+      {email && (
+        <a
+          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Email ${email}`}
+          className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center text-white/70 hover:text-gold-muted hover:border-gold hover:bg-white/10 transition-all duration-300"
+        >
+          <Mail className="w-4 h-4" aria-hidden="true" />
+        </a>
+      )}
     </div>
   );
 }

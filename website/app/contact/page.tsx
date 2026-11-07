@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Clock3, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock3, Mail, MapPin, Phone } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/layout/Container";
@@ -8,18 +8,17 @@ import { ContactForm } from "@/components/sections/ContactForm";
 import { ContactPageMotion } from "@/components/sections/ContactPageMotion";
 import { contactInfo } from "@/data/footer";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
-import { telHref } from "@/lib/contact";
+import { mapHref, telHref } from "@/lib/contact";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export const metadata: Metadata = {
-  title: "Contact | Kamaltara Enterprises — Always in All Ways for Wine Lovers",
+  title: "Contact | Kamaltara Enterprises — Always in All Ways for the Wine Lovers",
   description:
     "Contact Manoj Jagtap at Kamaltara Enterprises in Nashik for wine accessories, product customisation, business enquiries, and winery tours.",
 };
 
 export default function ContactPage() {
-  const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.location)}`;
-
   return (
     <>
       <Header />
@@ -45,10 +44,16 @@ export default function ContactPage() {
                 <span><small>Call</small>{contactInfo.phone.map((number) => <span key={number}>{number}</span>)}</span>
               </a>
               <WhatsAppLink className="wf-contact-detail">
-                <span className="wf-contact-detail-icon"><MessageCircle aria-hidden="true" /></span>
+                <span className="wf-contact-detail-icon"><WhatsAppIcon monochrome /></span>
                 <span><small>WhatsApp</small>Chat with us directly<em>Open WhatsApp ↗</em></span>
               </WhatsAppLink>
-              <a className="wf-contact-detail" href={`mailto:${contactInfo.email}`} aria-label={`Email ${contactInfo.email}`}>
+              <a
+                className="wf-contact-detail"
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactInfo.email)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Compose an email to ${contactInfo.email}`}
+              >
                 <span className="wf-contact-detail-icon"><Mail aria-hidden="true" /></span>
                 <span><small>Email</small><span className="wf-contact-email-address">{contactInfo.email}</span></span>
               </a>

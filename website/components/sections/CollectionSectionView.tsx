@@ -104,7 +104,7 @@ export function CollectionSectionView({
   );
 
   return (
-    <section id="products" ref={sectionRef} className="wf-section wf-collection py-16 lg:py-24 bg-cream">
+    <section id="products" ref={sectionRef} className="wf-section wf-collection py-14 lg:py-22 bg-cream">
       <GrapevineDecoration className="wf-vine wf-vine--bottom-left" />
       <Container className="wf-botanical-content">
         <div ref={headingRef} className="wf-collection-header">

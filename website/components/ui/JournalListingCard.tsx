@@ -14,6 +14,10 @@ export function JournalListingCard({ article, featured = false }: { article: Jou
           fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined}
           alt={article.title}
           fill
+
+
+          className="object-contain"
+
           sizes={featured ? "(max-width: 1023px) 100vw, 60vw" : "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"}
         />
       </div>
