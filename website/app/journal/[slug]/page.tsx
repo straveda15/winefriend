@@ -35,7 +35,7 @@ export default function JournalArticlePage({ params }: ArticlePageProps) {
   return (
     <>
       <Header />
-      <Suspense fallback={<main className="wf-section wf-detail-page bg-ivory py-16 lg:py-24" aria-busy="true" />}>
+      <Suspense fallback={<main className="wf-section wf-detail-page bg-ivory py-14 lg:py-22" aria-busy="true" />}>
         <JournalArticleContent params={params} />
       </Suspense>
       <Footer />
@@ -49,15 +49,15 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
   if (!article) notFound();
 
   return (
-    <main className="wf-section wf-detail-page bg-ivory py-16 lg:py-24">
+    <main className="wf-section wf-detail-page bg-ivory py-14 lg:py-22">
       <Container className="max-w-5xl">
         <Link href="/journal" className="wf-product-link">← Back to the Wine Journal</Link>
         <FadeUp>
           <p className="wf-collection-kicker mt-8">{article.category} · {formatDate(article.date)}</p>
           <h1 className="wf-page-title max-w-4xl">{article.title}</h1>
         </FadeUp>
-        <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden">
-          <Img src={article.image} alt={article.title} fill priority sizes="(max-width: 1023px) 100vw, 80vw" className="object-cover" />
+        <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden bg-cream">
+          <Img src={article.image} alt={article.title} fill priority sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
         </ImageReveal>
         <FadeUp>
           <p className="wf-page-lede max-w-3xl font-medium">{article.excerpt}</p>

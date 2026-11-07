@@ -18,7 +18,7 @@ export function JournalListingView({ articles }: { articles: JournalArticle[] })
       : articles.filter((article) => article.category === activeCategory);
 
   return (
-    <section className="wf-section wf-journal py-14 lg:py-20 bg-cream">
+    <section className="wf-section wf-journal py-12 lg:py-18 bg-cream">
       <Container>
         {articles.length === 0 && <p className="text-charcoal-light">New stories are on their way.</p>}
         <nav className="wf-journal-filters" aria-label="Filter journal stories">

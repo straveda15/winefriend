@@ -22,9 +22,9 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-4 py-2 text-[10px]",
-  md: "px-5 py-2.5 text-[11px]",
-  lg: "px-6 py-3 text-xs",
+  sm: "px-4 py-2 text-xs",
+  md: "px-5 py-2.5 text-xs",
+  lg: "px-6 py-3 text-sm",
 };
 
 export function Button({
@@ -39,7 +39,7 @@ export function Button({
   const baseStyles = [
     "group inline-flex items-center gap-2 font-sans font-semibold uppercase tracking-wider",
     "rounded-full transition-all duration-300 ease-out",
-    variant !== "ghost" ? sizeStyles[size] : "py-0.5 text-[11px]",
+    variant !== "ghost" ? sizeStyles[size] : "py-0.5 text-xs",
     variantStyles[variant],
     className,
   ].join(" ");

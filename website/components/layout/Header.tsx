@@ -81,7 +81,7 @@ export function Header() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
           ? "wf-header wf-header-scrolled py-1"
-            : "wf-header wf-header-top py-1.5 lg:py-2"
+            : "wf-header wf-header-top py-1 lg:py-2"
         }`}
       >
         <Container>

@@ -28,7 +28,7 @@ export function ProductGallery({ images, name, priority = false, sizes = "(max-w
             fill
             priority={priority && i === 0}
             sizes={sizes}
-            className={`object-cover wf-gallery-slide ${i === current ? "is-active" : ""}`}
+            className={`object-contain wf-gallery-slide ${i === current ? "is-active" : ""}`}
             aria-hidden={i === current ? undefined : true}
           />
         ))}

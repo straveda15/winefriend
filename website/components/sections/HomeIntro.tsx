@@ -2,34 +2,33 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animations";
 
 // Bump the key when the intro changes so returning testers see the latest version once.
-const SESSION_KEY = "winefriend-home-intro-v6-seen";
+const SESSION_KEY = "winefriend-home-intro-v8-seen";
 
 export function HomeIntro() {
-  const pathname = usePathname();
   const overlayRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(pathname === "/");
+  const [visible, setVisible] = useState(true);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const shouldShowIntro = pathname === "/" &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+    const shouldShowIntro = !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
       !window.sessionStorage.getItem(SESSION_KEY);
     if (!shouldShowIntro) {
       document.documentElement.classList.remove("wf-home-intro-active");
-      const hideIntroFrame = window.requestAnimationFrame(() => setVisible(false));
-      return () => window.cancelAnimationFrame(hideIntroFrame);
+      setVisible(false);
+      return;
     }
-  }, [pathname]);
+    setReady(true);
+  }, []);
 
   useGSAP(() => {
     const overlay = overlayRef.current;
-    if (!visible || !overlay) return;
+    if (!visible || !ready || !overlay) return;
 
-    const logo = overlay.querySelector(".wf-home-intro-logo");
+    const logo = overlay.querySelector(".wf-home-intro-logo-frame");
     const brand = overlay.querySelector<HTMLElement>(".wf-home-intro-brand");
     const ornament = overlay.querySelector(".wf-home-intro-ornament");
     const rule = overlay.querySelector(".wf-home-intro-rule");
@@ -80,7 +79,7 @@ export function HomeIntro() {
     }, 3.3);
 
     return () => timeline.kill();
-  }, { scope: overlayRef, dependencies: [visible] });
+  }, { scope: overlayRef, dependencies: [visible, ready] });
 
   useEffect(() => {
     document.documentElement.classList.toggle("wf-home-intro-active", visible);
@@ -103,14 +102,17 @@ export function HomeIntro() {
               <path d="M140 180c10-40-4-68-38-84-15 33-5 61 38 84Zm-5-7c-31-34-61-37-86-13 19 34 48 42 86 13Zm79 88c-35-31-67-34-96-10 18 34 49 44 96 10Z" />
             </g>
           </svg>
+          <span className="wf-home-intro-logo-frame wf-logo-mark-frame">
+            <Image src="/kamaltara-logo.png" alt="WineFriend" width={800} height={600} priority unoptimized className="wf-home-intro-logo" />
+            <span className="wf-logo-trademark" aria-hidden="true">{"\u2122"}</span>
+          </span>
           <div className="wf-home-intro-ornament" aria-hidden="true">
             <span className="wf-home-intro-rule" />
             <span className="wf-home-intro-diamond" />
             <span className="wf-home-intro-rule" />
           </div>
-          <Image src="/logo.png" alt="WineFriend" width={421} height={293} priority unoptimized className="wf-home-intro-logo" />
-          <p className="wf-home-intro-brand" aria-label="WineFriend">WineFriend</p>
-          <p className="wf-home-intro-copy">EVERYTHING WINE. ONE TRUSTED FRIEND.</p>
+          <p className="wf-home-intro-brand" aria-label="WineFriend">WineFriend<sup className="wf-trademark-inline" aria-hidden="true">{"\u2122"}</sup></p>
+          <p className="wf-home-intro-copy">ALWAYS IN ALL WAYS FOR THE WINE LOVERS</p>
         </div>
       )}
     </>

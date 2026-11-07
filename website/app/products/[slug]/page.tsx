@@ -32,7 +32,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
   return (
     <>
       <Header />
-      <Suspense fallback={<main className="wf-section wf-detail-page bg-ivory py-16 lg:py-24" aria-busy="true" />}>
+      <Suspense fallback={<main className="wf-section wf-detail-page bg-ivory py-14 lg:py-22" aria-busy="true" />}>
         <ProductDetailContent params={params} />
       </Suspense>
       <Footer />
@@ -46,7 +46,7 @@ async function ProductDetailContent({ params }: ProductPageProps) {
   if (!product) notFound();
 
   return (
-    <main className="wf-section wf-detail-page bg-ivory py-16 lg:py-24">
+    <main className="wf-section wf-detail-page bg-ivory py-14 lg:py-22">
       <Container className="max-w-[90rem]">
         <Link href="/products" className="wf-product-link">← Back to all products</Link>
         <div className="mt-8 grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">

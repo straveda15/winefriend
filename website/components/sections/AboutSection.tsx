@@ -40,7 +40,7 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
   }, { scope: sectionRef });
 
   return (
-    <section id="about" ref={sectionRef} className="wf-section wf-about py-14 lg:py-20 bg-ivory">
+    <section id="about" ref={sectionRef} className="wf-section wf-about py-12 lg:py-18 bg-ivory">
       <GrapevineDecoration className="wf-vine wf-vine--top-right wf-vine--about" variant="champagne" />
       <Container className="wf-botanical-content">
         <div className="wf-about-grid grid grid-cols-1 lg:grid-cols-2 items-start">
@@ -84,7 +84,7 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
                 alt="A warmly lit wine cellar lined with wooden racks and bottles"
                 fill
                 sizes="(max-width: 1023px) 100vw, 50vw"
-                className="wf-about-editorial-photo object-cover"
+                className="wf-about-editorial-photo object-contain"
               />
               <figcaption>A World Built Around Wine</figcaption>
             </figure>

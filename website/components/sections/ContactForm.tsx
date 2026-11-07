@@ -2,11 +2,15 @@
 
 import { startTransition, useActionState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { MessageCircle } from "lucide-react";
+import { useGSAP } from "@gsap/react";
 import { submitEnquiryAction } from "@/app/actions/enquiry";
 import { ENQUIRY_TOPICS } from "@winefriend/shared/constants";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { useHydrated } from "@winefriend/shared/use-hydrated";
+import { gsap, ScrollTrigger } from "@/lib/animations";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export function ContactForm() {
   const params = useSearchParams();
@@ -14,6 +18,28 @@ export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, action, pending] = useActionState(submitEnquiryAction, {});
   const ready = useHydrated();
+
+  useGSAP(() => {
+    const form = formRef.current;
+    if (!form || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const parts = gsap.utils.toArray<HTMLElement>(
+      ".wf-contact-form-heading, .wf-contact-form > label, .wf-contact-form-row > label, .wf-contact-submit",
+      form,
+    );
+    const intro = gsap.timeline({
+      scrollTrigger: {
+        trigger: form,
+        start: "top 84%",
+        once: true,
+      },
+      defaults: { ease: "power3.out" },
+    });
+    intro.fromTo(form, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.7 });
+    if (parts.length) {
+      intro.fromTo(parts, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.07 }, "-=0.35");
+    }
+  }, { scope: formRef });
 
   useEffect(() => {
     if (state.ok) formRef.current?.reset();
@@ -94,7 +120,7 @@ export function ContactForm() {
         {pending ? "Sending…" : "Submit"}
       </button>
       <WhatsAppLink className="wf-contact-whatsapp" message={product ? `Hello Wine Friend, I would like to enquire about "${product}".` : undefined}>
-        <MessageCircle aria-hidden="true" /> Prefer WhatsApp? Chat with us directly
+        <WhatsAppIcon monochrome /> Prefer WhatsApp? Chat with us directly
       </WhatsAppLink>
     </form>
   );

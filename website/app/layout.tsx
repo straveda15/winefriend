@@ -26,9 +26,9 @@ const italianno = localFont({
   weight: "400",
 });
 
-const brandTitle = "Kamaltara Enterprises | Always in All Ways for Wine Lovers";
+const brandTitle = "Kamaltara Enterprises | Always in All Ways for the Wine Lovers";
 const brandDescription =
-  "Always in All Ways for Wine Lovers. Wine Friend is a registered trademark of Nashik-based Kamaltara Enterprises, owned and operated by Manoj Jagtap. The company manufactures and imports wine products, offers customisation, and arranges Nashik winery tours.";
+  "Always in All Ways for the Wine Lovers. Wine Friend is a registered trademark of Nashik-based Kamaltara Enterprises, owned and operated by Manoj Jagtap. The company manufactures and imports wine products, offers customisation, and arranges Nashik winery tours.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://winefriend.in"),

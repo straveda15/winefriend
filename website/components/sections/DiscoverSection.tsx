@@ -61,7 +61,7 @@ export function DiscoverSection() {
   );
 
   return (
-    <section ref={sectionRef} className="wf-section wf-discover py-14 lg:py-20 bg-ivory">
+    <section ref={sectionRef} className="wf-section wf-discover py-12 lg:py-18 bg-ivory">
       <GrapevineDecoration className="wf-vine wf-vine--top-right" />
       <Container className="wf-botanical-content">
         <div className="wf-discover-heading">
