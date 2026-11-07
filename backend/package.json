@@ -4,8 +4,8 @@
   "private": true,
   "description": "Wine Friend API: owns the data (products, posts, enquiries), uploads and admin login.",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "start": "tsx src/index.ts --production",
+    "dev": "node scripts/run-tsx.cjs watch src/index.ts",
+    "start": "node scripts/run-tsx.cjs src/index.ts --production",
     "typecheck": "tsc --noEmit",
     "bundle": "esbuild src/vercel.ts --bundle --platform=node --target=node22 --format=cjs --outfile=api/index.js --footer:js=\"module.exports = module.exports.default;\" --external:kerberos --external:@mongodb-js/zstd --external:@aws-sdk/credential-providers --external:gcp-metadata --external:snappy --external:socks --external:mongodb-client-encryption --external:aws4 --log-level=warning",
     "vercel-build": "npm run bundle"

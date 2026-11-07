@@ -12,21 +12,21 @@ import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
 
 export function ToursSection({ preview = false }: { preview?: boolean }) {
   return (
-    <section id="wine-tours" className="wf-section wf-tours py-14 lg:py-20 bg-cream overflow-hidden">
+    <section id="wine-tours" className="wf-section wf-tours py-12 lg:py-18 bg-cream overflow-hidden">
       <GrapevineDecoration className="wf-vine wf-vine--bottom-right" />
       <Container className="wf-botanical-content">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
           {/* Image (left on desktop) */}
           <ImageReveal
             direction="right"
-            className="wf-editorial-image relative aspect-[4/5] rounded-none overflow-hidden order-2 lg:order-1"
+            className="wf-editorial-image relative aspect-[3/4] rounded-none overflow-hidden order-2 lg:order-1"
           >
             <div className="absolute inset-0 img-fallback-vineyard -z-10" />
             <Image
               src="/images/experiences/vineyard-landscape.webp"
               alt="Vineyard rows stretching toward a mountain landscape"
               fill
-              className="object-cover"
+              className="object-contain"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-3 border border-gold/20 rounded-xl pointer-events-none" />
@@ -35,7 +35,7 @@ export function ToursSection({ preview = false }: { preview?: boolean }) {
           {/* Text (right on desktop) */}
           <div className="order-1 lg:order-2">
             <TextReveal>
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.15em] text-burgundy mb-3">
+              <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.15em] text-burgundy mb-3">
                 Wine Tours &amp; Experiences
               </p>
             </TextReveal>

@@ -13,7 +13,7 @@ export function JournalListingCard({ article, featured = false }: { article: Jou
           src={article.image}
           alt={article.title}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-contain"
           sizes={featured ? "(max-width: 1023px) 100vw, 60vw" : "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"}
         />
       </div>

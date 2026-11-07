@@ -3,13 +3,14 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
-import { MapPin, Phone, Mail, Clock3 } from "lucide-react";
+import { MapPin, Phone, Clock3 } from "lucide-react";
 import { Container } from "./Container";
 import { SocialIcons } from "@/components/ui/SocialIcons";
-import { quickLinks, contactInfo, socialLinks, legalLinks } from "@/data/footer";
+import { exploreLinks, serviceLinks, contactInfo, socialLinks, legalLinks } from "@/data/footer";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
 import { gsap, ScrollTrigger } from "@/lib/animations";
+import { mapHref } from "@/lib/contact";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -39,19 +40,38 @@ export function Footer() {
     <footer ref={footerRef} className="wf-footer bg-[#24211D] text-white pt-5 lg:pt-6 pb-2">
       <GrapevineDecoration className="wf-vine wf-vine--bottom-left wf-vine--footer" variant="champagne" />
       <Container className="wf-botanical-content">
-        <div className="wf-footer-main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 mb-5">
+        <div className="wf-footer-main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.35fr_.85fr_.7fr_1.6fr] gap-5 lg:gap-6 mb-5">
           {/* Brand */}
           <div>
             <BrandLogo inverse />
+            <SocialIcons links={socialLinks} email={contactInfo.email} className="mt-4" />
           </div>
 
-          {/* Quick Links */}
+          {/* Explore */}
           <div>
             <h4 className="font-sans text-sm font-semibold uppercase tracking-wider text-white mb-3">
-              Quick Links
+              Explore
             </h4>
             <nav className="flex flex-col gap-2">
-              {quickLinks.map((link) => (
+              {exploreLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="font-sans text-sm text-white/50 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h4 className="font-sans text-sm font-semibold uppercase tracking-wider text-white mb-3">
+              Services
+            </h4>
+            <nav className="flex flex-col gap-2">
+              {serviceLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
@@ -71,9 +91,15 @@ export function Footer() {
             <div className="flex flex-col gap-2">
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                <span className="wf-footer-contact-copy text-sm text-white/50">
+                <a
+                  href={mapHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open The WineFriend location in Google Maps"
+                  className="wf-footer-contact-copy whitespace-pre-line text-sm text-white/50 transition-colors hover:text-white"
+                >
                   {contactInfo.location}
-                </span>
+                </a>
               </div>
               <div className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
@@ -92,31 +118,15 @@ export function Footer() {
                   <span className="wf-footer-contact-copy text-xs text-white/50">{contactInfo.hours}</span>
                 </div>
               )}
-              <div className="flex items-start gap-3">
-                <Mail className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                <a
-                  href={`mailto:${contactInfo.email}`}
-                  className="wf-footer-contact-copy text-sm text-white/50 hover:text-white transition-colors"
-                >
-                  {contactInfo.email}
-                </a>
-              </div>
             </div>
           </div>
 
-          {/* Social */}
-          <div>
-            <h4 className="font-sans text-sm font-semibold uppercase tracking-wider text-white mb-3">
-              Follow Us
-            </h4>
-            <SocialIcons links={socialLinks} />
-          </div>
         </div>
 
         {/* Bottom bar */}
         <div className="wf-footer-bottom border-t border-white/10 pt-3 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-white/30 font-sans">
-            &copy; {currentYear} WineFriend. All rights reserved.
+            &copy; {currentYear} WineFriend<sup className="wf-trademark-inline" aria-hidden="true">™</sup>. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             {legalLinks.map((link) => (

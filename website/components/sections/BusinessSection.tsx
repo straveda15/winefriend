@@ -10,14 +10,14 @@ import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
 
 export function BusinessSection({ preview = false }: { preview?: boolean }) {
   return (
-    <section id="business-solutions" className="wf-section wf-business py-14 lg:py-20 bg-ivory overflow-hidden">
+    <section id="business-solutions" className="wf-section wf-business py-12 lg:py-18 bg-ivory overflow-hidden">
       <GrapevineDecoration className="wf-vine wf-vine--top-left" variant="champagne" />
       <Container className="wf-botanical-content">
         <div className="wf-editorial-grid grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center">
           {/* Text Content */}
           <div>
             <TextReveal>
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.15em] text-burgundy mb-3">
+              <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.15em] text-burgundy mb-3">
                 Business Solutions
               </p>
             </TextReveal>
@@ -44,14 +44,14 @@ export function BusinessSection({ preview = false }: { preview?: boolean }) {
           {/* Image */}
           <ImageReveal
             direction="left"
-            className="wf-editorial-image relative aspect-[4/5] rounded-none overflow-hidden"
+            className="wf-editorial-image relative aspect-[4/3] rounded-none overflow-hidden"
           >
             <div className="absolute inset-0 img-fallback-wine -z-10" />
             <Image
               src="/images/business/wine-service-business.webp"
               alt="Wine being poured into a decanter during professional service"
               fill
-              className="object-cover"
+              className="object-contain"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-3 border border-gold/20 rounded-xl pointer-events-none" />

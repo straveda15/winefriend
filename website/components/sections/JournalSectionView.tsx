@@ -15,13 +15,13 @@ export function JournalSectionView({ articles: all, preview = false }: { article
   const articles = preview ? rest.slice(0, 2) : rest;
 
   return (
-    <section id="wine-journal" className="wf-section wf-journal py-14 lg:py-20 bg-cream">
+    <section id="wine-journal" className="wf-section wf-journal py-12 lg:py-18 bg-cream">
       <GrapevineDecoration className="wf-vine wf-vine--bottom-left wf-vine--journal" />
       <Container className="wf-botanical-content">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
           <TextReveal>
             <div>
-              <p className="text-[10px] font-sans font-semibold uppercase tracking-[0.15em] text-burgundy mb-2">
+              <p className="text-[13px] font-sans font-semibold uppercase tracking-[0.15em] text-burgundy mb-2">
                 Wine Journal
               </p>
               <h2 className="wf-display-heading font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-charcoal leading-[1.05] mb-3">

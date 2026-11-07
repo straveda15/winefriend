@@ -20,9 +20,17 @@ export function CategoryCard({ category }: CategoryCardProps) {
         <div className="wf-category-image-reveal absolute inset-0">
           <Image
             src={category.image}
+            alt=""
+            aria-hidden="true"
+            fill
+            className="object-cover blur-sm scale-105 opacity-55"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <Image
+            src={category.image}
             alt={category.title}
             fill
-            className="wf-category-image object-cover transition-transform duration-500 ease-out group-hover:scale-[1.08]"
+            className="wf-category-image object-contain"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         </div>
@@ -42,7 +50,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
         <p className="wf-category-description font-sans text-sm leading-6 mb-5 line-clamp-3">
           {category.description}
         </p>
-        <span className="wf-category-cta inline-flex items-center gap-2 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] group-hover:gap-3 transition-all duration-300">
+        <span className="wf-category-cta inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.14em] group-hover:gap-3 transition-all duration-300">
           {category.ctaText}
           <ArrowRight className="wf-category-arrow w-3 h-3 transition-transform duration-500 ease-out group-hover:translate-x-1.5" />
         </span>

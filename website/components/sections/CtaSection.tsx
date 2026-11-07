@@ -66,7 +66,7 @@ export function CtaSection() {
   );
 
   return (
-    <section id="contact" ref={sectionRef} className="wf-cta relative py-14 lg:py-20 overflow-hidden">
+    <section id="contact" ref={sectionRef} className="wf-cta relative py-6 lg:py-8 overflow-hidden">
       {/* Background */}
         <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 img-fallback-wine" />

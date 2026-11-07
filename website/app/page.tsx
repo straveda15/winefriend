@@ -13,9 +13,7 @@ import { HomeIntro } from "@/components/sections/HomeIntro";
 export default function Home() {
   return (
     <>
-      <Suspense fallback={null}>
-        <HomeIntro />
-      </Suspense>
+      <HomeIntro />
       <Suspense fallback={<Header />}>
         <Header />
       </Suspense>

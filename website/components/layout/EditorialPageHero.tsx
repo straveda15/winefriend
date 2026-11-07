@@ -20,8 +20,8 @@ export function EditorialPageHero({ kicker, title, description, image, imageAlt 
           <TextReveal delay={.1}><h1 className="wf-page-title">{title}</h1></TextReveal>
           <TextReveal delay={.2}><p className="wf-page-lede">{description}</p></TextReveal>
         </div>
-        <ImageReveal direction="left" className="wf-page-hero-image relative overflow-hidden">
-          <Image src={image} alt={imageAlt} fill priority sizes="(max-width: 1023px) 100vw, 50vw" className="object-cover" />
+        <ImageReveal direction="left" className="wf-page-hero-image relative overflow-hidden bg-cream">
+          <Image src={image} alt={imageAlt} fill priority sizes="(max-width: 1023px) 100vw, 50vw" className="object-contain" />
         </ImageReveal>
       </Container>
     </section>

@@ -22,7 +22,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
             src={article.image}
             alt={article.title}
             fill
-            className="object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+            className="object-contain"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
@@ -36,7 +36,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
               {article.excerpt}
             </p>
           )}
-          <span className="inline-flex items-center gap-2 text-gold font-sans font-semibold text-[10px] uppercase tracking-wider group-hover:gap-3 transition-all duration-300">
+          <span className="inline-flex items-center gap-2 text-gold font-sans font-semibold text-xs uppercase tracking-wider group-hover:gap-3 transition-all duration-300">
             Explore the Wine Journal
             <ArrowRight className="w-3 h-3" />
           </span>
@@ -56,7 +56,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
           src={article.image}
           alt={article.title}
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className="object-contain"
           sizes="96px"
         />
       </div>
@@ -64,7 +64,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
         <h4 className="font-serif text-sm sm:text-base font-semibold text-charcoal group-hover:text-gold transition-colors duration-300 mb-1.5 leading-snug">
           {article.title}
         </h4>
-          <span className="inline-flex items-center gap-1.5 text-burgundy font-sans text-[9px] font-semibold uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1.5 text-burgundy font-sans text-[11px] font-semibold uppercase tracking-wider">
           Read More
           <ArrowRight className="w-2.5 h-2.5 transition-transform duration-300 group-hover:translate-x-1" />
         </span>

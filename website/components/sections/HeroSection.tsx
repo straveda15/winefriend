@@ -347,7 +347,7 @@ export function HeroSection() {
             <span className="wf-hero-heading-line">One trusted</span>
             <span className="wf-hero-heading-line wf-hero-heading-accent">friend.</span>
           </h1>
-          <p className="wf-hero-tagline">Always in All Ways for Wine Lovers</p>
+          <p className="wf-hero-tagline">Always in All Ways for the Wine Lovers</p>
           <div className="wf-hero-actions">
             <Button href="/products">Explore Our Products</Button>
             <Button href="/wine-tours" variant="secondary" className="wf-hero-outline">Discover Wine Experiences</Button>
