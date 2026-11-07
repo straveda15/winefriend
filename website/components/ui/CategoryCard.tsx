@@ -15,25 +15,15 @@ export function CategoryCard({ category }: CategoryCardProps) {
       href={category.ctaHref}
       className="wf-category-card group relative block overflow-hidden rounded-none aspect-[4/5] cursor-pointer"
     >
-      {/* Background Image */}
-      <div className="absolute inset-0 img-fallback-wine">
-        <div className="wf-category-image-reveal absolute inset-0">
-          <Image
-            src={category.image}
-            alt=""
-            aria-hidden="true"
-            fill
-            className="object-cover blur-sm scale-105 opacity-55"
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-          <Image
-            src={category.image}
-            alt={category.title}
-            fill
-            className="wf-category-image object-contain"
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-        </div>
+      {/* A single cover image fills the editorial card; no enlarged blur duplicate. */}
+      <div className="wf-category-image-reveal absolute inset-0 bg-charcoal">
+        <Image
+          src={category.image}
+          alt={category.title}
+          fill
+          className="wf-category-image object-cover"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+        />
       </div>
 
       {/* Gradient Overlay */}

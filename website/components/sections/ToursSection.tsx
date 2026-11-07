@@ -26,7 +26,7 @@ export function ToursSection({ preview = false }: { preview?: boolean }) {
               src="/images/experiences/vineyard-landscape.webp"
               alt="Vineyard rows stretching toward a mountain landscape"
               fill
-              className="object-contain"
+              className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-3 border border-gold/20 rounded-xl pointer-events-none" />

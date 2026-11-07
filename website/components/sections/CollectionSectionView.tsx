@@ -134,7 +134,7 @@ export function CollectionSectionView({
           ))}
         </div>
         {visibleProducts.length === 0 && (
-          preview ? (
+          preview && loadState !== "error" ? (
             <p className="mt-10 text-center text-charcoal-light">Products will appear here soon.</p>
           ) : (
             <div
