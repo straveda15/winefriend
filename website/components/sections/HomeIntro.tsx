@@ -5,18 +5,13 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animations";
 
-// Bump the key when the intro changes so returning testers see the latest version once.
-const SESSION_KEY = "winefriend-home-intro-v8-seen";
-
 export function HomeIntro() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const shouldShowIntro = !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
-      !window.sessionStorage.getItem(SESSION_KEY);
-    if (!shouldShowIntro) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.documentElement.classList.remove("wf-home-intro-active");
       setVisible(false);
       return;
@@ -37,11 +32,11 @@ export function HomeIntro() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reducedMotion) {
-      window.sessionStorage.setItem(SESSION_KEY, "1");
       setVisible(false);
       return;
     }
 
+    overlay.classList.add("wf-home-intro-ready");
     const timeline = gsap.timeline();
     timeline
       .fromTo(logo, { autoAlpha: 0, scale: .97 }, { autoAlpha: 1, scale: 1, duration: 1.15, ease: "power2.out" }, 0)
@@ -73,7 +68,6 @@ export function HomeIntro() {
       duration: .9,
       ease: "power3.inOut",
       onComplete: () => {
-        window.sessionStorage.setItem(SESSION_KEY, "1");
         setVisible(false);
       },
     }, 3.3);

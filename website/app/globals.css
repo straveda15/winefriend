@@ -46,14 +46,16 @@
   contain: layout paint;
 }
 
+.wf-home-intro:not(.wf-home-intro-ready) .wf-home-intro-logo-frame { visibility: hidden; }
+
 .wf-home-intro-logo {
   position: relative;
   z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  scale: 1.08;
+  object-fit: cover;
+  scale: 1.04;
   filter: drop-shadow(0 12px 26px rgb(69 49 22 / 9%));
 }
 
@@ -442,7 +444,7 @@ h1, h2, h3, h4, h5, h6 {
 .wf-about-editorial-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 5 / 6;
   margin: 0;
   overflow: hidden;
   background: #f4efe5;
@@ -1175,16 +1177,17 @@ h1, h2, h3, h4, h5, h6 {
   .wf-hero-copy h1 { max-width: 12ch; font-size: clamp(3.5rem, 13.5vw, 5.2rem); }
   .wf-hero-eyebrow { font-size: .82rem; }
   .wf-hero-description { font-size: .9rem; }
-  .wf-hero-actions { align-items: center; flex-wrap: nowrap; gap: .45rem; }
+  .wf-hero-actions { flex-direction: column; align-items: stretch; gap: .6rem; }
   .wf-hero-actions a {
-    flex: 1 1 0;
+    width: 100%;
+    flex: none;
     min-width: 0;
     justify-content: center;
     gap: .3rem;
-    padding: .62rem .65rem;
+    padding: .75rem .8rem;
     font-size: .62rem;
     letter-spacing: .035em;
-    white-space: nowrap;
+    white-space: normal;
   }
   .wf-hero-actions a svg { width: .75rem; height: .75rem; flex: none; }
   .wf-hero-visual { min-height: 460px; }
@@ -1196,7 +1199,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 380px) {
-  .wf-hero-actions { gap: .35rem; }
+  .wf-hero-actions { gap: .5rem; }
   .wf-hero-actions a {
     gap: .25rem;
     padding-inline: .4rem;
@@ -1263,44 +1266,44 @@ h1, h2, h3, h4, h5, h6 {
   background: #000;
 }
 
-.wf-logo-mark-frame { position: relative; }
+.wf-logo-mark-frame { position: relative; container-type: inline-size; }
 
 .wf-logo-trademark {
   position: absolute;
   z-index: 2;
-  top: 14%;
-  right: 14%;
-  color: var(--gold, #c69a3a);
-  font: 600 1rem/1 var(--font-sans), sans-serif;
+  top: 18%;
+  right: 10%;
+  color: #D9A321;
+  font: 500 20cqi/1 Arial, sans-serif;
   pointer-events: none;
 }
 
 .wf-home-intro-logo-frame .wf-logo-trademark {
-  color: #8a692b;
-  font-size: 1.2rem;
+  font-size: 20cqi;
 }
 
 .wf-trademark-inline {
   display: inline-block;
-  margin-left: .08em;
+  margin-left: .06em;
   color: var(--gold, #c69a3a);
   font-size: .24em;
-  font-weight: 600;
-  line-height: 0;
+  font-family: Arial, sans-serif;
+  font-weight: 500;
+  line-height: 1;
   vertical-align: super;
 }
 
 .wf-footer-bottom .wf-trademark-inline { font-size: .7em; }
-.wf-home-intro-brand .wf-trademark-inline { color: #8a692b; }
+.wf-home-intro-brand .wf-trademark-inline { color: #D9A321; font-size: .2em; }
 
 .wf-brand-logo-image {
   display: block;
   width: 100%;
   height: 100%;
   max-width: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
-  scale: 1.08;
+  scale: 1.04;
   border-radius: 50%;
   background: #000;
   image-rendering: auto;
