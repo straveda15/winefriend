@@ -16,7 +16,7 @@ export function JournalListingCard({ article, featured = false }: { article: Jou
           fill
 
 
-          className="object-contain"
+          className="object-cover"
 
           sizes={featured ? "(max-width: 1023px) 100vw, 60vw" : "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"}
         />

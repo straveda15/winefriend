@@ -12,10 +12,11 @@ interface ProductGalleryProps {
   sizes?: string;
 }
 
-export function ProductGallery({ images, name, imageFit = "cover", priority = false, sizes = "(max-width: 1023px) 100vw, 50vw" }: ProductGalleryProps) {
+export function ProductGallery({ images, name, imageFit = "contain", priority = false, sizes = "(max-width: 1023px) 100vw, 50vw" }: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
   const count = images.length;
   const current = Math.min(index, count - 1);
+  const fitClass = imageFit === "cover" ? "object-cover" : "object-contain";
   const go = (delta: number) => setIndex((current + delta + count) % count);
 
   return (
@@ -29,11 +30,7 @@ export function ProductGallery({ images, name, imageFit = "cover", priority = fa
             fill
             priority={priority && i === 0}
             sizes={sizes}
-
-            className={`object-${imageFit} wf-gallery-slide ${i === current ? "is-active" : ""}`}
-
-            className={`object-contain wf-gallery-slide ${i === current ? "is-active" : ""}`}
-
+            className={`${fitClass} wf-gallery-slide ${i === current ? "is-active" : ""}`}
             aria-hidden={i === current ? undefined : true}
           />
         ))}

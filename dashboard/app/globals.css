@@ -62,3 +62,65 @@ p.flex > * {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Keep the Blog editor columns and fields within their own cards. */
+.blog-post-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  align-items: start;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+.blog-post-form > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  min-width: 0;
+}
+
+.blog-post-form > div > section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.blog-post-form > div > section > * {
+  min-width: 0;
+}
+
+.blog-post-form > div > section input:not([type="checkbox"]):not([type="file"]),
+.blog-post-form > div > section textarea {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.blog-post-form > aside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+.blog-post-form > aside > section {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 1279px) {
+  .blog-post-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .blog-post-form > aside {
+    position: static;
+  }
+}

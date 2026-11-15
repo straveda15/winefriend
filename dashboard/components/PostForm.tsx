@@ -17,7 +17,7 @@ export function PostForm({ post, today }: { post?: JournalArticle; today: string
 
   return (
     <form
-      className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]"
+      className="blog-post-form"
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -27,21 +27,21 @@ export function PostForm({ post, today }: { post?: JournalArticle; today: string
       {post && <input type="hidden" name="id" value={post.id} />}
       <input type="hidden" name="images" value={JSON.stringify(images)} />
 
-      <div className="grid gap-6">
-        <section className={`${card} grid gap-5 p-5 sm:p-6`}>
+      <div>
+        <section className={`${card} grid min-w-0 gap-5 p-5 sm:p-6`}>
           <h2 className="font-serif text-xl">Article</h2>
           <div>
             <label className={label} htmlFor="title">Title</label>
-            <input id="title" name="title" required maxLength={150} defaultValue={post?.title} className={input} />
+            <input id="title" name="title" required maxLength={150} defaultValue={post?.title} className={`${input} box-border max-w-full`} />
           </div>
           <div>
             <label className={label} htmlFor="excerpt">Summary</label>
-            <textarea id="excerpt" name="excerpt" required rows={3} maxLength={300} defaultValue={post?.excerpt} className={input} />
+            <textarea id="excerpt" name="excerpt" required rows={3} maxLength={300} defaultValue={post?.excerpt} className={`${input} box-border max-w-full`} />
             <p className={hint}>Up to 300 characters. Shown on the blog listing and when the article is shared.</p>
           </div>
           <div>
             <label className={label} htmlFor="content">Content</label>
-            <textarea id="content" name="content" required rows={16} maxLength={30000} defaultValue={post?.content} className={`${input} font-mono text-[13px] leading-relaxed`} />
+            <textarea id="content" name="content" required rows={16} maxLength={30000} defaultValue={post?.content} className={`${input} box-border max-w-full font-mono text-[13px] leading-relaxed`} />
             <p className={hint}>
               Leave a blank line between paragraphs. Use <code>## Heading</code> for a section heading, <code>- item</code> for bullet points,
               <code> **bold**</code>, <code>*italic*</code> and <code>[link text](https://…)</code>.
@@ -56,8 +56,8 @@ export function PostForm({ post, today }: { post?: JournalArticle; today: string
         </section>
       </div>
 
-      <aside className="grid content-start gap-6">
-        <section className={`${card} grid gap-5 p-5 sm:p-6`}>
+      <aside className="grid min-w-0 content-start gap-6">
+        <section className={`${card} grid min-w-0 gap-5 p-5 sm:p-6`}>
           <h2 className="font-serif text-xl">Publishing</h2>
           <div>
             <label className={label} htmlFor="category">Category</label>

@@ -56,12 +56,10 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
         <FadeUp>
           <p className="wf-collection-kicker mt-8">{article.category} · {formatDate(article.date)}</p>
           <h1 className="wf-page-title max-w-4xl">{article.title}</h1>
+        </FadeUp>
        
         <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden bg-white">
           <JournalImage src={coverImage} fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined} alt={article.title} fill priority sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
-
-        <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden bg-cream">
-          <Img src={article.image} alt={article.title} fill priority sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
 
         </ImageReveal>
         {article.images && article.images.length > 1 && (

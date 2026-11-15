@@ -24,7 +24,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
             fill
 
 
-            className="object-contain"
+            className="object-cover"
 
             sizes="(max-width: 768px) 100vw, 50vw"
           />
@@ -60,7 +60,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
           fill
 
 
-          className="object-contain"
+          className="object-cover"
 
           sizes="96px"
         />
