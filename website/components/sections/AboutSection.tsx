@@ -8,9 +8,6 @@ import { Container } from "@/components/layout/Container";
 import { FeatureIcon } from "@/components/ui/FeatureIcon";
 import { Button } from "@/components/ui/Button";
 import { Divider } from "@/components/ui/Divider";
-import { FadeUp } from "@/components/animations/FadeUp";
-import { TextReveal } from "@/components/animations/TextReveal";
-import { StaggerChildren } from "@/components/animations/StaggerChildren";
 import { aboutPillars, aboutContent } from "@/data/about";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
 
@@ -18,25 +15,95 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export function AboutSection({ preview = false }: { preview?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const imageFrameRef = useRef<HTMLElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
-
   useGSAP(() => {
-    const frame = imageFrameRef.current;
-    const image = imageRef.current;
-    if (!frame || !image || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const section = sectionRef.current;
+    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const reveal = gsap.timeline({
+    const heading = section.querySelector<HTMLElement>(".wf-about-main-heading");
+    const storyHeading = section.querySelector<HTMLElement>(".wf-about-story-heading");
+    const divider = section.querySelector<HTMLElement>(".wf-about-divider");
+    const cards = gsap.utils.toArray<HTMLElement>(".wf-about-pillar", section);
+    const icons = gsap.utils.toArray<HTMLElement>(".wf-about-pillar-icon", section);
+    const paragraphs = gsap.utils.toArray<HTMLElement>(".wf-about-story-copy", section);
+    const cta = section.querySelector<HTMLElement>(".wf-about-cta");
+    const frame = section.querySelector<HTMLElement>(".wf-about-editorial-image");
+    const image = section.querySelector<HTMLElement>(".wf-about-editorial-photo");
+
+    const timeline = gsap.timeline({
       scrollTrigger: {
-        trigger: frame,
-        start: "top 82%",
+        trigger: section,
+        start: "top 80%",
         toggleActions: "play none none none",
+        once: true,
       },
-      defaults: { ease: "power2.out" },
+      defaults: { ease: "power3.out" },
     });
-    reveal
-      .fromTo(frame, { clipPath: "inset(12% 0 0 0)" }, { clipPath: "inset(0 0 0 0)", duration: 1.1 })
-      .fromTo(image, { scale: 1.06 }, { scale: 1, duration: 1.5 }, "<");
+
+    if (heading) {
+      timeline.fromTo(heading,
+        { autoAlpha: 0, y: 14, clipPath: "inset(0 0 100% 0)" },
+        { autoAlpha: 1, y: 0, clipPath: "inset(0 0 0% 0)", duration: 0.68 },
+        0,
+      );
+    }
+
+    if (storyHeading) {
+      timeline.fromTo(storyHeading,
+        { autoAlpha: 0, x: 18 },
+        { autoAlpha: 1, x: 0, duration: 0.62 },
+        0.14,
+      );
+    }
+    if (divider) {
+      timeline.fromTo(divider,
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 0.58, ease: "power2.out" },
+        0.38,
+      );
+    }
+
+    if (cards.length) {
+      timeline.fromTo(cards,
+        { autoAlpha: 0, y: 20 },
+        { autoAlpha: 1, y: 0, duration: 0.58, stagger: 0.11 },
+        0.22,
+      );
+    }
+    if (icons.length) {
+      timeline.fromTo(icons,
+        { scale: 0.88, transformOrigin: "center center" },
+        { scale: 1, duration: 0.45, stagger: 0.11, ease: "power2.out" },
+        0.32,
+      );
+    }
+    if (paragraphs.length) {
+      timeline.fromTo(paragraphs,
+        { autoAlpha: 0, y: 12 },
+        { autoAlpha: 1, y: 0, duration: 0.62 },
+        0.46,
+      );
+    }
+    if (cta) {
+      timeline.fromTo(cta,
+        { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, duration: 0.5 },
+        0.62,
+      );
+    }
+    if (frame) {
+      timeline.fromTo(frame,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", duration: 0.95, ease: "power2.inOut" },
+        0.2,
+      );
+    }
+    if (image) {
+      timeline.fromTo(image,
+        { scale: 1.045 },
+        { scale: 1, duration: 1.25, ease: "power2.out" },
+        0.2,
+      );
+    }
   }, { scope: sectionRef });
 
   return (
@@ -46,26 +113,23 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
         <div className="wf-about-grid grid grid-cols-1 lg:grid-cols-2 items-start">
           {/* Left – Pillars */}
           <div>
-            <TextReveal>
-              <h2 className="wf-display-heading font-serif text-3xl sm:text-4xl lg:text-6xl font-normal text-charcoal leading-[1.05] mb-10">
+            <div>
+              <h2 className="wf-about-main-heading wf-display-heading font-serif text-3xl sm:text-4xl lg:text-6xl font-normal text-charcoal leading-[1.05] mb-10">
                 {aboutContent.heading}
               </h2>
-            </TextReveal>
-            <StaggerChildren
-              className="wf-about-pillars grid grid-cols-1 sm:grid-cols-2 gap-4"
-              stagger={0.15}
-            >
+            </div>
+            <div className="wf-about-pillars grid grid-cols-1 sm:grid-cols-2 gap-4">
               {aboutPillars.map((pillar) => (
                 <FeatureIcon key={pillar.title} pillar={pillar} horizontalMobile={!preview} />
               ))}
-            </StaggerChildren>
+            </div>
           </div>
 
           {/* Right – Story */}
           <div className="wf-about-story-column">
-            <FadeUp delay={0.2}>
+            <div>
               <div className="lg:pt-2">
-                <h3 className="font-serif text-2xl sm:text-3xl font-normal text-burgundy mb-5">
+                <h3 className="wf-about-story-heading font-serif text-2xl sm:text-3xl font-normal text-burgundy mb-5">
                   {aboutContent.storyHeading}
                 </h3>
                 <Divider className="wf-about-divider mb-4" />
@@ -76,10 +140,9 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
                   {aboutContent.ctaText}
                 </Button>
               </div>
-            </FadeUp>
-            <figure ref={imageFrameRef} className="wf-about-editorial-image">
+            </div>
+            <figure className="wf-about-editorial-image">
               <Image
-                ref={imageRef}
                 src="/images/about/wine-cellar.webp"
                 alt="A warmly lit wine cellar lined with wooden racks and bottles"
                 fill

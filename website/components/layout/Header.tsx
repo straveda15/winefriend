@@ -17,6 +17,16 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const [currentHash, setCurrentHash] = useState("");
+  const [introFinished, setIntroFinished] = useState(false);
+  const shouldWaitForIntro = pathname === "/" && !introFinished;
+
+  useEffect(() => {
+    if (pathname !== "/" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const handleIntroExit = () => setIntroFinished(true);
+    window.addEventListener("wf-home-intro-exit", handleIntroExit);
+    return () => window.removeEventListener("wf-home-intro-exit", handleIntroExit);
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,6 +66,7 @@ export function Header() {
 
   useGSAP(
     () => {
+      if (shouldWaitForIntro) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -71,14 +82,14 @@ export function Header() {
         "-=0.4",
       );
     },
-    { scope: headerRef },
+    { scope: headerRef, dependencies: [shouldWaitForIntro, pathname], revertOnUpdate: true },
   );
 
   return (
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${shouldWaitForIntro ? "wf-header-intro-pending" : ""} ${
           scrolled
           ? "wf-header wf-header-scrolled py-1"
             : "wf-header wf-header-top py-1 lg:py-2"

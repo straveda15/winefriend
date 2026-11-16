@@ -11,12 +11,15 @@ export function HomeIntro() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.documentElement.classList.remove("wf-home-intro-active");
-      setVisible(false);
-      return;
-    }
-    setReady(true);
+    const frame = window.requestAnimationFrame(() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.remove("wf-home-intro-active");
+        setVisible(false);
+        return;
+      }
+      setReady(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useGSAP(() => {
@@ -42,8 +45,8 @@ export function HomeIntro() {
       .fromTo(logo, { autoAlpha: 0, scale: .97 }, { autoAlpha: 1, scale: 1, duration: 1.15, ease: "power2.out" }, 0)
       .fromTo(ornament, { autoAlpha: 0, scale: .98 }, { autoAlpha: 1, scale: 1, duration: 1.05, ease: "power2.out" }, .1)
       .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1.05, ease: "power1.inOut" }, .1)
-      .fromTo(brand, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)", duration: 1.25, ease: "power1.inOut" }, 1.15)
-      .fromTo(copy, { autoAlpha: 0, y: 10 }, { autoAlpha: .9, y: 0, duration: .8, ease: "power2.out" }, 2.45);
+      .fromTo(brand, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)", duration: 1.25, ease: "power1.inOut" }, .8)
+      .fromTo(copy, { autoAlpha: 0, y: 10 }, { autoAlpha: .9, y: 0, duration: .8, ease: "power2.out" }, ">-.05");
 
     vineLeaves.forEach((leaf) => {
       const length = leaf.getTotalLength();
@@ -54,29 +57,28 @@ export function HomeIntro() {
         transformOrigin: "50% 90%",
       });
     });
-    timeline.to(vineLeaves, {
+    gsap.to(vineLeaves, {
       rotation: (index) => index % 2 === 0 ? 2.2 : -2.2,
       duration: 1.2,
       stagger: .14,
       yoyo: true,
       repeat: 3,
       ease: "sine.inOut",
-    }, .6);
+    });
 
     timeline.to(overlay, {
       clipPath: "inset(0 0 100% 0 round 0 0 46% 46%)",
-      duration: .9,
+      duration: .8,
       ease: "power3.inOut",
-      onComplete: () => {
-        setVisible(false);
-      },
-    }, 3.3);
+      onComplete: () => setVisible(false),
+    }, ">");
 
     return () => timeline.kill();
   }, { scope: overlayRef, dependencies: [visible, ready] });
 
   useEffect(() => {
     document.documentElement.classList.toggle("wf-home-intro-active", visible);
+    if (!visible) window.dispatchEvent(new Event("wf-home-intro-exit"));
     return () => document.documentElement.classList.remove("wf-home-intro-active");
   }, [visible]);
 

@@ -43,6 +43,101 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Keep the dashboard lockup visually identical to the public website. */
+.dashboard-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex: none;
+  padding: .65rem .85rem;
+  text-decoration: none;
+}
+
+.dashboard-brand-logo .wf-brand-logo-frame {
+  position: relative;
+  display: block;
+  width: 5.6rem;
+  aspect-ratio: 1;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #000;
+}
+
+.dashboard-brand-logo .wf-logo-mark-frame { container-type: inline-size; }
+
+.dashboard-brand-logo .wf-logo-trademark {
+  position: absolute;
+  z-index: 2;
+  top: 18%;
+  right: 10%;
+  color: #D9A321;
+  font: 500 20cqi/1 Arial, sans-serif;
+  pointer-events: none;
+}
+
+.dashboard-brand-logo .wf-brand-logo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  border-radius: 50%;
+  background: #000;
+  object-fit: cover;
+  object-position: center;
+  scale: 1.04;
+  image-rendering: auto;
+}
+
+.dashboard-brand-logo .wf-brand-logo-enterprise {
+  display: flex;
+  flex-direction: column;
+  gap: .12rem;
+  color: var(--charcoal);
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.dashboard-brand-logo .wf-brand-logo-tagline {
+  margin-top: .2rem;
+  color: var(--charcoal-light);
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: .68rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: .11em;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .dashboard-brand-logo { gap: .65rem; }
+  .dashboard-brand-logo .wf-brand-logo-frame { width: 4rem; }
+  .dashboard-brand-logo .wf-brand-logo-enterprise { font-size: .9rem; }
+  .dashboard-brand-logo .wf-brand-logo-tagline { font-size: .47rem; letter-spacing: .06em; }
+}
+
+.dashboard-brand-logo-compact {
+  gap: .45rem;
+  max-width: 100%;
+  padding: .55rem .45rem;
+}
+.dashboard-brand-logo-compact .wf-brand-logo-frame { width: 3.5rem; }
+.dashboard-brand-logo-compact .wf-brand-logo-enterprise { font-size: .7rem; }
+.dashboard-brand-logo-compact .wf-brand-logo-tagline { font-size: .38rem; letter-spacing: .045em; }
+
+/* The website logo keeps its light lockup in both the header and footer. */
+.dashboard-brand-logo,
+.dashboard-brand-logo:hover { color: inherit; }
+.dashboard-brand-logo .wf-brand-logo-enterprise { color: #24211d; }
+.dashboard-brand-logo .wf-brand-logo-tagline { color: #514b43; }
+.dashboard-brand-logo.dashboard-brand-logo-compact .wf-brand-logo-enterprise { color: #f5efe3; }
+.dashboard-brand-logo.dashboard-brand-logo-compact .wf-brand-logo-tagline { color: rgb(245 239 227 / 70%); }
+
 /* Keep dashboard subtitles, descriptions, metadata and status paragraphs on one line. */
 p {
   min-width: 0;

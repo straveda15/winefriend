@@ -62,9 +62,16 @@ export function HeroSection() {
   const touchStartXRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [heroEntranceComplete, setHeroEntranceComplete] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
+
+  useEffect(() => {
+    const handleIntroExit = () => setIntroComplete(true);
+    window.addEventListener("wf-home-intro-exit", handleIntroExit);
+    return () => window.removeEventListener("wf-home-intro-exit", handleIntroExit);
+  }, []);
 
   const goToSlide = useCallback((requestedIndex: number) => {
     const from = activeRef.current;
@@ -125,7 +132,7 @@ export function HeroSection() {
   }, []);
 
   useGSAP(() => {
-    if (!heroImageLoaded) return;
+    if (!introComplete || !heroImageLoaded) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       gsap.set(layerRefs.current, { autoAlpha: 1, clipPath: "inset(0 0 0 0)" });
       gsap.set(layerRefs.current.slice(1), { autoAlpha: 0 });
@@ -209,7 +216,7 @@ export function HeroSection() {
       photoMotionRef.current?.kill();
       scrollMotion.scrollTrigger?.kill();
     };
-  }, { scope: sectionRef, dependencies: [heroImageLoaded] });
+  }, { scope: sectionRef, dependencies: [heroImageLoaded, introComplete], revertOnUpdate: true });
 
   useEffect(() => {
     if (!heroEntranceComplete) return;

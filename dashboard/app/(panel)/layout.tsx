@@ -27,7 +27,7 @@ async function AdminShell({ children }: { children: ReactNode }) {
       <EnquiriesCountWatcher counts={enquiryCounts} />
       <aside className="bg-[#24211d] p-4 text-[#f5efe3] lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:p-5">
         <div className="mb-4 flex items-center justify-between gap-3 lg:mb-8 lg:block">
-          <BrandLogo inverse />
+          <BrandLogo compact />
           <form action={logoutAction} className="lg:hidden">
             <button type="submit" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#f5efe3]/80 hover:bg-white/10">
               <LogOut className="size-4" aria-hidden="true" /> Sign out

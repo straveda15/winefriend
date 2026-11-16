@@ -49,7 +49,7 @@ export function Footer() {
 
           {/* Explore */}
           <div>
-            <h4 className="font-sans text-sm font-semibold uppercase tracking-wider text-white mb-3">
+            <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-white mb-3">
               Explore
             </h4>
             <nav className="flex flex-col gap-2">
@@ -67,7 +67,7 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="font-sans text-sm font-semibold uppercase tracking-wider text-white mb-3">
+            <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-white mb-3">
               Services
             </h4>
             <nav className="flex flex-col gap-2">
@@ -85,7 +85,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-sans text-sm font-semibold uppercase tracking-wider text-white mb-3">
+            <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-white mb-3">
               Contact Us
             </h4>
             <div className="flex flex-col gap-2">
