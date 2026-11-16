@@ -22,5 +22,5 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   // Everything except Next.js internals, uploaded images and static assets.
-  matcher: ["/((?!_next/|uploads/|images/|fonts/|logo\\.png|kamaltara-favicon).*)"],
+  matcher: ["/((?!_next/|uploads/|images/|fonts/|logo\\.png|kamaltara-logo\\.png|kamaltara-favicon).*)"],
 };
