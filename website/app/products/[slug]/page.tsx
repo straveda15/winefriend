@@ -11,14 +11,18 @@ import { ProductGallery } from "@/components/products/ProductGallery";
 import { getProduct, getProducts } from "@/lib/content";
 
 type ProductPageProps = { params: Promise<{ slug: string }> };
+const BUILD_PLACEHOLDER_SLUG = "__build_placeholder__";
 
 export async function generateStaticParams() {
   const products = await getProducts();
-  return products.map(({ slug }) => ({ slug }));
+  return products.length > 0
+    ? products.map(({ slug }) => ({ slug }))
+    : [{ slug: BUILD_PLACEHOLDER_SLUG }];
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
+  if (slug === BUILD_PLACEHOLDER_SLUG) return { title: "Product | WineFriend" };
   const product = await getProduct(slug);
   if (!product) return { title: "Product | WineFriend" };
   return {
@@ -42,6 +46,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
 
 async function ProductDetailContent({ params }: ProductPageProps) {
   const { slug } = await params;
+  if (slug === BUILD_PLACEHOLDER_SLUG) notFound();
   const product = await getProduct(slug);
   if (!product) notFound();
 

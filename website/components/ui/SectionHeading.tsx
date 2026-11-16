@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 interface SectionHeadingProps {
   kicker?: string;
   heading: string;
-  description?: string;
+  description?: ReactNode;
   align?: "center" | "left";
   light?: boolean;
   className?: string;

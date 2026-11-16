@@ -1,5 +1,6 @@
 import { CollectionSectionView } from "@/components/sections/CollectionSectionView";
 import { getProductsForHome, getProductsOrThrow } from "@/lib/content";
+import { unstable_rethrow } from "next/navigation";
 import type { Product } from "@winefriend/shared/types";
 
 // Keep the home page useful when the catalogue API is temporarily unavailable.
@@ -58,6 +59,7 @@ export async function CollectionSection({ preview = false }: { preview?: boolean
         .slice(0, 3);
       return <CollectionSectionView products={homeProducts} preview />;
     } catch (error) {
+      unstable_rethrow(error);
       console.error("[website] Could not load featured products for the home page.", error);
       return <CollectionSectionView products={HOME_PRODUCT_FALLBACKS} preview />;
     }
@@ -67,6 +69,7 @@ export async function CollectionSection({ preview = false }: { preview?: boolean
     const products = await getProductsOrThrow();
     return <CollectionSectionView products={products} />;
   } catch (error) {
+    unstable_rethrow(error);
     console.error("[website] Could not load /api/products for the catalogue.", error);
     return <CollectionSectionView products={[]} loadState="error" />;
   }

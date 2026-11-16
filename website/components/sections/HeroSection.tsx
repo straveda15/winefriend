@@ -38,7 +38,7 @@ const slides = [
 ] as const;
 
 const AUTOPLAY_MS = 5500;
-const TRANSITION_MS = 1400;
+const TRANSITION_MS = 420;
 const HERO_IMAGE_REVEAL_MS = 3800;
 
 const slideMotion = [
@@ -58,12 +58,10 @@ export function HeroSection() {
   const photoMotionRef = useRef<gsap.core.Tween | null>(null);
   const activeRef = useRef(0);
   const transitionRef = useRef<gsap.core.Timeline | null>(null);
-  const transitioningRef = useRef(false);
   const touchStartXRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
-  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [heroEntranceComplete, setHeroEntranceComplete] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
@@ -76,7 +74,7 @@ export function HeroSection() {
   const goToSlide = useCallback((requestedIndex: number) => {
     const from = activeRef.current;
     const to = (requestedIndex + slides.length) % slides.length;
-    if (from === to || transitioningRef.current) return;
+    if (from === to) return;
 
     const outgoing = layerRefs.current[from];
     const incoming = layerRefs.current[to];
@@ -84,7 +82,6 @@ export function HeroSection() {
     const incomingPhoto = photoRefs.current[to];
     if (!outgoing || !incoming || !outgoingPhoto || !incomingPhoto) return;
 
-    transitioningRef.current = true;
     setTransitioning(true);
     activeRef.current = to;
     setActiveIndex(to);
@@ -94,7 +91,6 @@ export function HeroSection() {
       gsap.set(outgoingPhoto, { scale: 1, xPercent: 0, yPercent: 0 });
       gsap.set(incoming, { autoAlpha: 1, clipPath: "inset(0 0 0 0)" });
       gsap.set(incomingPhoto, { scale: 1, xPercent: 0, yPercent: 0 });
-      transitioningRef.current = false;
       setTransitioning(false);
       return;
     }
@@ -104,7 +100,6 @@ export function HeroSection() {
     const timeline = gsap.timeline({
       defaults: { ease: "power1.inOut" },
       onComplete: () => {
-        transitioningRef.current = false;
         setTransitioning(false);
         gsap.set(outgoing, { autoAlpha: 0, clipPath: "inset(0 0 0 0)" });
       },
@@ -132,8 +127,8 @@ export function HeroSection() {
   }, []);
 
   useGSAP(() => {
-    if (!introComplete || !heroImageLoaded) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (!introComplete) return;
       gsap.set(layerRefs.current, { autoAlpha: 1, clipPath: "inset(0 0 0 0)" });
       gsap.set(layerRefs.current.slice(1), { autoAlpha: 0 });
       gsap.set(photoRefs.current, { autoAlpha: 1, scale: 1, xPercent: 0, yPercent: 0 });
@@ -145,6 +140,17 @@ export function HeroSection() {
     gsap.set(photoRefs.current, { scale: 1.12, xPercent: 0, yPercent: 0 });
     gsap.set(layerRefs.current[0], { autoAlpha: 1, clipPath: "inset(0 0 0 0)" });
     gsap.set(photoRefs.current[0], { autoAlpha: 1, scale: 1.08, xPercent: -100, yPercent: 0 });
+
+    gsap.set(".wf-hero-story", { autoAlpha: 0, xPercent: 100 });
+    gsap.set(".wf-hero-eyebrow", { autoAlpha: 0, y: 14, letterSpacing: ".34em" });
+    gsap.set(".wf-hero-heading-line", { clipPath: "inset(0 0 100% 0)", y: 20 });
+    gsap.set(".wf-hero-description", { autoAlpha: 0, y: 8 });
+    gsap.set(".wf-hero-tagline", { autoAlpha: 0, y: 16 });
+    gsap.set(".wf-hero-actions > *", { autoAlpha: 0, y: 14 });
+
+    // Prepare the hidden entrance state while the Intro is still covering the Hero.
+    // The visible timeline starts only after the Intro exit event.
+    if (!introComplete) return;
 
     const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
     intro
@@ -162,6 +168,7 @@ export function HeroSection() {
       )
       .fromTo(".wf-hero-eyebrow", { autoAlpha: 0, y: 14, letterSpacing: ".34em" }, { autoAlpha: 1, y: 0, letterSpacing: ".2em", duration: .6 }, 1.05)
       .fromTo(".wf-hero-heading-line", { clipPath: "inset(0 0 100% 0)", y: 20 }, { clipPath: "inset(0 0 0% 0)", y: 0, duration: .72, stagger: .12 }, 1.45)
+      .fromTo(".wf-hero-description", { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .48 }, 2.45)
       .fromTo(".wf-hero-tagline", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .58 }, 2.55)
       .fromTo(".wf-hero-actions > *", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .58, stagger: .16 }, 3.15);
 
@@ -216,7 +223,7 @@ export function HeroSection() {
       photoMotionRef.current?.kill();
       scrollMotion.scrollTrigger?.kill();
     };
-  }, { scope: sectionRef, dependencies: [heroImageLoaded, introComplete], revertOnUpdate: true });
+  }, { scope: sectionRef, dependencies: [introComplete], revertOnUpdate: true });
 
   useEffect(() => {
     if (!heroEntranceComplete) return;
@@ -238,8 +245,13 @@ export function HeroSection() {
 
   useEffect(() => {
     const nextIndex = (activeIndex + 1) % slides.length;
-    const preload = new window.Image();
-    preload.src = slides[nextIndex].src;
+    const preload = slides.map((slide) => {
+      const image = new window.Image();
+      image.fetchPriority = slide.src === slides[nextIndex].src ? "high" : "auto";
+      image.src = slide.src;
+      return image;
+    });
+    return () => preload.forEach((image) => { image.onload = null; });
   }, [activeIndex]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
@@ -293,13 +305,10 @@ export function HeroSection() {
                   alt={slide.alt}
                   ref={(element) => { photoRefs.current[index] = element; }}
                   fill
-                  loading={index < 2 ? "eager" : "lazy"}
+                  loading="eager"
                   sizes="(max-width: 767px) 100vw, 34vw"
                   className="wf-hero-photo"
                   draggable={false}
-                  onLoad={index === 0 ? (event) => {
-                    void event.currentTarget.decode().then(() => setHeroImageLoaded(true));
-                  } : undefined}
                 />
               </div>
             ))}
@@ -314,17 +323,16 @@ export function HeroSection() {
                   className={`wf-hero-indicator ${activeIndex === index ? "is-active" : ""}`}
                   aria-label={`Show slide ${index + 1}: ${slide.label}`}
                   aria-current={activeIndex === index ? "true" : undefined}
-                  disabled={transitioning}
                   onClick={() => goToSlide(index)}
                 >
                   <span>{index === activeIndex ? <span ref={progressRef} className="wf-hero-progress" /> : null}</span>
                 </button>
               ))}
             </div>
-            <button type="button" className="wf-hero-arrow" aria-label="Previous slide" disabled={transitioning} onClick={() => goToSlide(activeRef.current - 1)}>
+            <button type="button" className="wf-hero-arrow" aria-label="Previous slide" onClick={() => goToSlide(activeRef.current - 1)}>
               <ChevronLeft aria-hidden="true" />
             </button>
-            <button type="button" className="wf-hero-arrow" aria-label="Next slide" disabled={transitioning} onClick={() => goToSlide(activeRef.current + 1)}>
+            <button type="button" className="wf-hero-arrow" aria-label="Next slide" onClick={() => goToSlide(activeRef.current + 1)}>
               <ChevronRight aria-hidden="true" />
             </button>
           </div>

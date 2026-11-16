@@ -14,14 +14,18 @@ import { formatDate } from "@winefriend/shared/constants";
 import { getPost, getPosts } from "@/lib/content";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
+const BUILD_PLACEHOLDER_SLUG = "__build_placeholder__";
 
 export async function generateStaticParams() {
   const posts = await getPosts();
-  return posts.map(({ slug }) => ({ slug }));
+  return posts.length > 0
+    ? posts.map(({ slug }) => ({ slug }))
+    : [{ slug: BUILD_PLACEHOLDER_SLUG }];
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
+  if (slug === BUILD_PLACEHOLDER_SLUG) return { title: "Wine Journal | WineFriend" };
   const article = await getPost(slug);
   if (!article) return { title: "Wine Journal | WineFriend" };
   return {
@@ -45,6 +49,7 @@ export default function JournalArticlePage({ params }: ArticlePageProps) {
 
 async function JournalArticleContent({ params }: ArticlePageProps) {
   const { slug } = await params;
+  if (slug === BUILD_PLACEHOLDER_SLUG) notFound();
   const article = await getPost(slug);
   if (!article) notFound();
   const coverImage = article.image ?? article.images?.[0];
