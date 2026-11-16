@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { backendGet } from "@/lib/backend";
 import type { JournalArticle, Product } from "@winefriend/shared/types";
 
@@ -9,7 +10,7 @@ import type { JournalArticle, Product } from "@winefriend/shared/types";
  */
 const CONTENT_LIFE = { stale: 60, revalidate: 300, expire: 86400 };
 
-/** Throws on failure so "use cache" never stores an empty list; the public getters below catch it. */
+/** Fetch content from the backend; cached callers provide a safe empty fallback on outages. */
 async function getContent<T>(path: string): Promise<T[]> {
   return backendGet<T[]>(path);
 }
@@ -17,11 +18,18 @@ async function getContent<T>(path: string): Promise<T[]> {
 async function getProductsCached(): Promise<Product[] | null> {
   "use cache";
   cacheTag("products");
-  cacheLife(CONTENT_LIFE);
-  const products = await getContent<Product>("/api/products");
-  // Never keep an empty catalogue cached: a temporary backend/database mismatch
-  // should not hide products after the source is corrected.
-  return products.length > 0 ? products : null;
+  try {
+    const products = await getContent<Product>("/api/products");
+    cacheLife(CONTENT_LIFE);
+    // Never keep an empty catalogue cached: a temporary backend/database mismatch
+    // should not hide products after the source is corrected.
+    return products.length > 0 ? products : null;
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error("[website] Could not load /api/products; rendering without backend content.", error);
+    cacheLife(CONTENT_LIFE);
+    return [];
+  }
 }
 
 export async function getProductsOrThrow(): Promise<Product[]> {
@@ -33,6 +41,7 @@ export async function getProducts(): Promise<Product[]> {
   try {
     return await getProductsOrThrow();
   } catch (error) {
+    unstable_rethrow(error);
     console.error("[website] Could not load /api/products; rendering without backend content.", error);
     return [];
   }
@@ -51,14 +60,23 @@ export async function getProduct(slug: string): Promise<Product | undefined> {
 async function getPostsCached(): Promise<JournalArticle[]> {
   "use cache";
   cacheTag("posts");
-  cacheLife(CONTENT_LIFE);
-  return getContent<JournalArticle>("/api/posts");
+  try {
+    const posts = await getContent<JournalArticle>("/api/posts");
+    cacheLife(CONTENT_LIFE);
+    return posts;
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error("[website] Could not load /api/posts; rendering without backend content.", error);
+    cacheLife(CONTENT_LIFE);
+    return [];
+  }
 }
 
 export async function getPosts(): Promise<JournalArticle[]> {
   try {
     return await getPostsCached();
   } catch (error) {
+    unstable_rethrow(error);
     console.error("[website] Could not load /api/posts; rendering without backend content.", error);
     return [];
   }

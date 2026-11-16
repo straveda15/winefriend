@@ -153,8 +153,8 @@ export function CollectionSectionView({
       <Container className="wf-botanical-content">
         <div ref={headingRef} className="wf-collection-header">
           <div>
-            <p className="wf-collection-kicker">The art of serving well</p>
-            <h2 className="wf-collection-title">Objects for the Wine Ritual</h2>
+            <p className="wf-collection-kicker">EXPLORE THE COLLECTION</p>
+            <h2 className="wf-collection-title">Discover Our Wine Essentials</h2>
           </div>
           <p className="wf-collection-description">
             {preview
