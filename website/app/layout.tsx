@@ -4,6 +4,7 @@ import "./globals.css";
 import "./catalogue.css";
 import { LenisProvider } from "@/lib/lenis";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
+import { GoldenDustCursor } from "@/components/ui/GoldenDustCursor";
 
 const playfair = localFont({
   src: "../public/fonts/PlayfairDisplay-Variable.ttf",
@@ -87,6 +88,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <LenisProvider>{children}</LenisProvider>
         <WhatsAppFloat />
+        <GoldenDustCursor />
       </body>
     </html>
   );

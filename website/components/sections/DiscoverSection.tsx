@@ -19,42 +19,80 @@ export function DiscoverSection() {
       const section = sectionRef.current;
       if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      const heading = section.querySelector<HTMLElement>(".wf-discover-heading");
-      const kicker = heading?.querySelector<HTMLElement>(".wf-discover-kicker");
-      const title = heading?.querySelector<HTMLElement>("h2");
-      const description = heading?.querySelector<HTMLElement>(".wf-discover-description");
-      const cards = gsap.utils.toArray<HTMLElement>(".wf-category-card", section);
+      const headingParts = gsap.utils.toArray<HTMLElement>(
+        ".wf-discover-kicker, .wf-discover-heading h2, .wf-discover-description",
+        section,
+      );
+      const imageFrames = gsap.utils.toArray<HTMLElement>(".wf-discover-image-reveal", section);
+      const images = gsap.utils.toArray<HTMLElement>(".wf-discover-image", section);
+      const numbers = gsap.utils.toArray<HTMLElement>(".wf-discover-item-number", section);
+      const titles = gsap.utils.toArray<HTMLElement>(".wf-discover-item-title", section);
+      const descriptions = gsap.utils.toArray<HTMLElement>(".wf-discover-item-description", section);
+      const links = gsap.utils.toArray<HTMLElement>(".wf-discover-item-cta", section);
 
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 85%",
+        start: "top 82%",
           toggleActions: "play none none none",
         },
         defaults: { ease: "power3.out" },
       });
 
-      if (heading) timeline.fromTo(heading, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1.1 });
-      if (kicker) timeline.fromTo(kicker, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.75 }, "-=0.8");
-      if (title) timeline.fromTo(title, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1.1 }, "-=0.65");
-      if (description) timeline.fromTo(description, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.85 }, "-=0.7");
-      if (cards.length) {
+      if (headingParts.length) {
         timeline.fromTo(
-          cards,
-          { autoAlpha: 0, y: 80 },
-          { autoAlpha: 1, y: 0, duration: 1.1, ease: "power3.out", stagger: 0.25 },
-          "-=0.35"
+          headingParts,
+          { autoAlpha: 0, y: 16 },
+          { autoAlpha: 1, y: 0, duration: 0.58, stagger: 0.08 },
         );
-        cards.forEach((card, index) => {
-          const imageReveal = card.querySelector<HTMLElement>(".wf-category-image-reveal");
-          const image = card.querySelector<HTMLElement>(".wf-category-image");
-          if (imageReveal) {
-            timeline.fromTo(imageReveal, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 1.1 }, `-=${index === 0 ? 0.85 : 0.65}`);
-          }
-          if (image) {
-            timeline.fromTo(image, { scale: 1.15 }, { scale: 1, duration: 1.2, ease: "power3.out" }, "<");
-          }
-        });
+      }
+      if (imageFrames.length) {
+        timeline.fromTo(
+          imageFrames,
+          { clipPath: "inset(100% 0 0 0)" },
+          { clipPath: "inset(0% 0 0 0)", duration: 0.82, stagger: 0.12, ease: "power2.inOut" },
+          ">-0.12",
+        );
+      }
+      if (images.length) {
+        timeline.fromTo(
+          images,
+          { scale: 1.035 },
+          { scale: 1, duration: 1, stagger: 0.12, ease: "power2.out" },
+          "<",
+        );
+      }
+      if (numbers.length) {
+        timeline.fromTo(
+          numbers,
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.4, stagger: 0.12 },
+          ">-0.12",
+        );
+      }
+      if (titles.length) {
+        timeline.fromTo(
+          titles,
+          { autoAlpha: 0, y: 10 },
+          { autoAlpha: 1, y: 0, duration: 0.52, stagger: 0.12 },
+          "<0.06",
+        );
+      }
+      if (descriptions.length) {
+        timeline.fromTo(
+          descriptions,
+          { autoAlpha: 0, y: 8 },
+          { autoAlpha: 1, y: 0, duration: 0.48, stagger: 0.12 },
+          ">-0.2",
+        );
+      }
+      if (links.length) {
+        timeline.fromTo(
+          links,
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.4, stagger: 0.12 },
+          ">-0.12",
+        );
       }
     },
     { scope: sectionRef }
@@ -66,14 +104,15 @@ export function DiscoverSection() {
       <Container className="wf-botanical-content">
         <div className="wf-discover-heading">
           <SectionHeading
+            align="left"
             kicker="A world of wine, thoughtfully curated"
             heading="Discover the World of Wine Friend"
-            description="Wine Friend is a registered trademark of Nashik-based Kamaltara Enterprises, owned and operated by Manoj Jagtap. The company makes and imports wine products and arranges curated Nashik Valley winery visits."
+            description={<>Wine Friend is a registered trademark of Nashik-based Kamaltara Enterprises, owned and operated by Manoj Jagtap.<br className="hidden lg:block" /> The company makes and imports wine products and arranges curated Nashik Valley winery visits.</>}
           />
         </div>
-        <div className="wf-category-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {categories.map((category) => (
-            <CategoryCard key={category.id} category={category} />
+        <div className="wf-discover-directory">
+          {categories.map((category, index) => (
+            <CategoryCard key={category.id} category={category} index={index + 1} />
           ))}
         </div>
       </Container>

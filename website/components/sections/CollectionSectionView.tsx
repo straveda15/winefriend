@@ -59,12 +59,12 @@ export function CollectionSectionView({
       const cards = gsap.utils.toArray<HTMLElement>(".wf-product-card", section);
       const imageFrames = gsap.utils.toArray<HTMLElement>(".wf-product-image-frame", section);
       const images = gsap.utils.toArray<HTMLElement>(".wf-product-image", section);
-      if (!cards.length) return;
+      if (!cards.length && !headingParts?.length) return;
 
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 82%",
+          start: "top 84%",
           toggleActions: "play none none none",
         },
         defaults: { ease: "power3.out" },
@@ -73,31 +73,75 @@ export function CollectionSectionView({
       if (headingParts?.length) {
         timeline.fromTo(
           headingParts,
-          { autoAlpha: 0, y: 18 },
-          { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.12 },
+          { autoAlpha: 0, y: 16 },
+          { autoAlpha: 1, y: 0, duration: 0.58, stagger: 0.1 },
           0,
         );
       }
-      timeline.fromTo(
-        cards,
-        { autoAlpha: 0, y: 45 },
-        { autoAlpha: 1, y: 0, duration: 0.75, stagger: 0.12 },
-        "-=0.15",
-      );
-      imageFrames.forEach((frame, index) => {
+
+      if (cards.length) {
         timeline.fromTo(
-          frame,
-          { clipPath: index % 2 === 0 ? "inset(100% 0 0 0)" : "inset(0 0 0 100%)" },
-          { clipPath: "inset(0% 0 0 0)", duration: 0.85 },
-          index === 0 ? "-=0.5" : "<0.12",
+          cards,
+          { autoAlpha: 0, y: 28 },
+          { autoAlpha: 1, y: 0, duration: 0.62, stagger: 0.1 },
+          headingParts?.length ? "-=0.2" : 0,
         );
+      }
+
+      if (imageFrames.length) {
+        timeline.fromTo(
+          imageFrames,
+          { clipPath: "inset(0 0 100% 0 round 2px)" },
+          { clipPath: "inset(0 0 0% 0 round 2px)", duration: 0.78, stagger: 0.1 },
+          "-=0.38",
+        );
+      }
+
+      if (images.length) {
+        timeline.fromTo(
+          images,
+          { scale: 1.055 },
+          { scale: 1, duration: 0.9, stagger: 0.1, ease: "power2.out" },
+          "<",
+        );
+      }
+
+      const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      const hoverCleanups: Array<() => void> = [];
+      cards.forEach((card) => {
+        const image = card.querySelector<HTMLElement>(".wf-product-image");
+        if (!image) return;
+
+        let hoverTween: gsap.core.Tween | undefined;
+        const animateImage = (scale: number) => {
+          hoverTween?.kill();
+          hoverTween = gsap.to(image, {
+            scale,
+            duration: scale > 1 ? 0.38 : 0.48,
+            ease: scale > 1 ? "power2.out" : "power2.inOut",
+            overwrite: "auto",
+          });
+        };
+        const onEnter = () => animateImage(1.035);
+        const onLeave = () => animateImage(1);
+
+        if (canHover) {
+          card.addEventListener("pointerenter", onEnter);
+          card.addEventListener("pointerleave", onLeave);
+        }
+        card.addEventListener("focusin", onEnter);
+        card.addEventListener("focusout", onLeave);
+
+        hoverCleanups.push(() => {
+          card.removeEventListener("pointerenter", onEnter);
+          card.removeEventListener("pointerleave", onLeave);
+          card.removeEventListener("focusin", onEnter);
+          card.removeEventListener("focusout", onLeave);
+          hoverTween?.kill();
+        });
       });
-      timeline.fromTo(
-        images,
-        { scale: 1.08 },
-        { scale: 1, duration: 1, stagger: 0.12 },
-        "<",
-      );
+
+      return () => hoverCleanups.forEach((cleanup) => cleanup());
 
     },
     { scope: sectionRef },

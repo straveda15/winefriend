@@ -10,6 +10,13 @@ const inter = localFont({
   weight: "100 900",
 });
 
+const playfair = localFont({
+  src: "../public/fonts/PlayfairDisplay-Variable.ttf",
+  variable: "--font-playfair",
+  display: "swap",
+  weight: "400 900",
+});
+
 export const metadata: Metadata = {
   title: "Dashboard | Wine Friend",
   robots: { index: false, follow: false },
@@ -18,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html lang="en" className={`${playfair.variable} ${inter.variable} antialiased`}>
       <body>
         <div className="min-h-screen bg-cream text-charcoal">{children}</div>
       </body>
