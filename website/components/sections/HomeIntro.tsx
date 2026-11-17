@@ -45,7 +45,7 @@ export function HomeIntro() {
       .fromTo(logo, { autoAlpha: 0, scale: .97 }, { autoAlpha: 1, scale: 1, duration: 1.15, ease: "power2.out" }, 0)
       .fromTo(ornament, { autoAlpha: 0, scale: .98 }, { autoAlpha: 1, scale: 1, duration: 1.05, ease: "power2.out" }, .1)
       .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1.05, ease: "power1.inOut" }, .1)
-      .fromTo(brand, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)", duration: 1.25, ease: "power1.inOut" }, .8)
+      .fromTo(brand, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(-.15em -.2em -.15em 0)", duration: 1.25, ease: "power1.inOut" }, .8)
       .fromTo(copy, { autoAlpha: 0, y: 10 }, { autoAlpha: .9, y: 0, duration: .8, ease: "power2.out" }, ">-.05");
 
     vineLeaves.forEach((leaf) => {

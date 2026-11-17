@@ -137,12 +137,6 @@ export async function togglePostPublishedAction(formData: FormData) {
 
 /* ------------------------------------------------------------- enquiries */
 
-export async function getEnquiryCountsAction() {
-  const enquiries = await adminEnquiries();
-  const newCount = enquiries.filter((item) => item.status === "new").length;
-  return { total: enquiries.length, new: newCount, handled: enquiries.length - newCount };
-}
-
 export async function toggleEnquiryHandledAction(formData: FormData) {
   await api(`/api/admin/enquiries/${encodeURIComponent(text(formData, "id"))}/toggle-handled`, { method: "POST" });
   redirect("/enquiries");

@@ -95,7 +95,7 @@
   line-height: .78;
   text-align: center;
   white-space: nowrap;
-  padding-inline: .08em;
+  padding-inline: .08em .22em;
   clip-path: inset(0 100% 0 0);
 }
 
@@ -1363,7 +1363,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .wf-footer-bottom .wf-trademark-inline { font-size: .7em; }
-.wf-home-intro-brand .wf-trademark-inline { color: #D9A321; font-size: .2em; }
+.wf-home-intro-brand .wf-trademark-inline {
+  position: relative;
+  top: -.1em;
+  margin-left: .1em;
+  color: #D9A321;
+  font-size: .2em;
+  vertical-align: baseline;
+}
 
 .wf-brand-logo-image {
   display: block;
