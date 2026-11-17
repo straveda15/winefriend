@@ -3,6 +3,7 @@ import { MessageCircle, Phone, Send } from "lucide-react";
 import { categoryLabel, formatPrice } from "@winefriend/shared/constants";
 import { productEnquiryMessage, telHref } from "@/lib/contact";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { ProductShareButton } from "@/components/ui/ProductShareButton";
 import type { Product } from "@winefriend/shared/types";
 
 interface ProductDetailsProps {
@@ -41,6 +42,7 @@ export function ProductDetails({ product, as: Heading = "h2", headingId, onNavig
       )}
 
       <div className="wf-product-actions">
+        <ProductShareButton name={product.name} slug={product.slug} />
         <WhatsAppLink className="wf-action wf-action-primary" message={productEnquiryMessage(product.name)}>
           <MessageCircle aria-hidden="true" /> Enquire on WhatsApp
         </WhatsAppLink>

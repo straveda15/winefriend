@@ -18,7 +18,7 @@ export default function ProductsPage() {
     <PageFrame>
       <EditorialPageHero kicker="The art of serving well" title="Objects for the Wine Ritual" description="Explore wine openers, wine and champagne corks, glasses, preservation systems, decanters, wooden, acrylic and stainless-steel racks, barrel furniture, and promotional materials." image="/images/categories/wine-accessories-display.webp" imageAlt="Wine accessories arranged for service" />
 
-      <Suspense fallback={<CollectionSectionView products={[]} loadState="loading" />}>
+      <Suspense fallback={<CollectionSectionView products={[]} loadState="loading" skeletonCount={6} />}>
         <CollectionSection />
       </Suspense>
       <section className="wf-section bg-ivory py-12 lg:py-18">

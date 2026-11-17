@@ -19,6 +19,34 @@
 }
 .wf-product-open:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
 .wf-product-cart-button { text-decoration: none; }
+.wf-product-share {
+  position: relative;
+  display: inline-grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: none;
+  place-items: center;
+  border: 1px solid rgb(198 154 58 / 55%);
+  border-radius: 50%;
+  background: rgb(250 247 240 / 94%);
+  color: #805f23;
+  cursor: pointer;
+}
+.wf-product-share:hover { background: var(--gold-muted); }
+.wf-product-share:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.wf-product-share > svg { width: 1rem; height: 1rem; }
+.wf-product-share-card { position: absolute; z-index: 3; top: .85rem; right: .85rem; }
+.wf-product-share-confirmation {
+  position: absolute;
+  top: calc(100% + .35rem);
+  right: 0;
+  padding: .3rem .5rem;
+  border-radius: .2rem;
+  background: rgb(36 33 29 / 88%);
+  color: #fffaf0;
+  font: 500 .65rem/1.2 var(--font-sans), sans-serif;
+  white-space: nowrap;
+}
 /* Beat the legacy ".wf-product-card > a" rule, which made every direct link a stretching column. */
 .wf-product-card > a.wf-product-cart-button { display: inline-flex; flex: none; flex-direction: row; }
 

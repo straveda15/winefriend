@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/Button";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { ImageReveal } from "@/components/animations/ImageReveal";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
+import { Img } from "@/components/ui/Img";
 
 export function BusinessSection({ preview = false }: { preview?: boolean }) {
   return (
@@ -47,7 +47,7 @@ export function BusinessSection({ preview = false }: { preview?: boolean }) {
             className="wf-editorial-image relative aspect-[4/3] rounded-none overflow-hidden"
           >
             <div className="absolute inset-0 img-fallback-wine -z-10" />
-            <Image
+            <Img
               src="/images/business/wine-service-business.webp"
               alt="Wine being poured into a decanter during professional service"
               fill

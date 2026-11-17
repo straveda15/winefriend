@@ -12,6 +12,73 @@
   pointer-events: none;
 }
 
+.wf-image-shell {
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--cream, #f4efe5);
+}
+
+.wf-image-shell-fill {
+  position: absolute;
+  inset: 0;
+}
+
+.wf-image-shell-intrinsic {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  max-width: 100%;
+}
+
+.wf-image-shell::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, #f4efe5 20%, #fffaf0 38%, #eadfc9 50%, #f4efe5 66%);
+  background-size: 220% 100%;
+  content: "";
+  pointer-events: none;
+  animation: wf-image-shimmer 1.7s ease-in-out infinite;
+  opacity: 1;
+  transition: opacity 360ms ease;
+}
+
+.wf-image-shell[data-image-state="loaded"]::before {
+  opacity: 0;
+}
+
+.wf-image-shell[data-image-state="error"]::before {
+  background: linear-gradient(135deg, #f4efe5, #faf7f0);
+  animation: none;
+}
+
+.wf-lazy-image {
+  opacity: 0;
+  transition: opacity 360ms ease;
+}
+
+.wf-image-shell[data-image-state="loaded"] .wf-lazy-image:not(.wf-gallery-slide),
+.wf-image-shell[data-image-state="loaded"] .wf-gallery-slide.is-active {
+  opacity: 1;
+}
+
+.wf-image-shell[data-image-state="error"] .wf-lazy-image {
+  opacity: 0;
+}
+
+@keyframes wf-image-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wf-image-shell::before { animation: none; }
+  .wf-lazy-image,
+  .wf-image-shell::before { transition-duration: 0ms; }
+}
+
 @media (max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .wf-golden-dust-canvas { display: none; }
 }
@@ -36,6 +103,7 @@
 .wf-journal-filters button[aria-pressed="true"] { border-color: var(--gold); background: var(--gold); color: var(--charcoal); }
 .wf-journal-filters { margin: 0 0 2rem; }
 .wf-detail-page { min-height: 75vh; margin-top: 5.5rem; }
+.wf-journal-detail-page { margin-top: 3rem; padding-top: 2rem; }
 
 @media (max-width: 767px) {
   .wf-page-hero { padding-block: 7rem 2.25rem; }
@@ -77,7 +145,7 @@
   position: relative;
   z-index: 1;
   display: block;
-  width: clamp(9.5rem, 18vw, 13rem);
+  width: calc(clamp(9.5rem, 18vw, 13rem) + 1px);
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 50%;
@@ -85,17 +153,24 @@
 }
 
 .wf-home-intro-brand {
+  --wf-intro-wordmark-size: clamp(4rem, 7vw, 6.25rem);
   position: relative;
   z-index: 1;
   margin: .15rem 0 0;
   color: #C69A3A;
   font-family: var(--font-italianno), cursive;
-  font-size: clamp(4rem, 7vw, 6.25rem);
+  font-size: var(--wf-intro-wordmark-size);
   font-weight: 400;
   line-height: .78;
   text-align: center;
   white-space: nowrap;
   padding-inline: .08em .22em;
+  clip-path: none;
+}
+
+.wf-home-intro-brand .wf-wordmark-text,
+.wf-home-intro-brand .wf-wordmark-final-glyph {
+  display: inline-block;
   clip-path: inset(0 100% 0 0);
 }
 
@@ -121,8 +196,8 @@
 
 @media (max-width: 640px) {
   .wf-home-intro { gap: .5rem; }
-  .wf-home-intro-logo-frame { width: clamp(8rem, 38vw, 10.5rem); }
-  .wf-home-intro-brand { font-size: clamp(3rem, 15vw, 4.75rem); }
+  .wf-home-intro-logo-frame { width: calc(clamp(8rem, 38vw, 10.5rem) + 1px); }
+  .wf-home-intro-brand { --wf-intro-wordmark-size: clamp(3rem, 15vw, 4.75rem); }
   .wf-home-intro-ornament { width: 86vw; }
   .wf-home-intro-copy { width: 85vw; font-size: .55rem; letter-spacing: .12em; }
   .wf-home-intro-vine { width: 37vw; height: 58vh; opacity: .23; }
@@ -622,6 +697,32 @@ h1, h2, h3, h4, h5, h6 {
   transition: top 550ms ease, box-shadow 550ms ease, border-color 550ms ease;
 }
 
+.wf-product-skeleton { pointer-events: none; }
+.wf-product-skeleton .wf-product-image-frame,
+.wf-skeleton-line {
+  position: relative;
+  overflow: hidden;
+  background: #eee6d6;
+}
+.wf-product-skeleton .wf-product-image-frame::after,
+.wf-skeleton-line::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 25%, rgb(255 250 240 / 75%) 48%, transparent 70%);
+  background-size: 220% 100%;
+  content: "";
+  animation: wf-image-shimmer 1.7s ease-in-out infinite;
+}
+.wf-skeleton-line { display: block; height: .9rem; margin-top: .8rem; border-radius: 2px; }
+.wf-skeleton-title { width: 68%; height: 1.4rem; margin-top: 0; }
+.wf-skeleton-description { width: 92%; }
+.wf-skeleton-description-short { width: 56%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wf-product-skeleton .wf-product-image-frame::after,
+  .wf-skeleton-line::after { animation: none; }
+}
+
 .wf-product-card > a {
   display: flex;
   min-width: 0;
@@ -792,6 +893,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 767px) {
+  .wf-page-hero { padding-bottom: 1.25rem; }
+  .wf-collection { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+  .wf-journal-detail-page { padding-top: .25rem; }
   .wf-collection-header { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
   .wf-collection-title {
     max-width: 100%;
@@ -1158,7 +1262,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: clamp(3.4rem, 6.3vw, 6.7rem);
   font-weight: 500;
   letter-spacing: -.045em;
-  line-height: .92;
+  line-height: 1;
   text-transform: uppercase;
 }
 
@@ -1174,6 +1278,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: visible;
   color: var(--charcoal) !important;
   font-style: normal !important;
+  padding-bottom: .08em;
   will-change: clip-path, transform;
 }
 
@@ -1327,7 +1432,7 @@ h1, h2, h3, h4, h5, h6 {
 .wf-brand-logo-frame {
   position: relative;
   display: block;
-  width: clamp(3.75rem, 5vw, 4.5rem);
+  width: calc(clamp(3.75rem, 5vw, 4.5rem) + 1px);
   aspect-ratio: 1;
   flex: none;
   overflow: hidden;
@@ -1341,14 +1446,32 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   z-index: 2;
   top: 18%;
-  right: 10%;
+  right: 18%;
   color: #D9A321;
-  font: 500 20cqi/1 Arial, sans-serif;
+  font: 500 6cqi/1 Arial, sans-serif;
   pointer-events: none;
 }
 
 .wf-home-intro-logo-frame .wf-logo-trademark {
-  font-size: 20cqi;
+  font-size: 6cqi;
+}
+
+.wf-wordmark { position: relative; display: inline-block; }
+.wf-wordmark-final-letter {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+  overflow: visible;
+}
+.wf-wordmark-trademark {
+  position: absolute;
+  z-index: 2;
+  top: -10%;
+  left: calc(100% + 3px);
+  color: #D9A321;
+  font: 500 clamp(8px, .09em, 9px)/1 Arial, sans-serif;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .wf-trademark-inline {
@@ -1363,15 +1486,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .wf-footer-bottom .wf-trademark-inline { font-size: .7em; }
-.wf-home-intro-brand .wf-trademark-inline {
-  position: relative;
-  top: -.1em;
-  margin-left: .1em;
-  color: #D9A321;
-  font-size: .2em;
-  vertical-align: baseline;
-}
-
 .wf-brand-logo-image {
   display: block;
   width: 100%;
@@ -1458,7 +1572,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 420px) {
-  .wf-brand-logo-frame { width: 3.5rem; }
+  .wf-brand-logo-frame { width: calc(3.5rem + 1px); }
   .wf-brand-logo { gap: .45rem; }
   .wf-brand-logo-enterprise { font-size: .7rem; }
   .wf-brand-logo-tagline { font-size: .38rem; letter-spacing: .045em; }
@@ -1513,7 +1627,7 @@ h1, h2, h3, h4, h5, h6 {
   .wf-header-row { gap: .75rem; }
   .wf-header-actions { gap: 0; }
   .wf-header .wf-brand-logo { min-width: 0; gap: .2rem; }
-  .wf-header .wf-brand-logo-frame { width: 3.25rem; }
+  .wf-header .wf-brand-logo-frame { width: calc(3.25rem + 1px); }
   .wf-header .wf-brand-logo-enterprise { font-size: .72rem; letter-spacing: .075em; }
   .wf-header .wf-brand-logo-tagline { font-size: .42rem; letter-spacing: .045em; }
 
@@ -1529,8 +1643,8 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 640px) {
   .wf-header-row { min-height: 2.5rem; }
-  .wf-header .wf-brand-logo { max-width: calc(100vw - 5.5rem); flex: 0 1 auto; gap: .1rem; }
-  .wf-header .wf-brand-logo-frame { width: 2.75rem; }
+  .wf-header .wf-brand-logo { max-width: calc(100vw - 5.5rem); flex: 0 1 auto; gap: .4rem; }
+  .wf-header .wf-brand-logo-frame { width: calc(2.75rem + 1px); }
   .wf-header .wf-brand-logo-enterprise { font-size: .63rem; letter-spacing: .055em; }
   .wf-header .wf-brand-logo-tagline { display: block; max-width: none; white-space: nowrap; font-size: clamp(.34rem, 1.6vw, .42rem); line-height: 1.25; letter-spacing: .03em; }
   .wf-header .wf-menu-toggle { width: 2.35rem; height: 2.35rem; }

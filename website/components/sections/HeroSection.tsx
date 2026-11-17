@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { gsap, ScrollTrigger } from "@/lib/animations";
 import { Button } from "@/components/ui/Button";
+import { Img } from "@/components/ui/Img";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -63,6 +63,7 @@ export function HeroSection() {
   const [paused, setPaused] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
   const [heroEntranceComplete, setHeroEntranceComplete] = useState(false);
+  const [heroImageReady, setHeroImageReady] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
@@ -143,14 +144,14 @@ export function HeroSection() {
 
     gsap.set(".wf-hero-story", { autoAlpha: 0, xPercent: 100 });
     gsap.set(".wf-hero-eyebrow", { autoAlpha: 0, y: 14, letterSpacing: ".34em" });
-    gsap.set(".wf-hero-heading-line", { clipPath: "inset(0 0 100% 0)", y: 20 });
+    gsap.set(".wf-hero-heading-line", { clipPath: "inset(0 0 calc(100% + .08em) 0)", y: 20 });
     gsap.set(".wf-hero-description", { autoAlpha: 0, y: 8 });
     gsap.set(".wf-hero-tagline", { autoAlpha: 0, y: 16 });
     gsap.set(".wf-hero-actions > *", { autoAlpha: 0, y: 14 });
 
     // Prepare the hidden entrance state while the Intro is still covering the Hero.
     // The visible timeline starts only after the Intro exit event.
-    if (!introComplete) return;
+    if (!introComplete || !heroImageReady) return;
 
     const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
     intro
@@ -167,7 +168,7 @@ export function HeroSection() {
         0.3,
       )
       .fromTo(".wf-hero-eyebrow", { autoAlpha: 0, y: 14, letterSpacing: ".34em" }, { autoAlpha: 1, y: 0, letterSpacing: ".2em", duration: .6 }, 1.05)
-      .fromTo(".wf-hero-heading-line", { clipPath: "inset(0 0 100% 0)", y: 20 }, { clipPath: "inset(0 0 0% 0)", y: 0, duration: .72, stagger: .12 }, 1.45)
+      .fromTo(".wf-hero-heading-line", { clipPath: "inset(0 0 calc(100% + .08em) 0)", y: 20 }, { clipPath: "inset(0 0 -.08em 0)", y: 0, duration: .72, stagger: .12 }, 1.45)
       .fromTo(".wf-hero-description", { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .48 }, 2.45)
       .fromTo(".wf-hero-tagline", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .58 }, 2.55)
       .fromTo(".wf-hero-actions > *", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .58, stagger: .16 }, 3.15);
@@ -223,7 +224,7 @@ export function HeroSection() {
       photoMotionRef.current?.kill();
       scrollMotion.scrollTrigger?.kill();
     };
-  }, { scope: sectionRef, dependencies: [introComplete], revertOnUpdate: true });
+  }, { scope: sectionRef, dependencies: [introComplete, heroImageReady], revertOnUpdate: true });
 
   useEffect(() => {
     if (!heroEntranceComplete) return;
@@ -245,13 +246,11 @@ export function HeroSection() {
 
   useEffect(() => {
     const nextIndex = (activeIndex + 1) % slides.length;
-    const preload = slides.map((slide) => {
-      const image = new window.Image();
-      image.fetchPriority = slide.src === slides[nextIndex].src ? "high" : "auto";
-      image.src = slide.src;
-      return image;
-    });
-    return () => preload.forEach((image) => { image.onload = null; });
+    if (nextIndex === 0) return;
+    const image = new window.Image();
+    image.fetchPriority = "low";
+    image.src = slides[nextIndex].src;
+    return () => { image.onload = null; };
   }, [activeIndex]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
@@ -300,15 +299,18 @@ export function HeroSection() {
                 className="wf-hero-image-layer"
                 aria-hidden={activeIndex !== index}
               >
-                <Image
+                <Img
                   src={slide.src}
                   alt={slide.alt}
                   ref={(element) => { photoRefs.current[index] = element; }}
                   fill
-                  loading="eager"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  fetchPriority={index === 0 ? "high" : undefined}
                   sizes="(max-width: 767px) 100vw, 34vw"
                   className="wf-hero-photo"
                   draggable={false}
+                  onLoad={() => { if (index === 0) setHeroImageReady(true); }}
+                  onError={() => { if (index === 0) setHeroImageReady(true); }}
                 />
               </div>
             ))}

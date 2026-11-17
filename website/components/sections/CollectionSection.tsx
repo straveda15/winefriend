@@ -65,6 +65,8 @@ export async function CollectionSection({ preview = false }: { preview?: boolean
     }
   }
 
+  // Stream the catalogue independently so the Products route can paint its heading,
+  // filters, and card skeletons before the backend response is ready.
   try {
     const products = await getProductsOrThrow();
     return <CollectionSectionView products={products} />;

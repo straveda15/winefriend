@@ -56,7 +56,7 @@ body {
 .dashboard-brand-logo .wf-brand-logo-frame {
   position: relative;
   display: block;
-  width: 5.6rem;
+  width: calc(5.6rem + 1px);
   aspect-ratio: 1;
   flex: none;
   overflow: hidden;
@@ -70,11 +70,12 @@ body {
   position: absolute;
   z-index: 2;
   top: 18%;
-  right: 10%;
+  right: 18%;
   color: #D9A321;
-  font: 500 20cqi/1 Arial, sans-serif;
+  font: 500 6cqi/1 Arial, sans-serif;
   pointer-events: none;
 }
+
 
 .dashboard-brand-logo .wf-brand-logo-image {
   display: block;
@@ -116,7 +117,7 @@ body {
 
 @media (max-width: 420px) {
   .dashboard-brand-logo { gap: .65rem; }
-  .dashboard-brand-logo .wf-brand-logo-frame { width: 4rem; }
+  .dashboard-brand-logo .wf-brand-logo-frame { width: calc(4rem + 1px); }
   .dashboard-brand-logo .wf-brand-logo-enterprise { font-size: .9rem; }
   .dashboard-brand-logo .wf-brand-logo-tagline { font-size: .47rem; letter-spacing: .06em; }
 }
@@ -126,7 +127,7 @@ body {
   max-width: 100%;
   padding: .55rem .45rem;
 }
-.dashboard-brand-logo-compact .wf-brand-logo-frame { width: 3.5rem; }
+.dashboard-brand-logo-compact .wf-brand-logo-frame { width: calc(3.5rem + 1px); }
 .dashboard-brand-logo-compact .wf-brand-logo-enterprise { font-size: .7rem; }
 .dashboard-brand-logo-compact .wf-brand-logo-tagline { font-size: .38rem; letter-spacing: .045em; }
 

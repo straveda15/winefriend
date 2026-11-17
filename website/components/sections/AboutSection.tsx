@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/animations";
 import { Container } from "@/components/layout/Container";
@@ -10,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Divider } from "@/components/ui/Divider";
 import { aboutPillars, aboutContent } from "@/data/about";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
+import { Img } from "@/components/ui/Img";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -142,7 +142,7 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
               </div>
             </div>
             <figure className="wf-about-editorial-image">
-              <Image
+              <Img
                 src="/images/about/wine-cellar.webp"
                 alt="A warmly lit wine cellar lined with wooden racks and bottles"
                 fill

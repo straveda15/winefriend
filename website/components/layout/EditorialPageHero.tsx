@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { ImageReveal } from "@/components/animations/ImageReveal";
 import { TextReveal } from "@/components/animations/TextReveal";
+import { Img } from "@/components/ui/Img";
 
 interface EditorialPageHeroProps {
   kicker: string;
@@ -21,7 +21,7 @@ export function EditorialPageHero({ kicker, title, description, image, imageAlt 
           <TextReveal delay={.2}><p className="wf-page-lede">{description}</p></TextReveal>
         </div>
         <ImageReveal direction="left" className="wf-page-hero-image relative overflow-hidden bg-cream">
-          <Image src={image} alt={imageAlt} fill priority sizes="(max-width: 1023px) 100vw, 50vw" className="object-cover object-center" />
+          <Img src={image} alt={imageAlt} fill preload sizes="(max-width: 1023px) 100vw, 50vw" className="object-cover object-center" />
         </ImageReveal>
       </Container>
     </section>
