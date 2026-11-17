@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Category } from "@winefriend/shared/types";
@@ -17,7 +17,7 @@ export function CategoryCard({ category, index }: CategoryCardProps) {
       className="wf-discover-item group block"
     >
       <div className="wf-discover-image-reveal">
-        <Image
+        <Img
           src={category.image}
           alt={category.title}
           fill

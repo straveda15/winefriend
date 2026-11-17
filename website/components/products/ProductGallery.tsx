@@ -24,11 +24,11 @@ export function ProductGallery({ images, name, imageFit = "contain", priority = 
       <div className="wf-gallery-stage">
         {images.map((src, i) => (
           <Img
-            key={src}
+            key={`${i}:${src}`}
             src={src}
             alt={i === current ? `${name} — image ${i + 1} of ${count}` : ""}
             fill
-            priority={priority && i === 0}
+            preload={priority && i === 0}
             sizes={sizes}
             className={`${fitClass} wf-gallery-slide ${i === current ? "is-active" : ""}`}
             aria-hidden={i === current ? undefined : true}
@@ -49,7 +49,7 @@ export function ProductGallery({ images, name, imageFit = "contain", priority = 
       {count > 1 && (
         <ul className="wf-gallery-thumbs">
           {images.map((src, i) => (
-            <li key={src}>
+            <li key={`${i}:${src}`}>
               <button type="button" onClick={() => setIndex(i)} aria-label={`Show image ${i + 1}`} aria-current={i === current}>
                 <Img src={src} alt="" fill sizes="80px" className="object-cover" />
               </button>

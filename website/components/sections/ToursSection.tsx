@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/Button";
 import { tourWebsiteUrl } from "@/data/site";
@@ -9,6 +8,7 @@ import { FadeUp } from "@/components/animations/FadeUp";
 import { ImageReveal } from "@/components/animations/ImageReveal";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
+import { Img } from "@/components/ui/Img";
 
 export function ToursSection({ preview = false }: { preview?: boolean }) {
   return (
@@ -22,7 +22,7 @@ export function ToursSection({ preview = false }: { preview?: boolean }) {
             className="wf-editorial-image relative aspect-[3/4] rounded-none overflow-hidden order-2 lg:order-1"
           >
             <div className="absolute inset-0 img-fallback-vineyard -z-10" />
-            <Image
+            <Img
               src="/images/experiences/vineyard-landscape.webp"
               alt="Vineyard rows stretching toward a mountain landscape"
               fill

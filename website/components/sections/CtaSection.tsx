@@ -2,11 +2,11 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import Image from "next/image";
 import { gsap, ScrollTrigger } from "@/lib/animations";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/Button";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
+import { Img } from "@/components/ui/Img";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -71,7 +71,7 @@ export function CtaSection() {
         <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 img-fallback-wine" />
         <div ref={backgroundRef} className="absolute inset-0">
-          <Image
+          <Img
             src="/images/about/wine-cellar.webp"
             alt="Warmly lit wine cellar lined with wooden bottle racks"
             fill

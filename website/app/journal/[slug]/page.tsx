@@ -55,16 +55,16 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
   const coverImage = article.image ?? article.images?.[0];
 
   return (
-    <main className="wf-section wf-detail-page bg-ivory py-14 lg:py-22">
+    <main className="wf-section wf-detail-page wf-journal-detail-page bg-ivory py-14 lg:py-22">
       <Container className="max-w-5xl">
         <Link href="/journal" className="wf-product-link">← Back to the Wine Journal</Link>
         <FadeUp>
           <p className="wf-collection-kicker mt-8">{article.category} · {formatDate(article.date)}</p>
-          <h1 className="wf-page-title max-w-4xl">{article.title}</h1>
+          <h1 className="wf-page-title max-w-none lg:whitespace-nowrap">{article.title}</h1>
         </FadeUp>
        
         <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden bg-white">
-          <JournalImage src={coverImage} fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined} alt={article.title} fill priority sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
+          <JournalImage src={coverImage} fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined} alt={article.title} fill preload sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
 
         </ImageReveal>
         {article.images && article.images.length > 1 && (

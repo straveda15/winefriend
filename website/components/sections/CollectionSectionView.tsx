@@ -22,10 +22,12 @@ export function CollectionSectionView({
   products,
   preview = false,
   loadState,
+  skeletonCount = 6,
 }: {
   products: Product[];
   preview?: boolean;
   loadState?: LoadState;
+  skeletonCount?: number;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
@@ -149,7 +151,7 @@ export function CollectionSectionView({
 
   return (
     <section id="products" ref={sectionRef} className="wf-section wf-collection py-14 lg:py-22 bg-cream">
-      <GrapevineDecoration className="wf-vine wf-vine--bottom-left" />
+      {loadState !== "loading" && <GrapevineDecoration className="wf-vine wf-vine--bottom-left" />}
       <Container className="wf-botanical-content">
         <div ref={headingRef} className="wf-collection-header">
           <div>
@@ -175,6 +177,16 @@ export function CollectionSectionView({
         <div className="wf-collection-grid grid mt-10">
           {visibleProducts.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index + 1} onOpen={setActive} />
+          ))}
+          {loadState === "loading" && Array.from({ length: skeletonCount }, (_, index) => (
+            <article key={`product-skeleton-${index}`} className="wf-product-card wf-product-skeleton" aria-hidden="true">
+              <div className="wf-product-image-frame relative aspect-[4/3] overflow-hidden bg-card" />
+              <div className="wf-product-card-copy">
+                <span className="wf-skeleton-line wf-skeleton-title" />
+                <span className="wf-skeleton-line wf-skeleton-description" />
+                <span className="wf-skeleton-line wf-skeleton-description wf-skeleton-description-short" />
+              </div>
+            </article>
           ))}
         </div>
         {visibleProducts.length === 0 && (

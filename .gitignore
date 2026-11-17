@@ -67,3 +67,6 @@ pnpm-debug.log*
 ehthumbs.db
 Thumbs.db
 [Dd]esktop.ini
+
+# Winefriend browser automation profiles
+website/.wf-*/

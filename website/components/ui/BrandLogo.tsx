@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { Img } from "@/components/ui/Img";
 
 interface BrandLogoProps { inverse?: boolean; className?: string }
 
@@ -11,12 +11,12 @@ export function BrandLogo({ inverse = false, className = "" }: BrandLogoProps) {
       className={`wf-brand-logo ${inverse ? "wf-brand-logo-inverse" : ""} ${className}`}
     >
       <span className="wf-brand-logo-frame wf-logo-mark-frame">
-        <Image
+        <Img
           src="/kamaltara-logo.png"
           alt="WineFriend"
-          width={800}
-          height={600}
-          priority
+          fill
+          preload
+          sizes="(max-width: 640px) 2.75rem, (max-width: 767px) 3.25rem, (max-width: 1023px) 3.75rem, 4.5rem"
           unoptimized
           className="wf-brand-logo-image"
         />

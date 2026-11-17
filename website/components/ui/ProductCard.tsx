@@ -5,6 +5,7 @@ import { Img } from "@/components/ui/Img";
 import { formatPrice } from "@winefriend/shared/constants";
 import { productEnquiryMessage } from "@/lib/contact";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { ProductShareButton } from "@/components/ui/ProductShareButton";
 import type { Product } from "@winefriend/shared/types";
 
 interface ProductCardProps {
@@ -14,16 +15,18 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index, onOpen }: ProductCardProps) {
+  const firstImage = product.images[0];
   return (
     <article className="wf-product-card group rounded-none overflow-hidden">
       <button type="button" className="wf-product-open" onClick={() => onOpen(product)} aria-haspopup="dialog">
         <div className="wf-product-image-frame relative aspect-[4/3] overflow-hidden bg-card">
           <Img
-            src={product.images[0]}
+            src={firstImage}
             alt={product.name}
             fill
             className="wf-product-image object-cover"
             sizes="(max-width: 479px) 100vw, (max-width: 1023px) 50vw, 33vw"
+            priority={index <= 2}
           />
           <div className="wf-product-image-wash absolute inset-0" />
           <span className="wf-product-index">{String(index).padStart(2, "0")}</span>
@@ -48,6 +51,7 @@ export function ProductCard({ product, index, onOpen }: ProductCardProps) {
           </span>
         </div>
       </button>
+      <ProductShareButton name={product.name} slug={product.slug} className="wf-product-share-card" />
       <WhatsAppLink
         className="wf-product-cart-button"
         message={productEnquiryMessage(product.name)}
