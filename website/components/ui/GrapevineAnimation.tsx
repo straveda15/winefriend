@@ -14,8 +14,10 @@ type GrapevineAnimationProps = {
 };
 
 const corners = [
-  { name: "top-left", sway: 1.3, drift: 4.4, lift: -1.8, origin: "5% 16%", duration: 3.8 },
-  { name: "bottom-right", sway: -1.45, drift: -4.1, lift: 1.7, origin: "95% 84%", duration: 4.8 },
+  // These are flattened photographs, so the complete branch moves from its
+  // attachment point. A little extra travel keeps the breeze visible at screen size.
+  { name: "top-left", sway: 2.35, drift: 8, lift: -3, origin: "4% 12%", duration: 3.2 },
+  { name: "bottom-right", sway: -2.6, drift: -7.5, lift: 2.7, origin: "96% 88%", duration: 4.1 },
 ] as const;
 
 /** Uses the supplied flattened photograph, moving each complete branch subtly. */
@@ -38,9 +40,9 @@ export function GrapevineAnimation({ className = "", mode, onGrowthComplete }: G
         transformOrigin: corner?.origin ?? "12% 55%",
       });
       if (reduceMotion) return;
-      const sway = corner?.sway ?? (index % 2 ? -0.9 : 0.95);
-      const drift = corner?.drift ?? (index % 2 ? -2.8 : 3);
-      const lift = corner?.lift ?? -1.15;
+      const sway = corner?.sway ?? (index % 2 ? -1.5 : 1.55);
+      const drift = corner?.drift ?? (index % 2 ? -5 : 5.2);
+      const lift = corner?.lift ?? -1.8;
       const duration = corner?.duration ?? 5.2;
       const breeze = gsap.timeline({
         repeat: -1,

@@ -8,6 +8,8 @@ import { Img } from "@/components/Img";
 import { adminPosts } from "@/lib/admin-data";
 import { formatDate } from "@winefriend/shared/constants";
 
+export const instant = false;
+
 export default async function AdminBlogPage({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
   const [{ saved }, posts] = await Promise.all([searchParams, adminPosts()]);
 

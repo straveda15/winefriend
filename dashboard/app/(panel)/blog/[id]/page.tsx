@@ -3,6 +3,8 @@ import { PageHeader } from "@/components/PageHeader";
 import { PostForm } from "@/components/PostForm";
 import { adminPost } from "@/lib/admin-data";
 
+export const instant = false;
+
 export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const post = await adminPost(id);

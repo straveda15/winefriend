@@ -52,35 +52,48 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
   if (slug === BUILD_PLACEHOLDER_SLUG) notFound();
   const article = await getPost(slug);
   if (!article) notFound();
-  const coverImage = article.image ?? article.images?.[0];
+  const articleImages = article.images?.length ? article.images : article.image ? [article.image] : [];
+  const coverImage = articleImages[0];
+  const additionalImages = articleImages.slice(1);
+  const articleContent = article.content.trim() !== article.excerpt.trim() ? article.content : "";
 
   return (
-    <main className="wf-section wf-detail-page wf-journal-detail-page bg-ivory py-14 lg:py-22">
-      <Container className="max-w-5xl">
-        <Link href="/journal" className="wf-product-link">← Back to the Wine Journal</Link>
-        <FadeUp>
-          <p className="wf-collection-kicker mt-8">{article.category} · {formatDate(article.date)}</p>
-          <h1 className="wf-page-title max-w-none lg:whitespace-nowrap">{article.title}</h1>
-        </FadeUp>
-       
-        <ImageReveal direction="left" className="relative mt-8 mb-10 aspect-[16/9] overflow-hidden bg-white">
-          <JournalImage src={coverImage} fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined} alt={article.title} fill preload sizes="(max-width: 1023px) 100vw, 80vw" className="object-contain" />
+    <main className="wf-section wf-detail-page wf-journal-detail-page bg-ivory">
+      <Container className="wf-journal-article-shell max-w-6xl">
+        <Link href="/journal" className="wf-product-link">&larr; Back to the Wine Journal</Link>
 
-        </ImageReveal>
-        {article.images && article.images.length > 1 && (
-          <div className="mb-10 grid gap-4 sm:grid-cols-2">
-            {article.images.slice(1).map((image, index) => (
-              <div key={`${image}-${index}`} className="relative aspect-[4/3] overflow-hidden rounded-xl bg-white">
-                <JournalImage src={image} alt={`${article.title} photo ${index + 2}`} fill sizes="(max-width: 639px) 100vw, 50vw" className="object-contain" />
-              </div>
-            ))}
-          </div>
+        <header className="wf-journal-article-heading">
+          <FadeUp>
+            <p className="wf-journal-article-meta">
+              <span>{article.category}</span>
+              <span aria-hidden="true">&bull;</span>
+              <time dateTime={article.date}>{formatDate(article.date)}</time>
+            </p>
+            <h1 className="wf-journal-article-title">{article.title}</h1>
+            {article.excerpt && <p className="wf-journal-article-subtitle">{article.excerpt}</p>}
+          </FadeUp>
+        </header>
+
+        {coverImage && (
+          <ImageReveal direction="left" className="wf-journal-cover-frame">
+            <JournalImage
+              src={coverImage}
+              alt={article.title}
+              fill
+              preload
+              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 92vw, 1152px"
+              className="object-cover"
+            />
+          </ImageReveal>
         )}
+
         <FadeUp>
-          <p className="wf-page-lede max-w-3xl font-medium">{article.excerpt}</p>
-          {article.content.trim() !== article.excerpt.trim() && <PostContent content={article.content} />}
+          {(articleContent || additionalImages.length > 0) && (
+            <PostContent content={articleContent} images={additionalImages} title={article.title} />
+          )}
         </FadeUp>
-        <div className="mt-12 flex flex-wrap items-center gap-5 border-t border-gold/30 pt-8">
+
+        <div className="wf-journal-article-actions">
           <Button href="/contact">Get in touch</Button>
           <Link href="/journal" className="wf-product-link">More stories</Link>
         </div>

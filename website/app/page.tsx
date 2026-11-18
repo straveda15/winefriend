@@ -9,6 +9,7 @@ import { AboutSection } from "@/components/sections/AboutSection";
 import { JournalSection } from "@/components/sections/JournalSection";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { HomeIntro } from "@/components/sections/HomeIntro";
+import { ImageGallery } from "@/components/ui/ImageGallery";
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
         </Suspense>
         <BusinessSection preview />
         <ToursSection preview />
+        <ImageGallery />
         <AboutSection preview />
         <Suspense fallback={null}>
           <JournalSection preview />
