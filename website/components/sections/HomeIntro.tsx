@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animations";
+import { GrapevineAnimation } from "@/components/ui/GrapevineAnimation";
 
 export function HomeIntro() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
   const [ready, setReady] = useState(false);
+  const [vineFinished, setVineFinished] = useState(false);
+  const [brandingFinished, setBrandingFinished] = useState(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -34,7 +37,6 @@ export function HomeIntro() {
     const ornament = overlay.querySelector(".wf-home-intro-ornament");
     const rule = overlay.querySelector(".wf-home-intro-rule");
     const copy = overlay.querySelector(".wf-home-intro-copy");
-    const vineLeaves = overlay.querySelectorAll<SVGPathElement>(".wf-home-intro-vine g > path:nth-of-type(2)");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reducedMotion) {
@@ -48,37 +50,25 @@ export function HomeIntro() {
       .fromTo(logo, { autoAlpha: 0, scale: .97 }, { autoAlpha: 1, scale: 1, duration: 1.15, ease: "power2.out" }, 0)
       .fromTo(ornament, { autoAlpha: 0, scale: .98 }, { autoAlpha: 1, scale: 1, duration: 1.05, ease: "power2.out" }, .1)
       .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1.05, ease: "power1.inOut" }, .1)
-      .fromTo(brand, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(-.65em -.2em -.15em 0)", duration: 1.25, ease: "power1.inOut" }, .8)
-      .fromTo(wordmarkTrademark, { autoAlpha: 0 }, { autoAlpha: 1, duration: .25, ease: "power1.out" }, 1.8)
-      .fromTo(copy, { autoAlpha: 0, y: 10 }, { autoAlpha: .9, y: 0, duration: .8, ease: "power2.out" }, ">-.05");
+      .fromTo(brand, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(-.15em -.2em -.15em 0)", duration: 1.25, ease: "power1.inOut" }, .8)
+      .fromTo(wordmarkTrademark, { autoAlpha: 0 }, { autoAlpha: 1, duration: .2, ease: "power1.out" }, 1.7)
+      .fromTo(copy, { autoAlpha: 0, y: 10 }, { autoAlpha: .9, y: 0, duration: .8, ease: "power2.out" }, 2)
+      .call(() => setBrandingFinished(true));
 
-    vineLeaves.forEach((leaf) => {
-      const length = leaf.getTotalLength();
-      gsap.set(leaf, {
-        strokeDasharray: length,
-        strokeDashoffset: 0,
-        transformBox: "fill-box",
-        transformOrigin: "50% 90%",
-      });
-    });
-    gsap.to(vineLeaves, {
-      rotation: (index) => index % 2 === 0 ? 2.2 : -2.2,
-      duration: 1.2,
-      stagger: .14,
-      yoyo: true,
-      repeat: 3,
-      ease: "sine.inOut",
-    });
+    return () => timeline.kill();
+  }, { scope: overlayRef, dependencies: [visible, ready] });
 
-    timeline.to(overlay, {
+  useGSAP(() => {
+    const overlay = overlayRef.current;
+    if (!overlay || !visible || !vineFinished || !brandingFinished) return;
+    const exit = gsap.to(overlay, {
       clipPath: "inset(0 0 100% 0 round 0 0 46% 46%)",
       duration: .8,
       ease: "power3.inOut",
       onComplete: () => setVisible(false),
-    }, ">");
-
-    return () => timeline.kill();
-  }, { scope: overlayRef, dependencies: [visible, ready] });
+    });
+    return () => exit.kill();
+  }, { scope: overlayRef, dependencies: [visible, vineFinished, brandingFinished] });
 
   useEffect(() => {
     document.documentElement.classList.toggle("wf-home-intro-active", visible);
@@ -90,18 +80,7 @@ export function HomeIntro() {
     <>
       {visible && (
         <div ref={overlayRef} className="wf-home-intro" aria-label="WineFriend" role="status">
-          <svg className="wf-home-intro-vine wf-home-intro-vine-left" viewBox="0 0 300 420" fill="none" aria-hidden="true">
-            <g stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M-20 380C90 320 30 240 130 190s80-100 120-170M80 275c-55-70-40-110 0-128 36 28 39 70 0 128Zm45-85c-2-75 32-110 78-100 0 41-25 77-78 100ZM44 297c-60-5-90 20-88 63 39 15 74-3 88-63Zm86-106c-50-6-83 14-88 57 42 14 74-5 88-57Z" />
-              <path d="M160 180c-10-40 4-68 38-84 15 33 5 61-38 84Zm5-7c31-34 61-37 86-13-19 34-48 42-86 13Zm-79 88c35-31 67-34 96-10-18 34-49 44-96 10Z" />
-            </g>
-          </svg>
-          <svg className="wf-home-intro-vine wf-home-intro-vine-right" viewBox="0 0 300 420" fill="none" aria-hidden="true">
-            <g stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M320 380C210 320 270 240 170 190S90 90 50 20M220 275c55-70 40-110 0-128-36 28-39 70 0 128Zm-45-85c2-75-32-110-78-100 0 41 25 77 78 100Zm81 107c60-5 90 20 88 63-39 15-74-3-88-63Zm-86-106c50-6 83 14 88 57-42 14-74-5-88-57Z" />
-              <path d="M140 180c10-40-4-68-38-84-15 33-5 61 38 84Zm-5-7c-31-34-61-37-86-13 19 34 48 42 86 13Zm79 88c-35-31-67-34-96-10 18 34 49 44 96 10Z" />
-            </g>
-          </svg>
+          <GrapevineAnimation mode="intro" className="wf-home-intro-grapevine" onGrowthComplete={() => setVineFinished(true)} />
           <span className="wf-home-intro-logo-frame wf-logo-mark-frame">
             <Image src="/kamaltara-logo.png" alt="WineFriend" width={800} height={600} priority unoptimized className="wf-home-intro-logo" />
             <span className="wf-logo-trademark" aria-hidden="true">{"\u2122"}</span>

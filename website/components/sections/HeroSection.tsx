@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { gsap, ScrollTrigger } from "@/lib/animations";
 import { Button } from "@/components/ui/Button";
 import { Img } from "@/components/ui/Img";
+import { GrapevineAnimation } from "@/components/ui/GrapevineAnimation";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -39,7 +40,7 @@ const slides = [
 
 const AUTOPLAY_MS = 5500;
 const TRANSITION_MS = 420;
-const HERO_IMAGE_REVEAL_MS = 3800;
+const HERO_IMAGE_REVEAL_MS = 1500;
 
 const slideMotion = [
   { x: -1.2, y: 0.8 },
@@ -142,12 +143,17 @@ export function HeroSection() {
     gsap.set(layerRefs.current[0], { autoAlpha: 1, clipPath: "inset(0 0 0 0)" });
     gsap.set(photoRefs.current[0], { autoAlpha: 1, scale: 1.08, xPercent: -100, yPercent: 0 });
 
-    gsap.set(".wf-hero-story", { autoAlpha: 0, xPercent: 100 });
-    gsap.set(".wf-hero-eyebrow", { autoAlpha: 0, y: 14, letterSpacing: ".34em" });
-    gsap.set(".wf-hero-heading-line", { clipPath: "inset(0 0 calc(100% + .08em) 0)", y: 20 });
-    gsap.set(".wf-hero-description", { autoAlpha: 0, y: 8 });
-    gsap.set(".wf-hero-tagline", { autoAlpha: 0, y: 16 });
-    gsap.set(".wf-hero-actions > *", { autoAlpha: 0, y: 14 });
+    const story = sectionRef.current?.querySelector(".wf-hero-story");
+    const eyebrow = sectionRef.current?.querySelector(".wf-hero-eyebrow");
+    const headingLines = sectionRef.current?.querySelectorAll(".wf-hero-heading-line");
+    const tagline = sectionRef.current?.querySelector(".wf-hero-tagline");
+    const actions = sectionRef.current?.querySelectorAll(".wf-hero-actions > *");
+
+    if (story) gsap.set(story, { autoAlpha: 0, xPercent: 100 });
+    if (eyebrow) gsap.set(eyebrow, { autoAlpha: 0, y: 14, letterSpacing: ".34em" });
+    if (headingLines?.length) gsap.set(headingLines, { clipPath: "inset(0 0 calc(100% + .08em) 0)", y: 20 });
+    if (tagline) gsap.set(tagline, { autoAlpha: 0, y: 16 });
+    if (actions?.length) gsap.set(actions, { autoAlpha: 0, y: 14 });
 
     // Prepare the hidden entrance state while the Intro is still covering the Hero.
     // The visible timeline starts only after the Intro exit event.
@@ -162,50 +168,15 @@ export function HeroSection() {
         0,
       )
       .fromTo(
-        ".wf-hero-story",
+        story ?? sectionRef.current,
         { autoAlpha: 0, xPercent: 100 },
-        { autoAlpha: 1, xPercent: 0, duration: 4.2, ease: "power4.out" },
-        0.3,
+        { autoAlpha: 1, xPercent: 0, duration: 1.1, ease: "power4.out" },
+        0.1,
       )
-      .fromTo(".wf-hero-eyebrow", { autoAlpha: 0, y: 14, letterSpacing: ".34em" }, { autoAlpha: 1, y: 0, letterSpacing: ".2em", duration: .6 }, 1.05)
-      .fromTo(".wf-hero-heading-line", { clipPath: "inset(0 0 calc(100% + .08em) 0)", y: 20 }, { clipPath: "inset(0 0 -.08em 0)", y: 0, duration: .72, stagger: .12 }, 1.45)
-      .fromTo(".wf-hero-description", { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .48 }, 2.45)
-      .fromTo(".wf-hero-tagline", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .58 }, 2.55)
-      .fromTo(".wf-hero-actions > *", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .58, stagger: .16 }, 3.15);
-
-    const vinePaths = gsap.utils.toArray<SVGPathElement>(".wf-hero-vine-art path, .wf-hero-vine-art circle");
-    vinePaths.forEach((path) => {
-      const length = path.getTotalLength?.() ?? 0;
-      if (length > 0) gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-    });
-    if (vinePaths.length) {
-      gsap.to(vinePaths, { strokeDashoffset: 0, duration: 1.9, stagger: .025, ease: "power1.out", delay: .2 });
-    }
-
-    const vineLeaves = gsap.utils.toArray<SVGGraphicsElement>(".wf-hero-vine-leaf", sectionRef.current);
-    gsap.to(vineLeaves, {
-      rotation: 2.2,
-      duration: 7,
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-      stagger: { each: 0.55, from: "random" },
-      transformOrigin: "50% 65%",
-    });
-
-    const grapeCluster = sectionRef.current?.querySelector<SVGGElement>(".wf-hero-grape-cluster");
-    if (grapeCluster) {
-      gsap.to(grapeCluster, {
-        y: -5,
-        rotation: 1.8,
-        scale: 1.025,
-        duration: 6.2,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        transformOrigin: "50% 50%",
-      });
-    }
+      .fromTo(eyebrow ?? sectionRef.current, { autoAlpha: 0, y: 14, letterSpacing: ".34em" }, { autoAlpha: 1, y: 0, letterSpacing: ".2em", duration: .4 }, .2)
+      .fromTo(headingLines?.length ? headingLines : sectionRef.current, { clipPath: "inset(0 0 calc(100% + .08em) 0)", y: 20 }, { clipPath: "inset(0 0 -.08em 0)", y: 0, duration: .48, stagger: .07 }, .4)
+      .fromTo(tagline ?? sectionRef.current, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .4 }, .8)
+      .fromTo(actions?.length ? actions : sectionRef.current, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .4, stagger: .1 }, 1.05);
 
     const scrollMotion = gsap.timeline({
       scrollTrigger: {
@@ -342,19 +313,7 @@ export function HeroSection() {
       </div>
 
       <div className="wf-hero-story">
-        <div className="wf-hero-vine-art" aria-hidden="true">
-          <svg viewBox="0 0 900 700" fill="none">
-            <g stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M-30 510C125 430 113 300 244 323c92 16 72 130 10 132-47 2-51-61-15-71 24-7 39 18 25 34M201 329c-60-72-53-133-8-166 36 39 38 91 8 166Zm8 4c-3-94 43-136 101-126 2 52-31 100-101 126Zm-14-3c-67-70-127-70-157-29 31 43 83 58 157 29Z" />
-              <path d="M240 323c64-60 112-99 170-132m-182 131c-51 5-100 18-150 50m170-30c23 39 55 75 96 111" />
-              <path className="wf-hero-vine-leaf" d="M423 188c-10 39-4 67 22 84 26-17 32-45 22-84-10-23-34-23-44 0Zm22 83v59m-1-33c-27-32-54-37-76-18 13 31 39 42 76 18Zm2-2c26-33 53-39 76-20-12 31-38 43-76 20Z" />
-              <path className="wf-hero-vine-leaf" d="M285 473c37-15 67-14 91 5-17 32-45 43-83 32 20 29 23 57 6 82-31-18-43-46-35-84-28 21-56 25-82 7 15-32 42-46 81-40-24-25-32-52-17-80 34 12 52 37 48 78Zm-18 19 79-14m-67 26 32 52" />
-              <g className="wf-hero-grape-cluster"><circle cx="558" cy="395" r="17"/><circle cx="585" cy="395" r="17"/><circle cx="572" cy="420" r="17"/><circle cx="599" cy="420" r="17"/><circle cx="586" cy="445" r="17"/><circle cx="572" cy="470" r="17"/><path className="wf-hero-vine-leaf" d="M572 378c-5-26 6-43 30-52 3 21-6 39-30 52Zm29-52c17-24 37-28 59-13-13 20-32 25-59 13Z"/></g>
-              <path className="wf-hero-vine-leaf" d="M620 411c84-38 105-91 78-135-42 23-56 64-41 123 34-58 78-70 119-39-25 44-69 61-132 51Zm71-54 66-28m-57 44 65 16" />
-              <path className="wf-hero-vine-leaf" d="M738 572c-61-24-78-65-50-105 43 21 59 57 45 107 31-47 69-56 106-29-21 39-59 54-111 42m9-32 70-13" />
-            </g>
-          </svg>
-        </div>
+        <GrapevineAnimation mode="home" className="wf-hero-vine-art" />
 
         <div className="wf-hero-copy">
           <p className="wf-hero-eyebrow">A world of wine, thoughtfully curated</p>

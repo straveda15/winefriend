@@ -1,7 +1,19 @@
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@winefriend/shared"],
+
+  async redirects() {
+    return [
+      {
+        source: "/shop",
+        destination: "/products",
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       {
@@ -10,9 +22,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
   experimental: {
     agentFeedback: true,
   },
+
   cacheComponents: true,
   partialPrefetching: true,
 };

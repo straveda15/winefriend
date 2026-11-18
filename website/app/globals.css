@@ -173,6 +173,7 @@
   display: inline-block;
   clip-path: inset(0 100% 0 0);
 }
+.wf-home-intro-brand .wf-wordmark-trademark { visibility: hidden; opacity: 0; }
 
 .wf-home-intro-ornament {
   position: relative;
@@ -189,10 +190,16 @@
 .wf-home-intro-rule:last-child { background: linear-gradient(90deg, var(--gold-muted, #e5d5b5), transparent); }
 .wf-home-intro-diamond { width: .42rem; height: .42rem; flex: none; border: 1px solid var(--gold, #c69a3a); transform: rotate(45deg); }
 .wf-home-intro-copy { position: relative; z-index: 1; margin: .2rem 0 0; color: var(--charcoal-light, #514b43); font: 500 .72rem/1.5 var(--font-sans), sans-serif; letter-spacing: .17em; text-align: center; text-transform: uppercase; opacity: 0; }
-.wf-home-intro-vine { position: absolute; top: 50%; width: clamp(13rem, 34vw, 28rem); height: min(76vh, 42rem); color: var(--gold, #c69a3a); opacity: .31; pointer-events: none; transform: translateY(-50%); }
-.wf-home-intro-vine-left { left: max(-3rem, -2vw); }
-.wf-home-intro-vine-right { right: max(-3rem, -2vw); }
-.wf-home-intro-vine path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.wf-home-intro-grapevine { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+.wf-grapevine-corner { position: absolute; width: clamp(16rem, 31vw, 32rem); aspect-ratio: 2 / 1; opacity: .72; visibility: hidden; }
+.wf-grapevine-corner--top-left { top: 0; left: -.5rem; }
+.wf-grapevine-corner--top-right { top: 0; right: -.5rem; transform: scaleX(-1); }
+.wf-grapevine-corner--bottom-left { bottom: 0; left: -.5rem; transform: scaleY(-1); }
+.wf-grapevine-corner--bottom-right { right: -.5rem; bottom: 0; transform: scale(-1); }
+.wf-grapevine-photo { display: block; width: 100%; height: 100%; object-fit: contain; transform-box: border-box; will-change: transform; }
+.wf-home-intro-logo-frame, .wf-home-intro-ornament, .wf-home-intro-brand, .wf-home-intro-copy { z-index: 1; }
+.wf-grapevine-animation { display: block; overflow: visible; }
+.wf-grapevine-leaf { transform-box: fill-box; }
 
 @media (max-width: 640px) {
   .wf-home-intro { gap: .5rem; }
@@ -200,9 +207,11 @@
   .wf-home-intro-brand { --wf-intro-wordmark-size: clamp(3rem, 15vw, 4.75rem); }
   .wf-home-intro-ornament { width: 86vw; }
   .wf-home-intro-copy { width: 85vw; font-size: .55rem; letter-spacing: .12em; }
-  .wf-home-intro-vine { width: 37vw; height: 58vh; opacity: .23; }
-  .wf-home-intro-vine-left { left: -14vw; }
-  .wf-home-intro-vine-right { right: -14vw; }
+  .wf-grapevine-corner { width: clamp(10rem, 42vw, 17rem); }
+  .wf-grapevine-corner--top-left { top: 0; left: -.35rem; }
+  .wf-grapevine-corner--top-right { top: 0; right: -.35rem; transform: scaleX(-1); }
+  .wf-grapevine-corner--bottom-left { bottom: 0; left: -.35rem; transform: scaleY(-1); }
+  .wf-grapevine-corner--bottom-right { right: -.35rem; bottom: 0; transform: scale(-1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -338,22 +347,23 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 0;
   display: block;
   width: clamp(13rem, 25vw, 23rem);
-  height: auto;
+  aspect-ratio: 360 / 340;
   overflow: visible;
-  opacity: .19;
+  opacity: .32;
   pointer-events: none;
   user-select: none;
 }
+.wf-grapevine-decoration .wf-grapevine-photo { object-fit: contain; }
 
 .wf-vine--top-right { top: .5rem; right: .25rem; }
 .wf-vine--top-left { top: .25rem; left: .25rem; transform: scaleX(-1); }
 .wf-vine--bottom-left { bottom: -.75rem; left: -.5rem; }
 .wf-vine--bottom-right { bottom: -.75rem; right: -.5rem; transform: scaleX(-1); }
-.wf-vine--about { width: clamp(12rem, 21vw, 19rem); opacity: .16; }
+.wf-vine--about { width: clamp(12rem, 21vw, 19rem); opacity: .3; }
 .wf-vine--journal { width: clamp(12rem, 21vw, 19rem); }
 .wf-vine--cta { opacity: .28; }
-.wf-vine--contact { width: clamp(12rem, 21vw, 19rem); opacity: .12; }
-.wf-vine--footer { width: clamp(13rem, 22vw, 20rem); opacity: .2; }
+.wf-vine--contact { width: clamp(12rem, 21vw, 19rem); opacity: .28; }
+.wf-vine--footer { width: clamp(13rem, 22vw, 20rem); opacity: .3; }
 
 .wf-section[id],
 .wf-cta[id] {
@@ -1222,24 +1232,19 @@ h1, h2, h3, h4, h5, h6 {
 .wf-hero-vine-art {
   position: absolute;
   z-index: -1;
-  inset: 0 -8% 0 -7%;
+  inset: 0 0 0 auto;
+  width: 62%;
+  height: 100%;
   overflow: hidden;
-  color: #8a692b;
-  opacity: .27;
+  opacity: .35;
   pointer-events: none;
 }
 
-.wf-hero-vine-art svg {
+.wf-hero-vine-art > .wf-grapevine-photo {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-.wf-hero-vine-leaf,
-.wf-hero-grape-cluster {
-  transform-box: fill-box;
-  transform-origin: center;
-  will-change: transform;
+  object-fit: contain;
+  object-position: right center;
 }
 
 .wf-hero-copy {
@@ -1366,7 +1371,7 @@ h1, h2, h3, h4, h5, h6 {
   .wf-hero-actions a svg { width: .75rem; height: .75rem; flex: none; }
   .wf-hero-visual { min-height: 460px; }
   .wf-hero-visual-art { min-height: 460px; }
-  .wf-hero-vine-art { inset: 0; }
+  .wf-hero-vine-art { inset: 0 0 0 auto; width: 76%; }
   .wf-hero-controls { right: 1rem; bottom: 1rem; left: 1rem; }
   .wf-hero-counter { top: 1.1rem; left: 1.2rem; }
   .wf-hero-arrow { width: 2.1rem; height: 2.1rem; }
@@ -1389,8 +1394,7 @@ h1, h2, h3, h4, h5, h6 {
   .wf-hero-copy,
   .wf-hero-vine-art,
   .wf-hero-progress { animation: none !important; transition: none !important; will-change: auto; }
-  .wf-hero-vine-leaf,
-  .wf-hero-grape-cluster { will-change: auto; }
+  .wf-grapevine-photo { will-change: auto; }
 }
 
 /* Header and navigation */
@@ -1466,8 +1470,8 @@ h1, h2, h3, h4, h5, h6 {
 .wf-wordmark-trademark {
   position: absolute;
   z-index: 2;
-  top: -10%;
-  left: calc(100% + 3px);
+  top: -14%;
+  left: calc(100% + clamp(18px, 1.35vw, 26px));
   color: #D9A321;
   font: 500 clamp(8px, .09em, 9px)/1 Arial, sans-serif;
   white-space: nowrap;
@@ -2013,9 +2017,9 @@ a.wf-contact-detail[href^="mailto:"]:focus-visible,
 @media (max-width: 767px) {
   .wf-contact-grid { grid-template-columns: minmax(0, 1fr); }
   .wf-contact-form-row { grid-template-columns: minmax(0, 1fr); }
-  .wf-grapevine-decoration { width: clamp(8rem, 34vw, 11rem); opacity: .15; }
-  .wf-vine--footer { width: 10rem; opacity: .18; }
-  .wf-vine--cta { opacity: .22; }
+  .wf-grapevine-decoration { width: clamp(8rem, 34vw, 11rem); opacity: .27; }
+  .wf-vine--footer { width: 10rem; opacity: .28; }
+  .wf-vine--cta { opacity: .28; }
 }
 
 /* Gold separator line animation */
