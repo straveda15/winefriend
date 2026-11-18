@@ -95,7 +95,7 @@ export function Header() {
             : "wf-header wf-header-top py-1 lg:py-2"
         }`}
       >
-        <Container>
+        <Container className="wf-header-container">
           <div className="wf-header-row flex items-center justify-between">
             <BrandLogo className="wf-brand shrink-0" />
 

@@ -17,7 +17,7 @@ export function ProductForm({ product }: { product?: Product }) {
 
   return (
     <form
-      className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]"
+      className="grid min-w-0 gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)]"
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);

@@ -4,5 +4,9 @@ interface ContainerProps {
 }
 
 export function Container({ children, className = "" }: ContainerProps) {
-  return <div className={`w-full px-5 sm:px-8 lg:px-12 2xl:px-16 ${className}`}>{children}</div>;
+  return (
+    <div className="w-full px-5 sm:px-8 lg:px-12 2xl:px-16">
+      <div className={`wf-container-content ${className}`}>{children}</div>
+    </div>
+  );
 }

@@ -59,7 +59,7 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
 
   return (
     <main className="wf-section wf-detail-page wf-journal-detail-page bg-ivory">
-      <Container className="wf-journal-article-shell max-w-6xl">
+      <Container className="wf-journal-article-shell">
         <Link href="/journal" className="wf-product-link">&larr; Back to the Wine Journal</Link>
 
         <header className="wf-journal-article-heading">

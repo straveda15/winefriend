@@ -62,12 +62,20 @@ function ContactScrollReset({
   const pathname = usePathname();
 
   useLayoutEffect(() => {
-    if (pathname !== "/contact") return;
+    const isContactPage = pathname === "/contact";
+    const isJournalArticle = /^\/journal\/[^/]+\/?$/.test(pathname);
+    if (!isContactPage && !isJournalArticle) return;
 
     lenisRef.current?.scrollTo(0, { immediate: true, force: true });
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
-    const frame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+    const frame = window.requestAnimationFrame(() => {
+      if (isJournalArticle) {
+        lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      }
+      ScrollTrigger.refresh();
+    });
     return () => window.cancelAnimationFrame(frame);
   }, [pathname, lenisRef]);
 

@@ -35,6 +35,7 @@ h3 {
 }
 
 body {
+  min-width: 320px;
   background: var(--ivory);
   color: var(--charcoal);
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -139,34 +140,46 @@ body {
 .dashboard-brand-logo.dashboard-brand-logo-compact .wf-brand-logo-enterprise { color: #f5efe3; }
 .dashboard-brand-logo.dashboard-brand-logo-compact .wf-brand-logo-tagline { color: rgb(245 239 227 / 70%); }
 
-/* Keep dashboard subtitles, descriptions, metadata and status paragraphs on one line. */
+/* Keep long admin content readable and let it wrap inside narrow cards. */
 p {
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-p.flex {
-  flex-wrap: nowrap;
-}
-
-p.flex > * {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 /* Keep the Blog editor columns and fields within their own cards. */
 .blog-post-form {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 21.25rem);
   align-items: start;
   gap: 24px;
   width: 100%;
   min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+textarea {
+  resize: vertical;
 }
 
 .blog-post-form > div {
@@ -219,4 +232,18 @@ p.flex > * {
   .blog-post-form > aside {
     position: static;
   }
+}
+
+@media (max-width: 639px) {
+  .dashboard-brand-logo { gap: clamp(.35rem, 2vw, .65rem); padding-inline: .25rem; }
+  .dashboard-brand-logo .wf-brand-logo-frame { width: clamp(2.75rem, 12vw, 4rem); }
+  .dashboard-brand-logo .wf-brand-logo-enterprise { font-size: clamp(.65rem, 3.1vw, .9rem); letter-spacing: .08em; }
+  .dashboard-brand-logo .wf-brand-logo-tagline { font-size: clamp(.36rem, 1.7vw, .47rem); letter-spacing: .04em; }
+}
+
+@media (max-width: 374px) {
+  body { font-size: 14px; }
+  .dashboard-brand-logo .wf-brand-logo-tagline { white-space: normal; }
+  .blog-post-form > div,
+  .blog-post-form > aside { gap: 1rem; }
 }

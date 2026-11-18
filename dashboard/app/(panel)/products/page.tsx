@@ -34,12 +34,12 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
               </div>
               <div className="min-w-0 flex-1 basis-56">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="truncate font-serif text-lg">{product.name}</p>
+                  <p className="font-serif text-lg">{product.name}</p>
                   <span className={product.published ? badgeGreen : badgeAmber}>{product.published ? "Visible" : "Hidden"}</span>
                   {product.featured && <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#805f23]"><Star className="size-3.5 fill-current" aria-hidden="true" /> Homepage</span>}
                 </div>
-                <p className="mt-1 truncate text-sm text-charcoal-light">{product.shortDescription}</p>
-                <p className="mt-1 flex min-w-0 flex-nowrap items-center gap-x-3 overflow-hidden text-xs text-slate">
+                <p className="mt-1 text-sm text-charcoal-light">{product.shortDescription}</p>
+                <p className="mt-1 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate">
                   <span className="min-w-0 truncate">{categoryLabel(product.category)}</span>
                   <span className="min-w-0 truncate">{typeof product.price === "number" ? formatPrice(product.price) : "No price shown"}</span>
                   <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap"><ImageIcon className="size-3.5" aria-hidden="true" /> {product.images.length}</span>
