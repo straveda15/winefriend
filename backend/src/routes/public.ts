@@ -17,7 +17,11 @@ publicRouter.get("/api/products", async (_request, response) => {
 
 publicRouter.get("/api/posts", async (_request, response) => {
   const items = await readCollection("posts");
-  response.json(items.filter((item) => item.published).sort((a, b) => b.date.localeCompare(a.date)));
+  const published = items.filter((item) => item.published).sort((a, b) => b.date.localeCompare(a.date));
+  response.json(published.map((item) => {
+    const images = item.images?.length ? item.images : item.image ? [item.image] : [];
+    return { ...item, image: images[0], images };
+  }));
 });
 
 /* ------------------------------------------------------------ enquiries */

@@ -40536,7 +40536,7 @@ var require_gssapi = __commonJS({
     exports2.GSSAPI = exports2.GSSAPICanonicalizationValue = void 0;
     exports2.performGSSAPICanonicalizeHostName = performGSSAPICanonicalizeHostName;
     exports2.resolveCname = resolveCname;
-    var dns = require("dns");
+    var dns2 = require("dns");
     var deps_1 = require_deps();
     var error_1 = require_error();
     var utils_1 = require_utils4();
@@ -40635,9 +40635,9 @@ var require_gssapi = __commonJS({
         return host;
       }
       if (mode === exports2.GSSAPICanonicalizationValue.on || mode === exports2.GSSAPICanonicalizationValue.forwardAndReverse) {
-        const { address } = await dns.promises.lookup(host);
+        const { address } = await dns2.promises.lookup(host);
         try {
-          const results = await dns.promises.resolve(address, "PTR");
+          const results = await dns2.promises.resolve(address, "PTR");
           return results.length > 0 ? results[0] : host;
         } catch {
           return await resolveCname(host);
@@ -40648,7 +40648,7 @@ var require_gssapi = __commonJS({
     }
     async function resolveCname(host) {
       try {
-        const results = await dns.promises.resolve(host, "CNAME");
+        const results = await dns2.promises.resolve(host, "CNAME");
         return results.length > 0 ? results[0] : host;
       } catch {
         return host;
@@ -50374,7 +50374,7 @@ var require_connection_string = __commonJS({
     exports2.DEFAULT_OPTIONS = exports2.OPTIONS = void 0;
     exports2.resolveSRVRecord = resolveSRVRecord;
     exports2.parseOptions = parseOptions;
-    var dns = require("dns");
+    var dns2 = require("dns");
     var mongodb_connection_string_url_1 = require_lib4();
     var process2 = require("process");
     var url_1 = require("url");
@@ -50417,12 +50417,12 @@ var require_connection_string = __commonJS({
     var LB_REPLICA_SET_ERROR = "loadBalanced option not supported with a replicaSet option";
     var LB_DIRECT_CONNECTION_ERROR = "loadBalanced option not supported when directConnection is provided";
     function retryDNSTimeoutFor(rrtype) {
-      const resolve = rrtype === "SRV" ? (address) => dns.promises.resolve(address, "SRV") : (address) => dns.promises.resolve(address, "TXT");
+      const resolve = rrtype === "SRV" ? (address) => dns2.promises.resolve(address, "SRV") : (address) => dns2.promises.resolve(address, "TXT");
       return async function dnsReqRetryTimeout(lookupAddress) {
         try {
           return await resolve(lookupAddress);
         } catch (firstDNSError) {
-          if (firstDNSError.code === dns.TIMEOUT) {
+          if (firstDNSError.code === dns2.TIMEOUT) {
             return await resolve(lookupAddress);
           } else {
             throw firstDNSError;
@@ -53739,7 +53739,7 @@ var require_srv_polling = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SrvPoller = exports2.SrvPollingEvent = void 0;
-    var dns = require("dns");
+    var dns2 = require("dns");
     var timers_1 = require("timers");
     var error_1 = require_error();
     var mongo_types_1 = require_mongo_types();
@@ -53814,7 +53814,7 @@ var require_srv_polling = __commonJS({
         const generation = this.generation;
         let srvRecords;
         try {
-          srvRecords = await dns.promises.resolve(this.srvAddress, "SRV");
+          srvRecords = await dns2.promises.resolve(this.srvAddress, "SRV");
         } catch {
           this.failure();
           return;
@@ -56729,7 +56729,9 @@ async function notifyWebsite(tags) {
 var import_node_crypto3 = require("node:crypto");
 
 // src/db.ts
+var import_node_dns = __toESM(require("node:dns"));
 var import_mongodb = __toESM(require_lib5());
+if (!isProduction && !process.env.VERCEL) import_node_dns.default.setServers(["8.8.8.8", "1.1.1.1"]);
 var globalForMongo = globalThis;
 async function getDb() {
   if (!config.mongodbUri) {
@@ -57013,7 +57015,10 @@ async function deleteUnreferencedUploads(candidates) {
   const uploads = [...new Set(candidates)].filter((src) => src.startsWith(UPLOAD_PREFIX));
   if (!uploads.length) return;
   const [products, posts] = await Promise.all([readCollection("products"), readCollection("posts")]);
-  const inUse = /* @__PURE__ */ new Set([...products.flatMap((item) => item.images), ...posts.flatMap((item) => item.images?.length ? item.images : item.image ? [item.image] : [])]);
+  const inUse = /* @__PURE__ */ new Set([
+    ...products.flatMap((item) => item.images),
+    ...posts.flatMap((item) => item.images?.length ? item.images : item.image ? [item.image] : [])
+  ]);
   const names = uploads.filter((src) => !inUse.has(src)).map((src) => src.slice(UPLOAD_PREFIX.length)).filter((name) => UPLOAD_NAME.test(name));
   if (names.length) await (await uploadsCollection()).deleteMany({ _id: { $in: names } });
 }
@@ -57283,7 +57288,11 @@ publicRouter.get("/api/products", async (_request, response) => {
 });
 publicRouter.get("/api/posts", async (_request, response) => {
   const items = await readCollection("posts");
-  response.json(items.filter((item) => item.published).sort((a, b) => b.date.localeCompare(a.date)));
+  const published = items.filter((item) => item.published).sort((a, b) => b.date.localeCompare(a.date));
+  response.json(published.map((item) => {
+    const images = item.images?.length ? item.images : item.image ? [item.image] : [];
+    return { ...item, image: images[0], images };
+  }));
 });
 var recent = /* @__PURE__ */ new Map();
 var LIMIT = 5;
@@ -57339,14 +57348,19 @@ publicRouter.post("/api/enquiries", async (request, response) => {
     createdAt: (/* @__PURE__ */ new Date()).toISOString()
   };
   const duplicate = await mutateCollection("enquiries", (items) => {
-    const duplicateWindow = 60 * 1000;
+    const duplicateWindow = 60 * 1e3;
     const isDuplicate = items.some((item) => {
       const age = Date.now() - Date.parse(item.createdAt);
       return age >= 0 && age <= duplicateWindow && item.name.toLowerCase() === enquiry.name.toLowerCase() && item.email.toLowerCase() === enquiry.email.toLowerCase() && item.phone === enquiry.phone && item.topic === enquiry.topic && item.message === enquiry.message && (item.product ?? "") === (enquiry.product ?? "");
     });
     return isDuplicate ? { items, result: true } : { items: [enquiry, ...items].slice(0, 2e3), result: false };
   });
-  response.json({ ok: true, saved: !duplicate, message: "Thank you - your enquiry has been received. We will get back to you shortly.", duplicate });
+  response.json({
+    ok: true,
+    saved: !duplicate,
+    message: "Thank you - your enquiry has been received. We will get back to you shortly.",
+    duplicate
+  });
 });
 publicRouter.get("/uploads/:name", async (request, response) => {
   const name = String(request.params.name);
