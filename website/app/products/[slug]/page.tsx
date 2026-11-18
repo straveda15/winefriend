@@ -52,7 +52,7 @@ async function ProductDetailContent({ params }: ProductPageProps) {
 
   return (
     <main className="wf-section wf-detail-page bg-ivory py-14 lg:py-22">
-      <Container className="max-w-[90rem]">
+      <Container className="wf-product-detail-shell">
         <Link href="/products" className="wf-product-link">← Back to all products</Link>
         <div className="mt-8 grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
           <FadeUp>

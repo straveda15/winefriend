@@ -15,7 +15,7 @@ export function AdminNav({ newEnquiries }: { newEnquiries: number }) {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Admin sections" className="flex gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
+    <nav aria-label="Admin sections" className="grid grid-cols-2 gap-2 sm:flex sm:gap-1 sm:overflow-x-auto sm:pb-1 sm:[scrollbar-width:thin] xl:grid xl:grid-cols-1 xl:overflow-visible xl:pb-0">
       {items.map(({ href, label, icon: Icon, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href);
         return (

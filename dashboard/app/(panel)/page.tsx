@@ -49,8 +49,8 @@ export default async function AdminDashboardPage() {
               {enquiries.slice(0, 5).map((item) => (
                 <li key={item.id} className="flex items-start justify-between gap-4 py-3">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold">{item.name}</p>
-                    <p className="truncate text-sm text-charcoal-light">{item.product ? `About: ${item.product}` : item.topic}</p>
+                    <p className="text-sm font-semibold">{item.name}</p>
+                    <p className="text-sm text-charcoal-light">{item.product ? `About: ${item.product}` : item.topic}</p>
                   </div>
                   <span className={item.status === "new" ? badgeAmber : badgeGrey}>{item.status === "new" ? "New" : "Handled"}</span>
                 </li>
