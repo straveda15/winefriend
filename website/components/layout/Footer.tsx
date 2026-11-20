@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
-import { MapPin, Phone, Clock3 } from "lucide-react";
+import { MapPin, Phone, Clock3, Mail } from "lucide-react";
 import { Container } from "./Container";
 import { SocialIcons } from "@/components/ui/SocialIcons";
 import { exploreLinks, serviceLinks, contactInfo, socialLinks, legalLinks } from "@/data/footer";
@@ -44,7 +44,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <BrandLogo inverse />
-            <SocialIcons links={socialLinks} email={contactInfo.email} className="mt-4" />
+            <SocialIcons links={socialLinks} className="mt-4" />
           </div>
 
           {/* Explore */}
@@ -105,11 +105,13 @@ export function Footer() {
                 <Phone className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
                 <div className="wf-footer-contact-copy flex flex-col gap-1">
                   {contactInfo.contactPerson && <span className="text-xs text-white/70">{contactInfo.contactPerson}</span>}
-                  {contactInfo.phone.map((num) => (
-                    <a key={num} href={`tel:${num.replace(/\s/g, "")}`} className="text-sm text-white/50 hover:text-white transition-colors">
-                      {num}
-                    </a>
-                  ))}
+                  <div className="flex flex-wrap gap-x-4 gap-y-1">
+                    {contactInfo.phone.map((num) => (
+                      <a key={num} href={`tel:${num.replace(/\s/g, "")}`} className="text-sm text-white/50 hover:text-white transition-colors whitespace-nowrap">
+                        {num}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
               {contactInfo.hours && (
@@ -118,6 +120,22 @@ export function Footer() {
                   <span className="wf-footer-contact-copy text-xs text-white/50">{contactInfo.hours}</span>
                 </div>
               )}
+              <div className="flex items-start gap-3">
+                <Mail className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                <div className="wf-footer-contact-copy flex flex-col gap-1">
+                  {(contactInfo.emails ?? [contactInfo.email]).map((email) => (
+                    <a
+                      key={email}
+                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="wf-footer-contact-copy text-sm text-white/50 underline decoration-gold/50 underline-offset-4 hover:text-white transition-colors"
+                    >
+                      {email}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 

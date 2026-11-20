@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function WineToursPage() {
   return (
     <PageFrame>
-      <EditorialPageHero kicker="Wine Tours & Experiences" title="Discover Nashik Through Wine" description="Curated winery visits and personalised wine tours invite guests to explore the vineyards and wine culture of Nashik Valley." image="/images/experiences/vineyard-landscape.webp" imageAlt="Vineyard rows in the Nashik landscape" />
+      <EditorialPageHero kicker="Wine Tours & Experiences" title="Discover Nashik Through Wine" description="Curated winery visits and personalised wine tours invite guests to explore the vineyards and wine culture of Nashik Valley." image="/images/experiences/winetours1.jpg" imageAlt="A curated wine tour experience in Nashik" />
       <ToursSection />
     </PageFrame>
   );

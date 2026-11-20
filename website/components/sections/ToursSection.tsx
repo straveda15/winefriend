@@ -19,12 +19,12 @@ export function ToursSection({ preview = false }: { preview?: boolean }) {
           {/* Image (left on desktop) */}
           <ImageReveal
             direction="right"
-            className="wf-editorial-image relative aspect-[3/4] rounded-none overflow-hidden order-2 lg:order-1"
+            className={`wf-editorial-image relative ${preview ? "aspect-[5/4]" : "aspect-[3/4]"} rounded-none overflow-hidden order-2 lg:order-1`}
           >
             <div className="absolute inset-0 img-fallback-vineyard -z-10" />
             <Img
-              src="/images/experiences/vineyard-landscape.webp"
-              alt="Vineyard rows stretching toward a mountain landscape"
+              src={preview ? "/images/about/imgHome2-home.jpg" : "/images/experiences/vineyard-landscape.webp"}
+              alt={preview ? "Wine Friend founder enjoying a glass of wine in a vineyard" : "Vineyard rows stretching toward a mountain landscape"}
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

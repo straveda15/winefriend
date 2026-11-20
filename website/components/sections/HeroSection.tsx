@@ -12,6 +12,11 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const slides = [
   {
+    src: "/images/about/herohome.JPG",
+    alt: "Wine Friend founder tasting wine beside oak barrels at a winery",
+    label: "A moment in the cellar",
+  },
+  {
     src: "/images/hero/lucia-yarushkina-2wEYI23jWn8-unsplash.jpg",
     alt: "Wine bottles displayed in an atmospheric cellar",
     label: "The wine cellar",
@@ -27,9 +32,9 @@ const slides = [
     label: "For the table",
   },
   {
-    src: "/images/hero/udit-chandra-ctKH9oC1AhU-unsplash.jpg",
-    alt: "Wine bottle, glass, and grapes outdoors",
-    label: "A moment to savour",
+    src: "/images/about/imgHome1.JPG",
+    alt: "Wine Friend in Nashik wine country",
+    label: "Our wine country",
   },
   {
     src: "/images/hero/hero-slide-03.webp",
@@ -43,6 +48,7 @@ const TRANSITION_MS = 420;
 const HERO_IMAGE_REVEAL_MS = 1500;
 
 const slideMotion = [
+  { x: 0.7, y: -0.6 },
   { x: -1.2, y: 0.8 },
   { x: 1.1, y: -0.7 },
   { x: -0.8, y: -0.9 },
@@ -109,7 +115,7 @@ export function HeroSection() {
     transitionRef.current?.kill();
     transitionRef.current = timeline;
 
-    const movement = slideMotion[to];
+    const movement = slideMotion[to] ?? { x: 0, y: 0 };
     gsap.set(incoming, { autoAlpha: 1, clipPath: hiddenEdge });
     gsap.set(incomingPhoto, { scale: 1.12, xPercent: movement.x, yPercent: movement.y });
     timeline

@@ -5,8 +5,8 @@ export const whatsappNumber = contactInfo.phone[0].replace(/\D/g, "");
 
 export const telHref = `tel:+${whatsappNumber}`;
 
-/** Shared address search used by both the contact page and footer. */
-export const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.location.replace(/\s+/g, " "))}`;
+/** Standard Google Maps place link for the location in the supplied embed URL. */
+export const mapHref = "https://www.google.com/maps/search/?api=1&query=Kamaltara%20Enterprises&query_place_id=0x3bddebb0a5b3cdfb%3A0x8ad5b66c0f739760";
 
 function query(message?: string): string {
   const params = new URLSearchParams({ phone: whatsappNumber });

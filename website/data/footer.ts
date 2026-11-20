@@ -17,6 +17,7 @@ export const contactInfo: ContactInfo = {
   location: "The WineFriend, A-130, 4th Floor, Business Index\nMakhmalabad Road, near Dream Castle Road\nPanchavati, Nashik, Maharashtra 422003, India",
   phone: ["+91 98224 39051", "+91 75075 55595"],
   email: "winefriend907@gmail.com",
+  emails: ["winefriend907@gmail.com", "kamaltaraenterprises@gmail.com"],
   contactPerson: "Manoj Jagtap",
   hours: "Monday–Saturday, 9:00–21:00",
 };

@@ -1,7 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { DiscoverSection } from "@/components/sections/DiscoverSection";
 import { CollectionSection } from "@/components/sections/CollectionSection";
 import { BusinessSection } from "@/components/sections/BusinessSection";
 import { ToursSection } from "@/components/sections/ToursSection";
@@ -20,17 +19,16 @@ export default function Home() {
       </Suspense>
       <main>
         <HeroSection />
-        <DiscoverSection />
         <Suspense fallback={null}>
           <CollectionSection preview />
         </Suspense>
         <BusinessSection preview />
         <ToursSection preview />
         <ImageGallery />
-        <AboutSection preview />
         <Suspense fallback={null}>
           <JournalSection preview />
         </Suspense>
+        <AboutSection preview />
         <CtaSection />
       </main>
       <Footer />

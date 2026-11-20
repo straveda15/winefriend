@@ -28,6 +28,8 @@ export const aboutPillars: AboutPillar[] = [
 export const aboutContent = {
   heading: "Wine, from Accessories to Experiences",
   storyHeading: "From Wine Accessories to Wine Tourism",
+  storyPreviewText:
+    "Based in Nashik, Wine Friend brings together wine accessories and curated winery tours. Founder Manoj Jagtap’s experience in wine sales inspired products and tours for wine lovers and businesses.",
   storyText:
     "Wine Friend is a registered trademark of Kamaltara Enterprises, based in Nashik, Maharashtra, about 180 km from Mumbai. Owner-operator Manoj Jagtap began in a hospital canteen, moved into mineral-water sales and then worked as a wine-company sales executive. A corkscrew inspired him to develop wine accessories; conversations with customers led him to organise winery visits that grew into structured wine tourism. Kamaltara Enterprises manufactures and imports wine-related products and arranges curated visits in Nashik Valley.",
   ctaText: "Get to Know Us",
