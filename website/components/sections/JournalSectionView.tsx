@@ -10,13 +10,13 @@ import type { JournalArticle } from "@winefriend/shared/types";
 import { GrapevineDecoration } from "@/components/ui/GrapevineDecoration";
 
 export function JournalSectionView({ articles: all, preview = false }: { articles: JournalArticle[]; preview?: boolean }) {
-  const featured = all.find((a) => a.featured) ?? all[0];
-  const rest = all.filter((a) => a.id !== featured?.id);
+  const featured = all.find((article) => article.featured) ?? all[0];
+  const rest = all.filter((article) => article.id !== featured?.id);
   const articles = preview ? rest.slice(0, 2) : rest;
 
   return (
     <section id="wine-journal" className="wf-section wf-journal py-12 lg:py-18 bg-cream">
-      <GrapevineDecoration className="wf-vine wf-vine--bottom-left wf-vine--journal" />
+      <GrapevineDecoration className="wf-vine wf-vine--top-left wf-vine--journal" />
       <Container className="wf-botanical-content">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
           <TextReveal>
@@ -39,24 +39,25 @@ export function JournalSectionView({ articles: all, preview = false }: { article
             </Button>
           </FadeUp>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
-          {/* Featured Article */}
-          {featured && (
+        {featured ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
             <FadeUp>
               <JournalCard article={featured} featured />
             </FadeUp>
-          )}
-
-          {/* Article List */}
-          <StaggerChildren
-            className="flex flex-col gap-5 justify-center"
-            stagger={0.2}
-          >
-            {articles.map((article) => (
-              <JournalCard key={article.id} article={article} />
-            ))}
-          </StaggerChildren>
-        </div>
+            <StaggerChildren
+              className="flex flex-col gap-5 justify-center"
+              stagger={0.2}
+            >
+              {articles.map((article) => (
+                <JournalCard key={article.id} article={article} />
+              ))}
+            </StaggerChildren>
+          </div>
+        ) : (
+          <p className="text-charcoal-light font-sans text-sm leading-relaxed">
+            New stories are on their way. Visit the Wine Journal for updates.
+          </p>
+        )}
       </Container>
     </section>
   );

@@ -93,6 +93,65 @@
 .wf-page-hero { padding-block: 8rem 3.5rem; }
 .wf-page-hero-grid { max-width: 90rem; }
 .wf-page-hero-image { min-height: clamp(18rem, 37vw, 31rem); }
+.wf-about-hero {
+  position: relative;
+  display: flex;
+  min-height: clamp(25rem, 34vw, 34rem);
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: 8.5rem 3.5rem;
+  color: #fffaf0;
+  background: #281516;
+}
+.wf-about-hero::before,
+.wf-about-hero::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+}
+.wf-about-hero::before {
+  background: url("/images/about/hero.jpg") center 57% / cover no-repeat;
+}
+.wf-about-hero::after {
+  z-index: 0;
+  background: linear-gradient(90deg, rgb(30 8 12 / 94%) 0%, rgb(38 12 16 / 84%) 34%, rgb(25 15 12 / 24%) 74%, rgb(18 13 10 / 12%) 100%), linear-gradient(0deg, rgb(18 13 10 / 28%), transparent 55%);
+  pointer-events: none;
+}
+.wf-about-hero-content { position: relative; z-index: 1; max-width: 90rem; }
+.wf-about-hero-kicker {
+  margin: 0 0 .55rem;
+  color: #e7c987;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.wf-about-hero-title {
+  max-width: 18ch;
+  margin: 0;
+  color: #fffaf0;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(2.6rem, 4.4vw, 4.15rem);
+  font-weight: 500;
+  letter-spacing: -.025em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+.wf-about-hero-title-mobile { display: none; }
+.wf-about-hero-copy {
+  max-width: 43rem;
+  margin: 1rem 0 1.3rem;
+  color: rgb(255 250 240 / 88%);
+  font-size: clamp(.92rem, 1.1vw, 1rem);
+  line-height: 1.65;
+}
+.wf-about-hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.wf-about-hero-primary { border-radius: .4rem; background: #e4bd72; color: #321719; }
+.wf-about-hero-primary:hover { background: #f0d295; color: #321719; }
+.wf-about-hero-secondary { border-radius: .4rem; border-color: rgb(255 250 240 / 75%); color: #fffaf0; }
+.wf-about-hero-secondary:hover { border-color: #e4bd72; background: rgb(255 250 240 / 12%); color: #fffaf0; }
 .wf-image-gallery {
   width: 100%;
   padding-block: clamp(2.5rem, 5vw, 4.5rem);
@@ -579,39 +638,79 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .wf-about-pillar {
-  min-height: 13rem;
-  border: 1px solid rgb(198 154 58 / 24%);
-  background: var(--card);
-  box-shadow: 0 8px 24px rgb(50 42 27 / 4%);
-  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 350ms ease, translate 350ms ease;
-}
-
-.wf-about-pillar:hover {
-  border-color: rgb(198 154 58 / 48%);
-  background: #fffefa;
-  box-shadow: 0 14px 30px rgb(50 42 27 / 9%);
-  translate: 0 -3px;
-}
-
-.wf-about-pillar-icon {
-  width: 2.7rem;
-  height: 2.7rem;
-  flex: none;
-  border: 1px solid rgb(198 154 58 / 42%);
-  border-radius: 50%;
-  background: #f4efe5;
-}
-
-.wf-about-story-column {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.25rem, 2.5vw, 2rem);
-  min-width: 0;
+  align-items: flex-start;
+  gap: .55rem;
+  min-height: 0;
+  padding: .35rem clamp(.5rem, 1vw, .85rem);
+  border: 0;
+  border-right: 1px solid rgb(198 154 58 / 35%);
+  background: transparent;
+  box-shadow: none;
+  transition: none;
 }
 
-.wf-about-grid {
-  gap: clamp(2.25rem, 5vw, 4rem);
+.wf-about-pillar:last-child { border-right: 0; }
+
+.wf-about-pillar-icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  flex: none;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
+
+.wf-about-pillar-heading {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  min-height: 2.8rem;
+}
+
+.wf-about-pillar-title { font-size: 1.05rem; }
+
+.wf-about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+  grid-template-areas: "story image" "pillars image" "cta image";
+  align-items: center;
+  column-gap: clamp(2.25rem, 5vw, 4rem);
+  row-gap: 1rem;
+}
+
+.wf-about-story-content {
+  grid-area: story;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .65rem;
+  padding-block: 0;
+}
+
+.wf-about-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .85rem;
+  color: var(--burgundy);
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.wf-about-eyebrow::after {
+  display: none;
+}
+
+.wf-about-main-heading {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(2.75rem, 3.2vw, 3.75rem);
+}
+.wf-about-main-heading br { display: block; }
+.wf-about-story-heading { margin: .2rem 0 0; color: #8d2034; }
 
 .wf-about .wf-botanical-content {
   max-width: 90rem;
@@ -619,21 +718,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .wf-about-pillars {
+  grid-area: pillars;
   align-items: stretch;
   gap: clamp(.75rem, 1.4vw, 1.15rem);
 }
 
-.wf-about-divider {
-  margin-left: 0;
-  margin-right: 0;
+.wf-about-pillars .wf-about-pillar { min-width: 0; }
+.wf-about-pillars .wf-about-pillar-heading { min-width: 0; }
+.wf-about-pillars .wf-about-pillar-description {
+  font-size: .9rem;
+  line-height: 1.6;
 }
 
 .wf-about-story-copy {
   max-width: 36rem;
-  margin-bottom: 1rem;
+  margin: 0;
   font-size: .94rem;
   line-height: 1.9;
 }
+
+.wf-about-cta {
+  grid-area: cta;
+  width: fit-content;
+  margin-top: 0;
+  border-radius: .35rem;
+  background: #871d31;
+  color: #fffaf0;
+}
+
+.wf-about-cta:hover { background: #681426; color: #fffaf0; }
 
 .wf-about-cta svg {
   transition: transform 350ms cubic-bezier(.2, .7, .2, 1);
@@ -644,13 +757,29 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .wf-about-editorial-image {
+  grid-area: image;
   position: relative;
   width: 100%;
-  aspect-ratio: 5 / 6;
+  height: clamp(29rem, 39vw, 36rem);
+  min-height: 0;
   margin: 0;
   overflow: hidden;
   background: #f4efe5;
-  box-shadow: 14px 14px 0 #e9e1d2;
+  border-radius: 1rem;
+  isolation: isolate;
+}
+
+.wf-about-editorial-image::before {
+  position: absolute;
+  z-index: 1;
+  top: -8%;
+  bottom: -8%;
+  left: -30%;
+  width: 37%;
+  border-right: 8px solid #d6ad60;
+  border-radius: 50%;
+  background: var(--ivory);
+  content: "";
 }
 
 .wf-about-editorial-photo {
@@ -662,6 +791,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 2;
   padding: 2.5rem 1.25rem 1rem;
   background: linear-gradient(180deg, transparent, rgb(38 16 20 / 62%));
   color: #fffaf0;
@@ -671,29 +801,264 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: .02em;
 }
 
+.wf-about-founder-journey {
+  padding-top: clamp(2.75rem, 5vw, 5rem);
+  padding-bottom: 1.25rem;
+  background: linear-gradient(180deg, #fcf8f0, #f7f0e4);
+}
+.wf-about-founder-journey-content { position: relative; z-index: 1; max-width: 90rem; margin-inline: auto; }
+.wf-vine--about-founder {
+  right: auto;
+  bottom: .25rem;
+  left: clamp(17rem, 34vw, 36rem);
+  top: auto;
+  width: clamp(10rem, 17vw, 16rem);
+  opacity: .2;
+}
+.wf-about-founder-journey-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  max-width: 90rem;
+  margin-inline: auto;
+}
+.wf-about-founder-title,
+.wf-about-journey-title {
+  margin: 0 0 1.15rem;
+  color: #511b25;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.7rem, 2.5vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.wf-about-founder-story {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: clamp(1rem, 2vw, 1.6rem);
+}
+.wf-about-founder-photo {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  overflow: hidden;
+  border-radius: .7rem;
+  background: #ede3d4;
+}
+.wf-about-founder-image { transform: none; }
+.wf-about-founder-copy h3 {
+  margin: 0 0 .55rem;
+  color: var(--gold);
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.wf-about-founder-copy p,
+.wf-about-journey-item p {
+  margin: 0 0 .8rem;
+  color: #625a50;
+  font-size: .9rem;
+  line-height: 1.55;
+}
+.wf-about-journey-panel {
+  padding-left: clamp(1.5rem, 3vw, 3rem);
+  border-left: 1px solid rgb(142 112 65 / 24%);
+}
+.wf-about-journey-title { margin-bottom: 1rem; }
+.wf-about-journey-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wf-about-journey-list::before {
+  position: absolute;
+  top: 1.2rem;
+  bottom: 1.2rem;
+  left: 1.15rem;
+  width: 1px;
+  background: linear-gradient(#c8963e, rgb(200 150 62 / 38%));
+  content: "";
+}
+.wf-about-journey-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  align-items: start;
+  gap: .85rem;
+}
+.wf-about-journey-icon {
+  z-index: 1;
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border: 1px solid rgb(198 154 58 / 38%);
+  border-radius: 50%;
+  background: #f8f0df;
+  color: #8a6324;
+}
+.wf-about-journey-icon svg { width: 1.15rem; height: 1.15rem; stroke-width: 1.7; }
+.wf-about-journey-item h3 {
+  margin: .12rem 0 .15rem;
+  color: #29231f;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: .98rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.wf-about-journey-item p { margin-bottom: 0; font-size: .82rem; line-height: 1.4; }
+
+.wf-about-work {
+  padding-top: 1.25rem;
+  padding-bottom: clamp(2.5rem, 4.5vw, 4rem);
+  background: #fbf7ef;
+}
+.wf-about-work-content,
+.wf-about-philosophy-content,
+.wf-about-connections-content { max-width: 90rem; margin-inline: auto; }
+.wf-about-work-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 0 1.35rem;
+  color: #511b25;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.65rem, 2.2vw, 2rem);
+  font-weight: 600;
+}
+.wf-about-work-title::before,
+.wf-about-work-title::after { width: min(18vw, 10rem); height: 1px; background: #d7bd89; content: ""; }
+.wf-about-work-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+.wf-about-work-card { overflow: hidden; border: 1px solid rgb(133 99 48 / 16%); border-radius: .7rem; background: #fffdf8; }
+.wf-about-work-link { display: block; color: inherit; text-decoration: none; transition: border-color 220ms ease, box-shadow 220ms ease, translate 220ms ease; }
+.wf-about-work-link:hover { border-color: rgb(133 99 48 / 38%); box-shadow: 0 8px 22px rgb(50 42 27 / 8%); translate: 0 -2px; }
+.wf-about-work-button { display: block; width: 100%; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; transition: border-color 220ms ease, box-shadow 220ms ease, translate 220ms ease; }
+.wf-about-work-button:hover { border-color: rgb(133 99 48 / 38%); box-shadow: 0 8px 22px rgb(50 42 27 / 8%); translate: 0 -2px; }
+.wf-about-work-image { position: relative; aspect-ratio: 1.9 / 1; overflow: hidden; background: #eee3d2; }
+.wf-about-work-card-copy { display: grid; grid-template-columns: 1.65rem minmax(0, 1fr); align-items: start; gap: .6rem; padding: .8rem .85rem .95rem; }
+.wf-about-work-icon { width: 1.3rem; height: 1.3rem; margin-top: .1rem; color: #8c6228; stroke-width: 1.7; }
+.wf-about-work-card h3 { margin: 0 0 .25rem; color: #4d2026; font-family: var(--font-playfair), Georgia, serif; font-size: .98rem; font-weight: 600; line-height: 1.2; }
+.wf-about-work-card p { margin: 0; color: #665d52; font-size: .76rem; line-height: 1.45; }
+
+.wf-about-philosophy { padding-block: 1.25rem; background: #f5eee2; }
+.wf-about-philosophy-content { display: grid; grid-template-columns: 11rem minmax(0, 1fr); align-items: center; gap: 1.25rem; }
+.wf-about-philosophy-content > h2 { margin: 0; color: #511b25; font-family: var(--font-playfair), Georgia, serif; font-size: 1.45rem; font-weight: 600; }
+.wf-about-philosophy-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.wf-about-philosophy-item { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); align-items: start; gap: .55rem; padding: .25rem .8rem; border-right: 1px solid rgb(142 112 65 / 28%); }
+.wf-about-philosophy-item:last-child { border-right: 0; }
+.wf-about-philosophy-item > svg { width: 1.25rem; height: 1.25rem; color: #8c6228; stroke-width: 1.7; }
+.wf-about-philosophy-item h3 { margin: 0 0 .18rem; color: #4d2026; font-size: .82rem; font-weight: 700; line-height: 1.2; }
+.wf-about-philosophy-item p { margin: 0; color: #665d52; font-size: .7rem; line-height: 1.4; }
+
+.wf-about-connections { padding-block: 1.6rem; background: var(--gold); color: #30251b; }
+.wf-about-connections-content { display: grid; grid-template-columns: minmax(13rem, .8fr) minmax(0, 2.2fr); align-items: center; gap: clamp(1.5rem, 3vw, 3rem); }
+.wf-about-connections-copy h2 { margin: 0 0 .4rem; color: #511b25; font-family: var(--font-playfair), Georgia, serif; font-size: clamp(1.25rem, 1.8vw, 1.65rem); font-weight: 600; line-height: 1.15; }
+.wf-about-connections-copy p { max-width: 20rem; margin: 0; color: #382a1d; font-size: .95rem; line-height: 1.5; }
+.wf-about-connections-grid { min-width: 0; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; }
+.wf-about-connections-grid:active { cursor: grabbing; }
+.wf-about-connections-track { display: flex; width: max-content; will-change: transform; }
+.wf-about-connections-group { display: flex; flex: 0 0 auto; gap: .7rem; padding-right: .7rem; }
+.wf-about-connection-photo { position: relative; flex: 0 0 auto; aspect-ratio: 1.55 / 1; margin: 0; overflow: hidden; border: 1px solid rgb(255 250 240 / 48%); border-radius: .55rem; background: #e7ddce; }
+
+.wf-about-founder-title,
+.wf-about-journey-title,
+.wf-about-work-title,
+.wf-about-philosophy-content > h2,
+.wf-about-connections-copy h2 {
+  color: var(--charcoal);
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.wf-about-philosophy-content > h2,
+.wf-about-connections-copy h2 { font-size: clamp(1.55rem, 2vw, 1.9rem); }
+.wf-about-philosophy-item p {
+  color: var(--charcoal);
+  font-size: .88rem;
+  line-height: 1.45;
+}
+
+@media (min-width: 1024px) {
+  .wf-about-philosophy-content {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+  .wf-about-philosophy-item {
+    align-items: center;
+    gap: .7rem;
+    padding-inline: .9rem;
+  }
+  .wf-about-philosophy-item > svg { width: 1.4rem; height: 1.4rem; }
+  .wf-about-philosophy-item h3 { font-size: .95rem; }
+  .wf-about-philosophy-item p { font-size: .92rem; line-height: 1.5; }
+  .wf-about-connections-content {
+    grid-template-columns: minmax(16rem, .85fr) minmax(0, 2.15fr);
+    align-items: center;
+  }
+  .wf-about-connections-copy p { font-size: 1rem; line-height: 1.55; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wf-about-cta svg { transition-duration: 0.01ms; }
 }
 
 @media (max-width: 639px) {
-  .wf-about-pillar { min-height: 0; padding: 1.15rem; }
-  .wf-about-pillar--horizontal-mobile {
-    flex-direction: row;
-    align-items: center;
-    gap: .85rem;
-    padding: .9rem;
+  .wf-about-pillars { grid-template-columns: 1fr; gap: .65rem; }
+  .wf-about-pillar { min-height: 0; padding: .3rem; }
+  .wf-about-pillars .wf-about-pillar {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: .75rem;
+    row-gap: .1rem;
+    border-right: 0;
   }
-  .wf-about-pillar--horizontal-mobile .wf-about-pillar-content { flex: 1; min-width: 0; }
-  .wf-about-pillar--horizontal-mobile .wf-about-pillar-description { margin-top: .35rem; }
-  .wf-about-story-column { gap: 1.25rem; }
-  .wf-about-editorial-image { box-shadow: 8px 8px 0 #e9e1d2; }
+  .wf-about-pillar-heading { display: contents; }
+  .wf-about-pillar-icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+  .wf-about-pillar-title { grid-column: 2; font-size: 1rem; }
+  .wf-about-pillars .wf-about-pillar-description {
+    grid-column: 2;
+    font-size: .88rem;
+    line-height: 1.45;
+  }
+  .wf-about-story-content { gap: .75rem; }
+  .wf-about-main-heading { font-size: clamp(1.75rem, 7.5vw, 2.25rem); }
+  .wf-about-editorial-image { height: 25rem; min-height: 0; }
+  .wf-about-editorial-image::before { left: -37%; width: 48%; border-right-width: 5px; }
 }
 
 @media (min-width: 1024px) {
   .wf-about-grid {
-    grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr);
-    gap: clamp(2.5rem, 4vw, 4rem);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+    column-gap: clamp(2.5rem, 4vw, 4rem);
   }
+}
+
+@media (max-width: 1023px) {
+  .wf-about-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: "story" "pillars" "image" "cta";
+    row-gap: .85rem;
+  }
+  .wf-about-editorial-image { height: 31rem; }
+  .wf-about-editorial-image::before { left: -34%; width: 38%; }
+}
+
+@media (max-width: 639px) {
+  .wf-about-editorial-image { height: 25rem; }
+  .wf-about-editorial-image::before { left: -35%; width: 38%; border-right-width: 5px; }
 }
 
 .wf-collection { background-image: linear-gradient(180deg, rgb(255 255 255 / 60%), transparent 28%, rgb(198 154 58 / 4%)); }
@@ -956,6 +1321,22 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 767px) {
   .wf-page-hero { padding-bottom: 1.25rem; }
+  .wf-about-hero { min-height: 31rem; padding-block: 5.5rem 2.5rem; }
+  .wf-about-hero::before { background-position: 58% center; }
+  .wf-about-hero::after { background: linear-gradient(90deg, rgb(30 8 12 / 88%), rgb(30 8 12 / 54%) 72%, rgb(30 8 12 / 38%)), linear-gradient(0deg, rgb(18 13 10 / 30%), transparent 60%); }
+  .wf-about-hero-title { max-width: none; font-size: clamp(2rem, 7vw, 2.3rem); letter-spacing: -.04em; line-height: 1.08; }
+  .wf-about-hero-title-desktop { display: none; }
+  .wf-about-hero-title-mobile { display: block; }
+  .wf-about-hero-copy { max-width: 38rem; margin-block: .75rem 1rem; font-size: .9rem; line-height: 1.55; }
+  .wf-about-hero-actions { flex-wrap: nowrap; gap: .5rem; }
+  .wf-about-hero-actions > a { flex: 0 0 auto; gap: .35rem; padding: .5rem .68rem; font-size: .65rem; white-space: nowrap; }
+  .wf-about-founder-title,
+  .wf-about-journey-title,
+  .wf-about-work-title,
+  .wf-about-philosophy-content > h2,
+  .wf-about-connections-copy h2 { font-size: clamp(1.55rem, 5.5vw, 2.1rem); }
+  .wf-about-philosophy-content > h2,
+  .wf-about-connections-copy h2 { font-size: clamp(1.45rem, 4.8vw, 1.8rem); }
   .wf-collection { padding-top: 2.5rem; padding-bottom: 2.5rem; }
   .wf-journal-detail-page { padding-top: .25rem; }
   .wf-collection-header { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
@@ -970,7 +1351,49 @@ h1, h2, h3, h4, h5, h6 {
   .wf-product-cart-button { margin: 0 1.15rem 1.15rem; }
 }
 
+@media (max-width: 1023px) {
+  .wf-about-founder-journey-grid { grid-template-columns: 1fr; gap: 2.25rem; }
+  .wf-about-journey-panel { padding: 1.75rem 0 0; border-top: 1px solid rgb(142 112 65 / 24%); border-left: 0; }
+  .wf-vine--about-founder { display: none; }
+}
+
+@media (max-width: 639px) {
+  .wf-about-founder-story { grid-template-columns: 1fr; }
+  .wf-about-founder-photo { justify-self: center; }
+  .wf-about-founder-copy p { font-size: .92rem; }
+  .wf-about-work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+  .wf-about-work-card-copy { grid-template-columns: 1.35rem minmax(0, 1fr); gap: .4rem; padding: .7rem; }
+  .wf-about-work-icon { width: 1.15rem; height: 1.15rem; }
+  .wf-about-work-card h3 { font-size: .9rem; }
+  .wf-about-work-card p { font-size: .72rem; }
+  .wf-about-philosophy-content { grid-template-columns: 1fr; gap: .8rem; }
+  .wf-about-philosophy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem .35rem; }
+  .wf-about-philosophy-item { padding: .2rem .35rem; }
+  .wf-about-philosophy-item:nth-child(2) { border-right: 0; }
+  .wf-about-connections-content { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .wf-about-work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wf-about-philosophy-content { grid-template-columns: 1fr; gap: .85rem; }
+  .wf-about-connections-content { grid-template-columns: 1fr; }
+}
+
 .wf-journal { background-image: linear-gradient(135deg, rgb(255 255 255 / 65%), transparent 55%); }
+.wf-journal-featured-card { aspect-ratio: 4 / 3; }
+.wf-journal-intro-copy { width: 100%; max-width: none; }
+.wf-journal-preview-side { display: flex; height: 100%; min-width: 0; flex-direction: column; justify-content: center; }
+.wf-journal-preview-more { display: flex; justify-content: flex-start; margin-top: 1.8rem; padding-top: 0; }
+.wf-journal-side-image { width: 8rem; height: 6.5rem; }
+.wf-journal-side-excerpt { margin: 0 0 .4rem; color: var(--charcoal-light); font-size: .86rem; line-height: 1.5; }
+
+@media (max-width: 767px) {
+  .wf-journal-side-image { width: 6.75rem; height: 5.5rem; }
+  .wf-journal-featured-card > div:last-child { padding: 1rem; }
+  .wf-journal-featured-card .wf-jcard-title { font-size: 1.05rem; line-height: 1.2; }
+  .wf-journal-featured-card .line-clamp-2 { margin-bottom: .5rem; font-size: .72rem; line-height: 1.35; }
+  .wf-journal-featured-card > div:last-child > span { font-size: .65rem; }
+}
 
 /* Editorial layout scoped to individual public journal articles. */
 .wf-journal-detail-page {

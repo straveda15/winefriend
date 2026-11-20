@@ -15,7 +15,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
     return (
       <Link
         href={`/journal/${article.slug}`}
-        className="wf-journal-card group block relative overflow-hidden rounded-2xl aspect-[3/4]"
+        className="wf-journal-card wf-journal-featured-card group block relative overflow-hidden rounded-2xl"
       >
         <div className="absolute inset-0 bg-white">
           <JournalImage
@@ -53,7 +53,7 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
       href={`/journal/${article.slug}`}
       className="wf-journal-card group flex gap-4 items-start hover:bg-cream-dark/50 rounded-xl p-2 -m-2 transition-colors duration-300"
     >
-      <div className="relative w-20 h-16 sm:w-24 sm:h-20 flex-shrink-0 overflow-hidden rounded-xl bg-white">
+      <div className="wf-journal-side-image relative w-24 h-20 sm:w-28 sm:h-24 flex-shrink-0 overflow-hidden rounded-xl bg-white">
         <JournalImage
           src={article.image ?? article.images?.[0]}
           alt={article.title}
@@ -69,7 +69,10 @@ export function JournalCard({ article, featured = false }: JournalCardProps) {
         <h4 className="wf-jcard-title mb-1.5">
           {article.title}
         </h4>
-          <span className="inline-flex items-center gap-1.5 text-burgundy font-sans text-[11px] font-semibold uppercase tracking-wider">
+        {article.excerpt && (
+          <p className="wf-journal-side-excerpt line-clamp-2">{article.excerpt}</p>
+        )}
+        <span className="inline-flex items-center gap-1.5 text-burgundy font-sans text-[11px] font-semibold uppercase tracking-wider">
           Read More
           <ArrowRight className="w-2.5 h-2.5 transition-transform duration-300 group-hover:translate-x-1" />
         </span>

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { EditorialPageHero } from "@/components/layout/EditorialPageHero";
+import { AboutHero } from "@/components/layout/AboutHero";
 import { PageFrame } from "@/components/layout/PageFrame";
-import { AboutSection } from "@/components/sections/AboutSection";
-import { aboutContent } from "@/data/about";
+import { AboutFounderJourney } from "@/components/sections/AboutFounderJourney";
+import { AboutWorkAndConnections } from "@/components/sections/AboutWorkAndConnections";
 
 export const metadata: Metadata = {
   title: "About WineFriend | Kamaltara Enterprises",
@@ -12,8 +12,9 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageFrame>
-      <EditorialPageHero kicker="About WineFriend" title={aboutContent.heading} description="Wine Friend is a registered trademark of Kamaltara Enterprises, based in Nashik, Maharashtra, and owned and operated by Manoj Jagtap." image="/images/about/wine-cellar.webp" imageAlt="Wine cellar lined with bottles" />
-      <AboutSection />
+      <AboutHero />
+      <AboutFounderJourney />
+      <AboutWorkAndConnections />
     </PageFrame>
   );
 }

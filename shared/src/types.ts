@@ -85,6 +85,7 @@ export interface ContactInfo {
   location: string;
   phone: string[];
   email: string;
+  emails?: string[];
   contactPerson?: string;
   hours?: string;
 }

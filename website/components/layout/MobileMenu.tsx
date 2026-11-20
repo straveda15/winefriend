@@ -56,7 +56,6 @@ export function MobileMenu({ isOpen, onClose, activeHref, onNavigate }: MobileMe
           <Link
             key={item.label}
             href={item.href}
-            scroll={item.href !== "/contact"}
             onClick={() => {
               onNavigate(item.href);
               onClose();

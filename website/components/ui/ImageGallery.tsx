@@ -17,6 +17,7 @@ const photos = [
   { src: "/images/categories/wine-accessories-display.webp", alt: "Wine accessories on display" },
   { src: "/images/categories/nashik-countryside.webp", alt: "Green countryside near Nashik" },
   { src: "/images/about/wine-cellar.webp", alt: "Wine bottles in a cellar" },
+  { src: "/images/about/aboutimg2.jpg", alt: "Wine Friend team sharing wine at an event" },
   { src: "/images/categories/business-wine-gifting.webp", alt: "Wine bottles arranged as a gift" },
 ];
 
@@ -151,7 +152,7 @@ export function ImageGallery() {
     }
   };
 
-  const renderPhotos = (duplicate = false) => photos.map((photo, index) => (
+  const renderPhotos = (duplicate = false) => photos.map((photo) => (
     <div className="wf-gallery-item" key={`${duplicate ? "copy-" : ""}${photo.src}`}>
       <Image
         src={photo.src}
