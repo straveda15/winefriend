@@ -942,7 +942,7 @@ h1, h2, h3, h4, h5, h6 {
 .wf-about-work-link:hover { border-color: rgb(133 99 48 / 38%); box-shadow: 0 8px 22px rgb(50 42 27 / 8%); translate: 0 -2px; }
 .wf-about-work-button { display: block; width: 100%; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; transition: border-color 220ms ease, box-shadow 220ms ease, translate 220ms ease; }
 .wf-about-work-button:hover { border-color: rgb(133 99 48 / 38%); box-shadow: 0 8px 22px rgb(50 42 27 / 8%); translate: 0 -2px; }
-.wf-about-work-image { position: relative; aspect-ratio: 1.9 / 1; overflow: hidden; background: #eee3d2; }
+.wf-about-work-image { position: relative; aspect-ratio: 1.75 / 1; overflow: hidden; background: #eee3d2; }
 .wf-about-work-card-copy { display: grid; grid-template-columns: 1.65rem minmax(0, 1fr); align-items: start; gap: .6rem; padding: .8rem .85rem .95rem; }
 .wf-about-work-icon { width: 1.3rem; height: 1.3rem; margin-top: .1rem; color: #8c6228; stroke-width: 1.7; }
 .wf-about-work-card h3 { margin: 0 0 .25rem; color: #4d2026; font-family: var(--font-playfair), Georgia, serif; font-size: .98rem; font-weight: 600; line-height: 1.2; }
