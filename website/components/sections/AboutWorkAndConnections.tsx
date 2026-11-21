@@ -59,6 +59,8 @@ const connectionImages = [
   { src: "/images/about/aboutimg3.jpg", alt: "Wine Friend team and products at an event" },
   { src: "/images/about/aboutimg4.jpg", alt: "Wine Friend exhibition display" },
   { src: "/images/about/aboutimg5.jpg", alt: "Wine Friend team showcasing wine products at an exhibition" },
+  { src: "/images/about/aboutimg6.webp", alt: "Wine Friend at an industry connection" },
+  { src: "/images/about/aboutimg7.webp", alt: "Wine Friend at an industry event" },
 ];
 
 const CONNECTION_SCROLL_SPEED = 48;

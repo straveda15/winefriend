@@ -104,7 +104,7 @@ export function Footer() {
               <div className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
                 <div className="wf-footer-contact-copy flex flex-col gap-1">
-                  {contactInfo.contactPerson && <span className="text-xs text-white/70">{contactInfo.contactPerson}</span>}
+                  {contactInfo.contactPerson && <span className="text-sm text-white/70">{contactInfo.contactPerson}</span>}
                   <div className="flex flex-wrap gap-x-4 gap-y-1">
                     {contactInfo.phone.map((num) => (
                       <a key={num} href={`tel:${num.replace(/\s/g, "")}`} className="text-sm text-white/50 hover:text-white transition-colors whitespace-nowrap">

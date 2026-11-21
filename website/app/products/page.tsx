@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <PageFrame>
-      <EditorialPageHero kicker="The art of serving well" title="Objects for the Wine Ritual" description="Explore wine openers, wine and champagne corks, glasses, preservation systems, decanters, wooden, acrylic and stainless-steel racks, barrel furniture, and promotional materials." image="/images/categories/wine-accessories-display.webp" imageAlt="Wine accessories arranged for service" />
+      <EditorialPageHero kicker="The art of serving well" title="Objects for the Wine Ritual" description="Explore wine openers, wine and champagne corks, glasses, preservation systems, decanters, wooden, acrylic and stainless-steel racks, barrel furniture, and promotional materials." image="/images/serving/productimg.webp" imageAlt="Wine products arranged for serving" />
 
       <Suspense fallback={<CollectionSectionView products={[]} loadState="loading" skeletonCount={6} />}>
         <CollectionSection />

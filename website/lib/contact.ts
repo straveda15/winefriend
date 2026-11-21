@@ -1,7 +1,7 @@
 import { contactInfo } from "@/data/footer";
 
-/** Digits only, with country code. First number in contactInfo is the primary WhatsApp line. */
-export const whatsappNumber = contactInfo.phone[0].replace(/\D/g, "");
+/** Digits only, with country code. The second footer number is the primary WhatsApp line. */
+export const whatsappNumber = contactInfo.phone[1].replace(/\D/g, "");
 
 export const telHref = `tel:+${whatsappNumber}`;
 
