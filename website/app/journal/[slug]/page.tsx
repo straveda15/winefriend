@@ -10,6 +10,7 @@ import { ImageReveal } from "@/components/animations/ImageReveal";
 import { PostContent } from "@/components/blog/PostContent";
 import { Button } from "@/components/ui/Button";
 import { JournalImage } from "@/components/ui/JournalImage";
+import { ProductShareButton } from "@/components/ui/ProductShareButton";
 import { formatDate } from "@winefriend/shared/constants";
 import { getPost, getPosts } from "@/lib/content";
 
@@ -75,7 +76,7 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
         </header>
 
         {coverImage && (
-          <ImageReveal direction="left" className="wf-journal-cover-frame">
+          <ImageReveal direction="left" className={`wf-journal-cover-frame${article.slug === "the-bandra-wineout-2025" ? " wf-journal-cover-frame--poster" : ""}`}>
             <JournalImage
               src={coverImage}
               alt={article.title}
@@ -88,13 +89,14 @@ async function JournalArticleContent({ params }: ArticlePageProps) {
         )}
 
         <FadeUp>
-          {(articleContent || additionalImages.length > 0) && (
-            <PostContent content={articleContent} images={additionalImages} title={article.title} />
+          {(articleContent || additionalImages.length > 0 || article.videos?.length) && (
+            <PostContent content={articleContent} images={additionalImages} videos={article.videos} title={article.title} />
           )}
         </FadeUp>
 
         <div className="wf-journal-article-actions">
           <Button href="/contact">Get in touch</Button>
+          <ProductShareButton name={article.title} slug={article.slug} path="journal" itemType="article" />
           <Link href="/journal" className="wf-product-link">More stories</Link>
         </div>
       </Container>

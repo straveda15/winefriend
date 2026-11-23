@@ -3,6 +3,7 @@ import { randomBytes } from "node:crypto";
 import { BLOG_CATEGORIES, MAX_PRODUCT_IMAGES, PRODUCT_CATEGORIES, UPLOAD_PREFIX } from "@winefriend/shared/constants";
 import type { JournalArticle, Product } from "@winefriend/shared/types";
 import { isAllowedImagePath, lines } from "@winefriend/shared/validation";
+import { getYouTubeVideoId } from "@winefriend/shared/youtube";
 import {
   adminConfigured,
   clearFailures,
@@ -220,6 +221,7 @@ async function savePost(id: string | undefined, body: ReturnType<typeof asBody>)
   const legacyImage = str(body, "image");
   const images = Array.isArray(body.images) ? body.images : legacyImage ? [legacyImage] : [];
   const image = typeof images[0] === "string" ? images[0] : undefined;
+  let videos: string[] | undefined;
   const category = str(body, "category");
   const date = str(body, "date");
   const customSlug = str(body, "slug");
@@ -234,6 +236,16 @@ async function savePost(id: string | undefined, body: ReturnType<typeof asBody>)
   if (content.length > 30000) return { error: "Article is too long (30,000 character limit)." };
   if (body.images !== undefined && !Array.isArray(body.images)) return { error: "Article images must be a list." };
   if (!images.every(isAllowedImagePath)) return { error: "One of the article images is invalid. Please re-upload it." };
+  if (body.videos !== undefined) {
+    if (!Array.isArray(body.videos) || !body.videos.every((video): video is string => typeof video === "string")) {
+      return { error: "YouTube video links must be a list of links." };
+    }
+    videos = body.videos.map((video) => video.trim());
+    if (videos.length > 20) return { error: "An article can have up to 20 YouTube videos." };
+    if (!videos.every((video) => video.length <= 500 && getYouTubeVideoId(video) !== null)) {
+      return { error: "Enter valid YouTube watch, Shorts, or share links for every video." };
+    }
+  }
   if (!(BLOG_CATEGORIES as readonly string[]).includes(category)) return { error: "Choose a category." };
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Choose a publication date." };
 
@@ -248,7 +260,7 @@ async function savePost(id: string | undefined, body: ReturnType<typeof asBody>)
     if (id) {
       const previous = items.find((item) => item.id === id);
       if (!previous) return { items, result: { error: "That post no longer exists." } };
-      const updated: JournalArticle = { ...previous, title, slug, excerpt, content, image, images, category, date, featured, published, updatedAt: now };
+      const updated: JournalArticle = { ...previous, title, slug, excerpt, content, image, images, videos: videos ?? previous.videos ?? [], category, date, featured, published, updatedAt: now };
       const previousImages = previous.images?.length ? previous.images : previous.image ? [previous.image] : [];
       return {
         items: items.map((item) => (item.id === id ? updated : (cleared.find((other) => other.id === item.id) ?? item))),
@@ -256,7 +268,7 @@ async function savePost(id: string | undefined, body: ReturnType<typeof asBody>)
       };
     }
 
-    const created: JournalArticle = { id: newId(), title, slug, excerpt, content, image, images, category, date, featured, published, updatedAt: now };
+    const created: JournalArticle = { id: newId(), title, slug, excerpt, content, image, images, videos: videos ?? [], category, date, featured, published, updatedAt: now };
     return { items: [created, ...cleared], result: { saved: created, removed: [] } };
   });
 }

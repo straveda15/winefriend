@@ -106,11 +106,19 @@ export async function savePostAction(_prev: FormState, formData: FormData): Prom
     images = [];
   }
 
+  let videos: unknown;
+  try {
+    videos = JSON.parse(text(formData, "videos") || "[]");
+  } catch {
+    videos = [];
+  }
+
   const body = {
     title: text(formData, "title"),
     excerpt: text(formData, "excerpt"),
     content: String(formData.get("content") ?? ""),
     images,
+    videos,
     category: text(formData, "category"),
     date: text(formData, "date"),
     slug: text(formData, "slug"),

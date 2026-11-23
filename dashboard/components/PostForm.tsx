@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Save } from "lucide-react";
 import { savePostAction } from "@/app/actions";
 import { ImageUploader } from "@/components/ImageUploader";
+import { VideoLinksEditor } from "@/components/VideoLinksEditor";
 import { buttonGhost, buttonPrimary, card, hint, input, label } from "@/components/ui";
 import { BLOG_CATEGORIES } from "@winefriend/shared/constants";
 import { useHydrated } from "@winefriend/shared/use-hydrated";
@@ -13,6 +14,7 @@ import type { JournalArticle } from "@winefriend/shared/types";
 export function PostForm({ post, today }: { post?: JournalArticle; today: string }) {
   const [state, action, pending] = useActionState(savePostAction, {});
   const [images, setImages] = useState<string[]>(post?.images?.length ? post.images : post?.image ? [post.image] : []);
+  const [videos, setVideos] = useState<string[]>(post?.videos ?? []);
   const ready = useHydrated();
 
   return (
@@ -53,6 +55,12 @@ export function PostForm({ post, today }: { post?: JournalArticle; today: string
           <h2 className="font-serif text-xl">Article images <span className="text-sm font-normal text-slate">(optional)</span></h2>
           <p className={`${hint} mb-4`}>Upload photos if you want. The first image is used as the cover; portrait and landscape images are fitted without cropping.</p>
           <ImageUploader value={images} onChange={setImages} firstLabel="Cover" />
+        </section>
+
+        <section className={`${card} p-5 sm:p-6`}>
+          <h2 className="font-serif text-xl">YouTube videos <span className="text-sm font-normal text-slate">(optional)</span></h2>
+          <p className={`${hint} mb-4`}>Videos appear with the article images on the published journal page.</p>
+          <VideoLinksEditor value={videos} onChange={setVideos} />
         </section>
       </div>
 

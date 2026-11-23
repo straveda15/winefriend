@@ -44,6 +44,8 @@ export interface JournalArticle {
   image?: string;
   /** Additional article images; images[0] is the cover when present. */
   images?: string[];
+  /** Optional YouTube video links displayed in the article media section. */
+  videos?: string[];
   category: string;
   /** ISO date (yyyy-mm-dd) shown as the publication date. */
   date: string;

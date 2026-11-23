@@ -1,27 +1,15 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { JournalImage } from "@/components/ui/JournalImage";
+import { JournalCardMedia } from "@/components/ui/JournalCardMedia";
 import { formatDate } from "@winefriend/shared/constants";
 import type { JournalArticle } from "@winefriend/shared/types";
 
 /** Card used on the Wine Journal page: a wide "featured" layout or a standard grid card. */
 export function JournalListingCard({ article, featured = false }: { article: JournalArticle; featured?: boolean }) {
   return (
-    <Link href={`/journal/${article.slug}`} className={`wf-jcard wf-journal-card group${featured ? " wf-jcard--featured" : ""}`}>
-      <div className="wf-jcard-media bg-white">
-        <JournalImage
-          src={article.image ?? article.images?.[0]}
-          fallbackSrc={article.slug === "the-bandra-wineout-2025" ? "/images/journal/bandra-wineout-2025.svg" : undefined}
-          alt={article.title}
-          fill
-
-
-          className="object-cover"
-
-          sizes={featured ? "(max-width: 1023px) 100vw, 60vw" : "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"}
-        />
-      </div>
-      <div className="wf-jcard-body">
+    <article className={`wf-jcard wf-journal-card group${featured ? " wf-jcard--featured" : ""}`}>
+      <JournalCardMedia article={article} featured={featured} />
+      <Link href={`/journal/${article.slug}`} className="wf-jcard-body">
         <p className="wf-jcard-meta">
           <span>{article.category}</span>
           <span aria-hidden="true">·</span>
@@ -32,7 +20,7 @@ export function JournalListingCard({ article, featured = false }: { article: Jou
         <span className="wf-jcard-link">
           Read more <ArrowRight aria-hidden="true" />
         </span>
-      </div>
-    </Link>
+      </Link>
+    </article>
   );
 }
