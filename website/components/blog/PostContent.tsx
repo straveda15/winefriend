@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { JournalImage } from "@/components/ui/JournalImage";
+import { ArticleImageFrame } from "@/components/blog/ArticleImageFrame";
+import { toYouTubeEmbedUrl } from "@winefriend/shared/youtube";
 
 /**
  * Renders the lightweight article format used by the admin editor:
@@ -30,31 +31,53 @@ function inline(text: string, keyPrefix: string): ReactNode[] {
 }
 
 function ArticleImageGroup({ images, title, startIndex }: { images: string[]; title: string; startIndex: number }) {
-  const layout = images.length === 1 ? "single" : images.length === 2 ? "pair" : "editorial";
+  const layout = images.length === 1 ? "single" : "pair";
 
   return (
     <div className={`wf-article-image-layout wf-article-image-layout--${layout}`}>
       {images.map((image, index) => (
-        <figure key={`${image}-${index}`} className="wf-article-image-frame">
-          <JournalImage
-            src={image}
-            alt={`${title} photo ${startIndex + index + 2}`}
-            fill
-            sizes={layout === "pair" ? "(max-width: 767px) 100vw, 50vw" : "(max-width: 1023px) 100vw, 80vw"}
-            className="object-cover"
-          />
-        </figure>
+        <ArticleImageFrame
+          key={`${image}-${index}`}
+          image={image}
+          alt={`${title} photo ${startIndex + index + 2}`}
+          sizes={layout === "pair" ? "(max-width: 767px) 100vw, 50vw" : "(max-width: 1023px) 100vw, 80vw"}
+          matchFrame={layout === "pair"}
+        />
       ))}
     </div>
   );
 }
 
-export function PostContent({ content, images = [], title = "Article" }: { content: string; images?: string[]; title?: string }) {
+function ArticleVideoGroup({ videos, title }: { videos: string[]; title: string }) {
+  const validVideos = videos.map((video) => toYouTubeEmbedUrl(video)).filter((video): video is string => Boolean(video));
+  if (validVideos.length === 0) return null;
+
+  return (
+    <div className="wf-article-video-layout">
+      {validVideos.map((video, index) => (
+        <div key={`${video}-${index}`} className="wf-article-video-frame">
+          <iframe
+            src={video}
+            title={`${title} video ${index + 1}`}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function PostContent({ content, images = [], videos = [], title = "Article" }: { content: string; images?: string[]; videos?: string[]; title?: string }) {
   const blocks = content.replace(/\r\n/g, "\n").split(/\n{2,}/).map((block) => block.trim()).filter(Boolean);
   const imageGroups: string[][] = [];
-  const imagesPerGroup = images.length === 1 ? 1 : images.length === 3 ? 3 : 2;
-  for (let index = 0; index < images.length; index += imagesPerGroup) {
-    imageGroups.push(images.slice(index, index + imagesPerGroup));
+  let imageIndex = 0;
+  while (imageIndex < images.length) {
+    const group = images.slice(imageIndex, imageIndex + 2);
+    imageGroups.push(group);
+    imageIndex += group.length;
   }
   const contentWithImages: ReactNode[] = [];
   let previousImageGroupCount = 0;
@@ -112,5 +135,10 @@ export function PostContent({ content, images = [], title = "Article" }: { conte
     imageOffset += groupImages.length;
   }
 
-  return <div className="wf-prose">{contentWithImages}</div>;
+  return (
+    <div className="wf-prose">
+      {contentWithImages}
+      <ArticleVideoGroup videos={videos} title={title} />
+    </div>
+  );
 }

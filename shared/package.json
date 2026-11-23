@@ -7,6 +7,7 @@
     "./types": "./src/types.ts",
     "./constants": "./src/constants.ts",
     "./validation": "./src/validation.ts",
+    "./youtube": "./src/youtube.ts",
     "./form-state": "./src/form-state.ts",
     "./use-hydrated": "./src/use-hydrated.ts"
   },

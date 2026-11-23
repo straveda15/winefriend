@@ -3,11 +3,23 @@
 import { useState } from "react";
 import { Share2 } from "lucide-react";
 
-export function ProductShareButton({ name, slug, className = "" }: { name: string; slug: string; className?: string }) {
+export function ProductShareButton({
+  name,
+  slug,
+  path = "products",
+  itemType = "product",
+  className = "",
+}: {
+  name: string;
+  slug: string;
+  path?: string;
+  itemType?: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   async function shareProduct() {
-    const url = new URL(`/products/${encodeURIComponent(slug)}`, window.location.origin).href;
+    const url = new URL(`/${path}/${encodeURIComponent(slug)}`, window.location.origin).href;
     if (navigator.share) {
       try {
         await navigator.share({ title: name, text: name, url });
@@ -31,8 +43,8 @@ export function ProductShareButton({ name, slug, className = "" }: { name: strin
       type="button"
       className={`wf-product-share ${className}`}
       onClick={shareProduct}
-      aria-label={`Share ${name}`}
-      title={copied ? "Link copied" : "Share product"}
+      aria-label={`Share ${itemType}: ${name}`}
+      title={copied ? "Link copied" : `Share ${itemType}`}
       aria-live="polite"
     >
       <Share2 aria-hidden="true" />

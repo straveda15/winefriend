@@ -34,10 +34,13 @@ export function BusinessSection({ preview = false }: { preview?: boolean }) {
                   ? "Kamaltara Enterprises makes and imports wine products, customises to client requirements, and emphasizes production quality, design, and finish."
                   : "Kamaltara Enterprises manufactures and imports wine-related products, with customisation tailored to client specifications and current market trends. Its company profile describes production quality checks and careful attention to product design and finish. Cash, demand draft, and bank transfer are listed as accepted payment methods."}
               </p>
-              <Button href="/contact">
-                Discuss Your Requirements
-              </Button>
-              {preview && <Button href="/business-solutions" variant="ghost" className="ml-4">Explore Business Solutions</Button>}
+              {preview ? (
+                <Button href="/business-solutions" variant="primary">
+                  Explore Business Solutions
+                </Button>
+              ) : (
+                <Button href="/contact">Discuss Your Requirements</Button>
+              )}
             </FadeUp>
           </div>
 
