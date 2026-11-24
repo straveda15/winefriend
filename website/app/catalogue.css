@@ -138,7 +138,7 @@
 
 /* Product dialog */
 .wf-dialog {
-  width: min(64rem, calc(100vw - 1.5rem));
+  width: min(64rem, calc(100% - 1.5rem));
   max-height: calc(100dvh - 1.5rem);
   margin: auto;
   padding: 0;
@@ -253,7 +253,7 @@
 .wf-action-primary:hover { background: #d4aa4d; }
 
 @media (max-width: 899px) {
-  .wf-dialog { width: min(40rem, calc(100vw - 1.5rem)); }
+  .wf-dialog { width: min(40rem, calc(100% - 1.5rem)); }
   .wf-dialog-body {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto;
