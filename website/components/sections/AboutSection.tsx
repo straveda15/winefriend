@@ -138,7 +138,7 @@ export function AboutSection({ preview = false }: { preview?: boolean }) {
               alt="WineFriend guests enjoying a winery visit in Nashik"
               fill
               sizes="(max-width: 1023px) 100vw, 48vw"
-              className="wf-about-editorial-photo object-cover object-[44%_center]"
+              className="wf-about-editorial-photo object-cover"
             />
             <figcaption>Wine, Shared in Nashik</figcaption>
           </figure>

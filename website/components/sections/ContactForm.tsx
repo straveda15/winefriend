@@ -110,7 +110,20 @@ export function ContactForm() {
 
       {product && <input type="hidden" name="product" value={product} />}
       {/* Honeypot — hidden from people, tempting to bots. */}
-      <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", height: 0, overflow: "hidden" }}>
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          width: 1,
+          height: 1,
+          padding: 0,
+          margin: -1,
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
+      >
         <label>
           Company website
           <input name="company_website" tabIndex={-1} autoComplete="off" />

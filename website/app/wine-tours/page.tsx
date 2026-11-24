@@ -16,7 +16,7 @@ export default function WineToursPage() {
       <ToursSection />
       <section className="wf-section bg-ivory py-12 lg:py-18" aria-labelledby="wine-tour-video-title">
         <Container>
-          <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-7xl">
             <h2 id="wine-tour-video-title" className="wf-display-heading mb-7 text-center font-serif text-3xl font-normal leading-[1.05] text-charcoal sm:text-4xl lg:text-6xl">
               Experience Nashik Through Wine
             </h2>

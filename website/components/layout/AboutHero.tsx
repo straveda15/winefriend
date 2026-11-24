@@ -18,7 +18,7 @@ export function AboutHero() {
           experience more meaningful.
         </p>
         <div className="wf-about-hero-actions">
-          <Button href="/about#founder-story" variant="primary" icon={false} className="wf-about-hero-primary">
+          <Button href="#our-journey" variant="primary" icon={false} className="wf-about-hero-primary">
             Our Journey <ArrowDown className="w-3.5 h-3.5" aria-hidden="true" />
           </Button>
           <Button href="/products" variant="secondary" className="wf-about-hero-secondary">
