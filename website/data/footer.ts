@@ -26,6 +26,7 @@ export const socialLinks: SocialLink[] = [
   { platform: "Facebook", href: "https://www.facebook.com/nashikwinetours/", icon: "facebook" },
   { platform: "Instagram", href: "https://www.instagram.com/nashikwinetours/", icon: "instagram" },
   { platform: "YouTube", href: "https://www.youtube.com/@nashikwinetours", icon: "youtube" },
+  { platform: "IndiaMART Portfolio", href: "https://www.indiamart.com/kamaltara-enterprises/", icon: "indiamart" },
 ];
 
 export const legalLinks: FooterLink[] = [
