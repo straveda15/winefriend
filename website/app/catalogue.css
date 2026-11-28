@@ -83,6 +83,8 @@
 
 /* Gallery */
 .wf-gallery { display: grid; gap: .75rem; min-width: 0; }
+.wf-flipkart-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .85rem; }
+.wf-flipkart-links .wf-action { text-decoration: none; }
 .wf-gallery-stage { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--cream); }
 .wf-gallery-slide { opacity: 0; transition: opacity 400ms ease; }
 .wf-gallery-slide.is-active { opacity: 1; }
@@ -161,7 +163,7 @@
   overflow: hidden;
   overscroll-behavior: contain;
 }
-.wf-dialog-body > .wf-gallery {
+.wf-dialog-gallery {
   position: sticky;
   top: 0;
   align-self: start;
@@ -260,7 +262,7 @@
     gap: 1.25rem;
     overflow-y: auto;
   }
-  .wf-dialog-body > .wf-gallery { position: relative; top: auto; }
+  .wf-dialog-gallery { position: relative; top: auto; }
   .wf-dialog-copy { min-height: min-content; max-height: none; overflow: visible; padding-right: 0; }
 }
 @media (max-width: 599px) {

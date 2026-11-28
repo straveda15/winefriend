@@ -25,6 +25,8 @@ export interface Product {
   priceNote?: string;
   /** First image is the cover. */
   images: string[];
+  /** Optional Flipkart product links shown below the product gallery. */
+  flipkartLinks?: string[];
   /** Key details shown as a bullet list. */
   features: string[];
   featured: boolean;

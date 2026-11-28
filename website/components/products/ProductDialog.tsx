@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { ProductDetails } from "@/components/products/ProductDetails";
 import { ProductGallery } from "@/components/products/ProductGallery";
+import { FlipkartLinks } from "@/components/products/FlipkartLinks";
 import type { Product } from "@winefriend/shared/types";
 
 export function ProductDialog({ product, onClose }: { product: Product; onClose: () => void }) {
@@ -53,7 +54,10 @@ export function ProductDialog({ product, onClose }: { product: Product; onClose:
         <X aria-hidden="true" />
       </button>
       <div className="wf-dialog-body" data-lenis-prevent>
-        <ProductGallery key={product.id} images={product.images} name={product.name} imageFit="contain" priority sizes="(max-width: 767px) 100vw, 560px" />
+        <div className="wf-dialog-gallery">
+          <ProductGallery key={product.id} images={product.images} name={product.name} imageFit="contain" priority sizes="(max-width: 767px) 100vw, 560px" />
+          <FlipkartLinks links={product.flipkartLinks} />
+        </div>
         <div className="wf-dialog-copy" tabIndex={0} aria-label="Product details">
           <ProductDetails product={product} headingId={headingId} onNavigate={onClose} />
         </div>

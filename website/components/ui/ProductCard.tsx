@@ -12,22 +12,50 @@ interface ProductCardProps {
   product: Product;
   index: number;
   onOpen: (product: Product) => void;
+  rotateImages?: boolean;
 }
 
-export function ProductCard({ product, index, onOpen }: ProductCardProps) {
-  const firstImage = product.images[0];
+export function ProductCard({ product, index, onOpen, rotateImages = false }: ProductCardProps) {
   return (
     <article className="wf-product-card group rounded-none overflow-hidden">
       <button type="button" className="wf-product-open" onClick={() => onOpen(product)} aria-haspopup="dialog">
         <div className="wf-product-image-frame relative aspect-[4/3] overflow-hidden bg-card">
-          <Img
-            src={firstImage}
-            alt={product.name}
-            fill
-            className="wf-product-image object-cover"
-            sizes="(max-width: 479px) 100vw, (max-width: 1023px) 50vw, 33vw"
-            priority={index <= 2}
-          />
+          {rotateImages && product.images.length > 1 ? (
+            <div
+              className="wf-product-image-track"
+              aria-hidden="true"
+              style={{
+                width: `${product.images.length * 200}%`,
+                animationDuration: `${product.images.length * 8}s`,
+              }}
+            >
+              {[...product.images, ...product.images].map((src, imageIndex) => (
+                <div
+                  key={`${imageIndex}-${src}`}
+                  className="wf-product-image-slide"
+                  style={{ flexBasis: `${100 / (product.images.length * 2)}%` }}
+                >
+                  <Img
+                    src={src}
+                    alt=""
+                    fill
+                    className="wf-product-image object-cover"
+                    sizes="(max-width: 479px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                    priority={index <= 2 && imageIndex === 0}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Img
+              src={product.images[0]}
+              alt={product.name}
+              fill
+              className="wf-product-image object-cover"
+              sizes="(max-width: 479px) 100vw, (max-width: 1023px) 50vw, 33vw"
+              priority={index <= 2}
+            />
+          )}
           <div className="wf-product-image-wash absolute inset-0" />
           <span className="wf-product-index">{String(index).padStart(2, "0")}</span>
           {product.images.length > 1 && (

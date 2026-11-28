@@ -73,6 +73,7 @@ export async function saveProductAction(_prev: FormState, formData: FormData): P
     priceNote: text(formData, "priceNote"),
     features: String(formData.get("features") ?? ""),
     images,
+    flipkartLinks: String(formData.get("flipkartLinks") ?? ""),
     featured: checked(formData, "featured"),
     published: checked(formData, "published"),
   };

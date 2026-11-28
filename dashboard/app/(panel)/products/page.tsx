@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, ImageIcon, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import { deleteProductAction, toggleProductPublishedAction } from "@/app/actions";
@@ -8,7 +9,15 @@ import { Img } from "@/components/Img";
 import { adminProducts } from "@/lib/admin-data";
 import { PLANNED_PRODUCT_COUNT, categoryLabel, formatPrice } from "@winefriend/shared/constants";
 
-export default async function AdminProductsPage({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
+export default function AdminProductsPage({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
+  return (
+    <Suspense fallback={<ProductsLoading />}>
+      <AdminProductsContent searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function AdminProductsContent({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
   const [{ saved }, products] = await Promise.all([searchParams, adminProducts()]);
 
   return (
@@ -63,5 +72,19 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
         </ul>
       )}
     </>
+  );
+}
+
+function ProductsLoading() {
+  return (
+    <div aria-busy="true" className="animate-pulse">
+      <div className="h-9 w-40 rounded-lg bg-cream-dark" />
+      <div className="mt-4 h-4 w-80 max-w-full rounded bg-cream-dark" />
+      <div className="mt-8 grid gap-3">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="h-28 rounded-xl bg-cream-dark/70" />
+        ))}
+      </div>
+    </div>
   );
 }

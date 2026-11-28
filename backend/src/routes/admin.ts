@@ -86,7 +86,7 @@ adminRouter.get("/api/admin/products/:id", async (request, response) => {
 
 type ProductInput = Pick<
   Product,
-  "name" | "category" | "shortDescription" | "description" | "price" | "priceNote" | "images" | "features" | "featured" | "published"
+  "name" | "category" | "shortDescription" | "description" | "price" | "priceNote" | "images" | "flipkartLinks" | "features" | "featured" | "published"
 >;
 
 function parseProduct(body: ReturnType<typeof asBody>): ProductInput | { error: string } {
@@ -98,6 +98,9 @@ function parseProduct(body: ReturnType<typeof asBody>): ProductInput | { error: 
   const priceRaw = String(body.price ?? "").replace(/[,₹\s]/g, "");
   const features = lines(typeof body.features === "string" ? body.features : "", 12, 120);
   const images = body.images;
+  const flipkartLinks = typeof body.flipkartLinks === "string"
+    ? body.flipkartLinks.split(/\r?\n/).map((link) => link.trim()).filter(Boolean)
+    : [];
 
   if (!name) return { error: "Product name is required." };
   if (name.length > 120) return { error: "Product name must be 120 characters or fewer." };
@@ -116,6 +119,13 @@ function parseProduct(body: ReturnType<typeof asBody>): ProductInput | { error: 
   if (!Array.isArray(images) || !images.every(isAllowedImagePath)) return { error: "One of the images is invalid. Please re-upload it." };
   if (images.length === 0) return { error: "Add at least one product image." };
   if (images.length > MAX_PRODUCT_IMAGES) return { error: `A product can have up to ${MAX_PRODUCT_IMAGES} images.` };
+  if (flipkartLinks.length > 20) return { error: "A product can have up to 20 Flipkart links." };
+  if (flipkartLinks.some((link) => {
+    try {
+      const url = new URL(link);
+      return url.protocol !== "https:" || !(url.hostname === "flipkart.com" || url.hostname.endsWith(".flipkart.com"));
+    } catch { return true; }
+  })) return { error: "Enter valid HTTPS Flipkart links, one per line." };
 
   return {
     name,
@@ -125,6 +135,7 @@ function parseProduct(body: ReturnType<typeof asBody>): ProductInput | { error: 
     price,
     priceNote: priceNote || undefined,
     images: images as string[],
+    flipkartLinks,
     features,
     featured: bool(body, "featured"),
     published: bool(body, "published"),

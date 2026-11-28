@@ -8,6 +8,7 @@ import { Container } from "@/components/layout/Container";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { ProductDetails } from "@/components/products/ProductDetails";
 import { ProductGallery } from "@/components/products/ProductGallery";
+import { FlipkartLinks } from "@/components/products/FlipkartLinks";
 import { getProduct, getProducts } from "@/lib/content";
 
 type ProductPageProps = { params: Promise<{ slug: string }> };
@@ -57,6 +58,7 @@ async function ProductDetailContent({ params }: ProductPageProps) {
         <div className="mt-8 grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
           <FadeUp>
             <ProductGallery images={product.images} name={product.name} priority />
+            <FlipkartLinks links={product.flipkartLinks} />
           </FadeUp>
           <FadeUp delay={0.1}>
             <ProductDetails product={product} as="h1" />
