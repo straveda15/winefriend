@@ -48,6 +48,14 @@ export function ProductForm({ product }: { product?: Product }) {
             <textarea id="features" name="features" rows={5} defaultValue={product?.features.join("\n")} className={input} placeholder={"Solid oak\nHolds 12 bottles\nCustom sizes available"} />
             <p className={hint}>One detail per line (up to 12). Shown as a bullet list.</p>
           </div>
+          <div>
+            <label className={label} htmlFor="flipkartLinks">Flipkart links</label>
+            <textarea id="flipkartLinks" name="flipkartLinks" rows={4} defaultValue={product?.flipkartLinks?.join("\n")} className={input} placeholder="Paste one Flipkart product link per line" />
+            <p className={hint}>Optional. Add multiple links, one per line. Buy buttons appear below the product images when links are saved.</p>
+            <button type="submit" disabled={pending || !ready} className={`${buttonPrimary} mt-3`}>
+              <Save /> {pending ? "Saving…" : "Save product and Flipkart links"}
+            </button>
+          </div>
         </section>
 
         <section className={`${card} p-5 sm:p-6`}>

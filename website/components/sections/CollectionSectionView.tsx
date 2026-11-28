@@ -176,7 +176,7 @@ export function CollectionSectionView({
         )}
         <div className="wf-collection-grid grid mt-10">
           {visibleProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index + 1} onOpen={setActive} />
+            <ProductCard key={product.id} product={product} index={index + 1} onOpen={setActive} rotateImages />
           ))}
           {loadState === "loading" && Array.from({ length: skeletonCount }, (_, index) => (
             <article key={`product-skeleton-${index}`} className="wf-product-card wf-product-skeleton" aria-hidden="true">

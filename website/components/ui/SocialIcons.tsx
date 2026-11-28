@@ -33,11 +33,22 @@ function LinkedinIcon({ className }: { className?: string }) {
   );
 }
 
+function IndiaMartIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="8" cy="4.5" r="1.8" />
+      <circle cx="16" cy="3.5" r="2.2" />
+      <path fillRule="evenodd" d="M1 13.8a11 7.5 8 1 0 22 0 11 7.5 8 1 0-22 0Zm4 5.3L6 10c.2-1.8 1.4-2.2 2.2-.4l2.4 5.1c.4.8.8.8 1.2 0l2.4-5.1c.8-1.8 2-1.4 2.2.4l1 9.7c-3.7 1.2-8 1-12.4-.6Z" />
+    </svg>
+  );
+}
+
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   facebook: FacebookIcon,
   instagram: InstagramIcon,
   youtube: YoutubeIcon,
   linkedin: LinkedinIcon,
+  indiamart: IndiaMartIcon,
 };
 
 interface SocialIconsProps {
@@ -60,7 +71,7 @@ export function SocialIcons({ links, email, className = "" }: SocialIconsProps) 
             aria-label={link.platform}
             className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center text-white/70 hover:text-gold-muted hover:border-gold hover:bg-white/10 transition-all duration-300"
           >
-            <Icon className="w-4 h-4" />
+            <Icon className={link.icon === "indiamart" ? "w-5 h-5" : "w-4 h-4"} />
           </a>
         );
       })}
